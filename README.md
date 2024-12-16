@@ -35,7 +35,7 @@
   - MySQL, con un modello relazionale progettato per garantire l'integrità e la consistenza dei dati.
 - **Altro**:
   - MySQL Workbench per la progettazione del database.
-  - Architettura basata sul pattern **Model-View-Controller (MVC)**.
+  - Architettura **Three-thier**.
 
 ---
 
