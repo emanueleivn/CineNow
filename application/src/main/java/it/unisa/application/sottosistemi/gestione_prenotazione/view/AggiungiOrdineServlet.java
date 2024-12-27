@@ -1,4 +1,4 @@
 package it.unisa.application.sottosistemi.gestione_prenotazione.view;
 
-public class VisualizzaCatalogoServlet {
+public class AggiungiOrdineServlet {
 }
