@@ -20,15 +20,12 @@ public class StoricoOrdiniServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             // Recupera l'email del cliente dal parametro della richiesta
-            String emailCliente = request.getParameter("emailCliente");
+            Cliente cliente = (Cliente) request.getAttribute("cliente");
 
             // Validazione del parametro
-            if (emailCliente == null || emailCliente.isEmpty()) {
-                throw new IllegalArgumentException("Email cliente non fornita.");
+            if (cliente == null) {
+                throw new IllegalArgumentException("Errore cliente.");
             }
-
-            // Simula il recupero del cliente dal database (da sostituire con logica effettiva)
-            Cliente cliente = new Cliente(emailCliente, "Mario", "Rossi"); // Mock
 
             // Recupera lo storico degli ordini per il cliente
             List<Prenotazione> storico = prenotazioneService.storicoOrdini(cliente);

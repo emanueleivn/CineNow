@@ -50,13 +50,7 @@ public class AggiungiOrdineServlet extends HttpServlet {
                 int numero = Integer.parseInt(dettagliPosto[2]);
                 posti.add(new PostoProiezione(idSala, fila, numero, idProiezione, true));
             }
-
-            // Crea il cliente e la proiezione
-            Cliente cliente = new Cliente(emailCliente, "Mario", "Rossi"); // Mock del cliente
-            Proiezione proiezione = new Proiezione(idProiezione, null, 0, 0, 0);
-
-            // Aggiungi l'ordine
-            Prenotazione prenotazione = prenotazioneService.aggiungiOrdine(cliente, posti, proiezione);
+            //Prenotazione prenotazione = prenotazioneService.aggiungiOrdine(cliente, posti, proiezione);
 
             // Reindirizza alla pagina dello storico ordini
             response.sendRedirect(request.getContextPath() + "/storicoOrdini?emailCliente=" + emailCliente);
