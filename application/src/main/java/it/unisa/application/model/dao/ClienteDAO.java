@@ -1,6 +1,8 @@
 package it.unisa.application.model.dao;
 
+import it.unisa.application.database_connection.DataSourceSingleton;
 import it.unisa.application.model.entity.Cliente;
+import it.unisa.application.model.entity.Utente;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,21 +13,17 @@ import javax.sql.DataSource;
 public class ClienteDAO {
     private DataSource ds;
 
-    public ClienteDAO(DataSource ds) {
-        this.ds = ds;
+    public ClienteDAO() {
+        this.ds = DataSourceSingleton.getInstance();
     }
 
     public boolean create(Cliente cliente) {
-        String sqlUtente = "INSERT INTO utente (email, password, ruolo) VALUES (?, ?, ?)";
         String sqlCliente = "INSERT INTO cliente (email, nome, cognome) VALUES (?, ?, ?)";
         try (Connection conn = ds.getConnection()) {
             conn.setAutoCommit(false);
-            try (PreparedStatement stmtUtente = conn.prepareStatement(sqlUtente);
-                 PreparedStatement stmtCliente = conn.prepareStatement(sqlCliente)) {
-                stmtUtente.setString(1, cliente.getEmail());
-                stmtUtente.setString(2, cliente.getPassword());
-                stmtUtente.setString(3, "cliente");
-                stmtUtente.executeUpdate();
+            try (PreparedStatement stmtCliente = conn.prepareStatement(sqlCliente)) {
+                UtenteDAO uDao = new UtenteDAO();
+                uDao.create(cliente);
                 stmtCliente.setString(1, cliente.getEmail());
                 stmtCliente.setString(2, cliente.getNome());
                 stmtCliente.setString(3, cliente.getCognome());

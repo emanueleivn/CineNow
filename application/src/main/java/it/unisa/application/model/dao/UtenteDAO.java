@@ -1,5 +1,6 @@
 package it.unisa.application.model.dao;
 
+import it.unisa.application.database_connection.DataSourceSingleton;
 import it.unisa.application.model.entity.Utente;
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -10,8 +11,8 @@ import java.sql.SQLException;
 public class UtenteDAO {
     private DataSource ds;
 
-    public UtenteDAO(DataSource ds) {
-        this.ds = ds;
+    public UtenteDAO() {
+        this.ds = DataSourceSingleton.getInstance();
     }
 
     public boolean create(Utente utente) {
