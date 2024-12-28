@@ -28,7 +28,7 @@ public class RegistrazioneService {
     }
     public Cliente registrazione(String email,String password,String nome,String cognome){
         if (!validationManager.validate(Map.of("email", email, "password", password, "nome", nome, "cognome", cognome))
-                ||utenteDAO.retrieveByEmail(email) != null) {
+                || utenteDAO.retrieveByEmail(email) != null) {
             return null;
         }
         Cliente cliente = new Cliente(email, password, nome, cognome);

@@ -13,7 +13,7 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     public void init() {
-        authService = new AutenticazioneService(); // Inizializza il servizio di autenticazione
+        authService = new AutenticazioneService();
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -23,9 +23,7 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-
         Cliente cliente = authService.login(email, password);
-
         if (cliente != null) {
             HttpSession session = request.getSession();
             session.setAttribute("clienteLoggato", cliente);

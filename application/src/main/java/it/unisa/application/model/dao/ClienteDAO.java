@@ -2,8 +2,6 @@ package it.unisa.application.model.dao;
 
 import it.unisa.application.database_connection.DataSourceSingleton;
 import it.unisa.application.model.entity.Cliente;
-import it.unisa.application.model.entity.Utente;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

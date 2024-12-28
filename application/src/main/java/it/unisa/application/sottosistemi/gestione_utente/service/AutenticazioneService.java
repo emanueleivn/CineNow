@@ -29,7 +29,6 @@ public class AutenticazioneService {
         if (!validationManager.validate(Map.of("email", email, "password", password))) {
             return null;
         }
-
         Utente utente = utenteDAO.retrieveByEmail(email);
         if (utente != null && utente.getPassword().equals(password)) {
             if ("cliente".equalsIgnoreCase(utente.getRuolo())) {
