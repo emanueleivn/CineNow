@@ -1,18 +1,18 @@
 package it.unisa.application.model.entity;
 
-public class PostoProiezione {
+public class Occupa {
     private int idSala;
     private char fila;
     private int numero;
     private int idProiezione;
-    private boolean stato;
+    private int idPrenotazione;
 
-    public PostoProiezione(int idSala, char fila, int numero, int idProiezione, boolean stato) {
+    public Occupa(int idSala, char fila, int numero, int idProiezione, int idPrenotazione) {
         this.idSala = idSala;
         this.fila = fila;
         this.numero = numero;
         this.idProiezione = idProiezione;
-        this.stato = stato;
+        this.idPrenotazione = idPrenotazione;
     }
 
     public int getIdSala() {
@@ -47,11 +47,11 @@ public class PostoProiezione {
         this.idProiezione = idProiezione;
     }
 
-    public boolean isStato() {
-        return stato;
+    public int getIdPrenotazione() {
+        return idPrenotazione;
     }
 
-    public void setStato(boolean stato) {
-        this.stato = stato;
+    public void setIdPrenotazione(int idPrenotazione) {
+        this.idPrenotazione = idPrenotazione;
     }
 }
