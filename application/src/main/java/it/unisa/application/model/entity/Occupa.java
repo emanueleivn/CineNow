@@ -7,6 +7,8 @@ public class Occupa {
     private int idProiezione;
     private int idPrenotazione;
 
+    public Occupa() {}
+
     public Occupa(int idSala, char fila, int numero, int idProiezione, int idPrenotazione) {
         this.idSala = idSala;
         this.fila = fila;

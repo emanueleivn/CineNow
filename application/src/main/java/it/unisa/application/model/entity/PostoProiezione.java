@@ -7,6 +7,8 @@ public class PostoProiezione {
     private int idProiezione;
     private boolean stato;
 
+    public PostoProiezione() {}
+
     public PostoProiezione(int idSala, char fila, int numero, int idProiezione, boolean stato) {
         this.idSala = idSala;
         this.fila = fila;

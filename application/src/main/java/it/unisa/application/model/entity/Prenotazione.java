@@ -5,6 +5,7 @@ public class Prenotazione {
     private String emailCliente;
     private int idProiezione;
 
+    public Prenotazione() {}
 
     public Prenotazione(int id, String emailCliente, int idProiezione) {
         this.id = id;
