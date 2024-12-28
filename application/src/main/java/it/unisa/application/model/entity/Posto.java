@@ -5,6 +5,8 @@ public class Posto {
     private char fila;
     private int numero;
 
+    public Posto() {}
+
     public Posto(int idSala, char fila, int numero) {
         this.idSala = idSala;
         this.fila = fila;
