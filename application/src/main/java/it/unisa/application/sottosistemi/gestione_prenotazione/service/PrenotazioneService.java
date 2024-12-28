@@ -12,6 +12,9 @@ import java.util.List;
 public class PrenotazioneService {
     private final PrenotazioneDAO prenotazioneDAO = new PrenotazioneDAO();
 
+    public PrenotazioneService() {
+    }
+
     public Prenotazione aggiungiOrdine(Cliente cliente, List<PostoProiezione> posti, Proiezione proiezione) {
         if (cliente == null || posti == null || posti.isEmpty() || proiezione == null) {
             throw new IllegalArgumentException("Cliente, posti e proiezione non possono essere null.");
@@ -19,11 +22,11 @@ public class PrenotazioneService {
 
         Prenotazione prenotazione = new Prenotazione();
         prenotazione.setEmailCliente(cliente.getEmail());
-        prenotazione.setIdProiezione(proiezione.getId());
+        //prenotazione.setIdProiezione(proiezione.getId());
 
-        if (prenotazioneDAO.addPrenotazione(prenotazione)) {
+        if (prenotazioneDAO.create(prenotazione)) {
             for (PostoProiezione posto : posti) {
-                posto.setIdProiezione(proiezione.getId());
+                //posto.setIdProiezione(proiezione.getId());
                 posto.setStato(false);
             }
             return prenotazione;
@@ -37,6 +40,6 @@ public class PrenotazioneService {
             throw new IllegalArgumentException("Il cliente non può essere null.");
         }
 
-        return prenotazioneDAO.getPrenotazioniByCliente(cliente.getEmail());
+        return prenotazioneDAO.retrieveAllByCliente(cliente.getEmail());
     }
 }

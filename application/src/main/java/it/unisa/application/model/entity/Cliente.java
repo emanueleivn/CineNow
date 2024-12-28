@@ -12,7 +12,7 @@ public class Cliente extends Utente{
         super();
         this.prenotazioni=new ArrayList<Prenotazione>();
     }
-    public Cliente(String email, String password,String nome, String cognome) {
+    public Cliente(String email, String password, String nome, String cognome) {
         super(email,password,"cliente");
         this.nome = nome;
         this.cognome = cognome;

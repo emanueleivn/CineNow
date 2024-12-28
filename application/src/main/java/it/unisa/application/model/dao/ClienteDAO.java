@@ -58,9 +58,6 @@ public class ClienteDAO {
                     cliente.setEmail(rs.getString("email"));
                     cliente.setNome(rs.getString("nome"));
                     cliente.setCognome(rs.getString("cognome"));
-                    //PrenotazioneDAO pDao = new PrenotazioneDAO(ds);
-                    //pDao.prenotazioniByCliente(cliente.getEmail());
-                    //cliente.setPrenotazioni() Retrive prenotazioni da PrenotazioneDAO
                     return cliente;
                 }
             }

@@ -13,7 +13,7 @@ public class PrenotazioneDAO {
     private static final String SELECT_PRENOTAZIONI_BY_CLIENTE = "SELECT * FROM prenotazione WHERE email_cliente = ?";
 
     // Aggiunge una prenotazione al database
-    public boolean addPrenotazione(Prenotazione prenotazione) {
+    public boolean create(Prenotazione prenotazione) {
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement ps = connection.prepareStatement(INSERT_PRENOTAZIONE, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -35,7 +35,7 @@ public class PrenotazioneDAO {
     }
 
     // Ottiene tutte le prenotazioni di un cliente
-    public List<Prenotazione> getPrenotazioniByCliente(String emailCliente) {
+    public List<Prenotazione> retrieveAllByCliente(String emailCliente) {
         System.out.println("Esecuzione query per email: " + emailCliente); // Log
         List<Prenotazione> prenotazioni = new ArrayList<>();
         String query = "SELECT * FROM prenotazione WHERE email_cliente = ?";
