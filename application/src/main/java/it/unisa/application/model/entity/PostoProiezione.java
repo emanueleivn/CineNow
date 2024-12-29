@@ -1,52 +1,40 @@
 package it.unisa.application.model.entity;
 
 public class PostoProiezione {
-    private int idSala;
-    private char fila;
-    private int numero;
-    private int idProiezione;
+    private Posto posto;
+    private Proiezione proiezione;
     private boolean stato;
 
-    public PostoProiezione() {}
-
-    public PostoProiezione(int idSala, char fila, int numero, int idProiezione, boolean stato) {
-        this.idSala = idSala;
-        this.fila = fila;
-        this.numero = numero;
-        this.idProiezione = idProiezione;
-        this.stato = stato;
+    public PostoProiezione() {
+        this.stato = true;
     }
 
-    public int getIdSala() {
-        return idSala;
+    public PostoProiezione(Posto posto, Proiezione proiezione) {
+        this.stato = true;
+        this.posto = posto;
+        this.proiezione = proiezione;
     }
 
-    public void setIdSala(int idSala) {
-        this.idSala = idSala;
+    public PostoProiezione(Sala sala, char fila, int numero, Proiezione proiezione, boolean stato) {
+        posto = new Posto(sala, fila, numero);
+        this.proiezione = proiezione;
+        this.stato = true;
     }
 
-    public char getFila() {
-        return fila;
+    public Posto getPosto() {
+        return posto;
     }
 
-    public void setFila(char fila) {
-        this.fila = fila;
+    public void setPosto(Posto posto) {
+        this.posto = posto;
     }
 
-    public int getNumero() {
-        return numero;
+    public Proiezione getProiezione() {
+        return proiezione;
     }
 
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
-
-    public int getIdProiezione() {
-        return idProiezione;
-    }
-
-    public void setIdProiezione(int idProiezione) {
-        this.idProiezione = idProiezione;
+    public void setProiezione(Proiezione proiezione) {
+        this.proiezione = proiezione;
     }
 
     public boolean isStato() {
