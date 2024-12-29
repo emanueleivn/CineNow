@@ -1,22 +1,24 @@
 package it.unisa.application.model.entity;
 
 public class Posto {
-    private int idSala;
+    private Sala sala;
     private char fila;
     private int numero;
 
-    public Posto(int idSala, char fila, int numero) {
-        this.idSala = idSala;
+    public Posto() {}
+
+    public Posto(Sala sala, char fila, int numero) {
+        this.sala = sala;
         this.fila = fila;
         this.numero = numero;
     }
 
-    public int getIdSala() {
-        return idSala;
+    public Sala getSala() {
+        return sala;
     }
 
-    public void setIdSala(int idSala) {
-        this.idSala = idSala;
+    public void setSala(Sala sala) {
+        this.sala = sala;
     }
 
     public char getFila() {
