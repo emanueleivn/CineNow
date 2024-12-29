@@ -1,16 +1,19 @@
 package it.unisa.application.model.entity;
 
+import java.util.List;
+
 public class Prenotazione {
     private int id;
-    private String emailCliente;
-    private int idProiezione;
+    private Proiezione proiezione;
+    private List<PostoProiezione> postiPrenotazione;
+    private Cliente cliente;
 
     public Prenotazione() {}
 
-    public Prenotazione(int id, String emailCliente, int idProiezione) {
+    public Prenotazione(int id, Cliente cliente, Proiezione proiezione) {
         this.id = id;
-        this.emailCliente = emailCliente;
-        this.idProiezione = idProiezione;
+        this.cliente = cliente;
+        this.proiezione = proiezione;
     }
 
     public int getId() {
@@ -21,19 +24,27 @@ public class Prenotazione {
         this.id = id;
     }
 
-    public String getEmailCliente() {
-        return emailCliente;
+    public Proiezione getProiezione() {
+        return proiezione;
     }
 
-    public void setEmailCliente(String emailCliente) {
-        this.emailCliente = emailCliente;
+    public void setProiezione(Proiezione proiezione) {
+        this.proiezione = proiezione;
     }
 
-    public int getIdProiezione() {
-        return idProiezione;
+    public List<PostoProiezione> getPostiPrenotazione() {
+        return postiPrenotazione;
     }
 
-    public void setIdProiezione(int idProiezione) {
-        this.idProiezione = idProiezione;
+    public void setPostiPrenotazione(List<PostoProiezione> postiPrenotazione) {
+        this.postiPrenotazione = postiPrenotazione;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
     }
 }

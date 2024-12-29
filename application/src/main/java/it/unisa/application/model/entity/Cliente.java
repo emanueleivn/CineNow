@@ -3,17 +3,18 @@ package it.unisa.application.model.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Cliente extends Utente{
+public class Cliente extends Utente {
     private String nome;
     private String cognome;
     private List<Prenotazione> prenotazioni;
 
     public Cliente() {
         super();
-        this.prenotazioni=new ArrayList<Prenotazione>();
+        this.prenotazioni = new ArrayList<Prenotazione>();
     }
+
     public Cliente(String email, String password, String nome, String cognome) {
-        super(email,password,"cliente");
+        super(email, password, "cliente");
         this.nome = nome;
         this.cognome = cognome;
     }
@@ -42,11 +43,12 @@ public class Cliente extends Utente{
         this.prenotazioni = prenotazioni;
     }
 
-    /*public void aggiungiOrdine(List<PostoProiezione> posti, Proiezione proiezione) {
-        prenotazioni.add();
+    public void aggiungiOrdine(List<PostoProiezione> posti, Proiezione proiezione) {
+        Prenotazione prenotazione = new Prenotazione();
+        prenotazione.setCliente(this);
+        prenotazione.setProiezione(proiezione);
+        prenotazione.setPostiPrenotazione(posti);
+        prenotazioni.add(prenotazione);
     }
-
-    */
-
 
 }
