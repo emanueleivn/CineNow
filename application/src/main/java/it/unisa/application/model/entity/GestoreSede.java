@@ -12,6 +12,8 @@ public class GestoreSede extends Utente {
     }
 
     public GestoreSede() {
+        super();
+        this.setRuolo("gestore_sede");
     }
 
     public GestoreSede(String email, String password, Sede sede) {

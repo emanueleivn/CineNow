@@ -10,6 +10,7 @@ public class Cliente extends Utente {
 
     public Cliente() {
         super();
+        this.setRuolo("cliente");
         this.prenotazioni = new ArrayList<Prenotazione>();
     }
 

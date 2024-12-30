@@ -32,7 +32,7 @@ public class LoginServlet extends HttpServlet {
             String ruolo = utente.getRuolo().toLowerCase();
             switch (ruolo) {
                 case "cliente":
-                    session.setAttribute("cliente", (Cliente) utente);
+                    session.setAttribute("cliente", utente);
                     response.sendRedirect(request.getContextPath() + "/index.jsp");
                     break;
                 case "gestore_sede":

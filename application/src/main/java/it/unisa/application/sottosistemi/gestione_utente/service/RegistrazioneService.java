@@ -4,10 +4,7 @@ import it.unisa.application.model.dao.ClienteDAO;
 import it.unisa.application.model.dao.UtenteDAO;
 import it.unisa.application.model.entity.Cliente;
 import it.unisa.application.model.entity.Utente;
-import it.unisa.application.utilities.CampoValidator;
-import it.unisa.application.utilities.EmailValidator;
-import it.unisa.application.utilities.PasswordValidator;
-import it.unisa.application.utilities.ValidateStrategyManager;
+import it.unisa.application.utilities.*;
 
 import java.util.Map;
 
@@ -26,12 +23,14 @@ public class RegistrazioneService {
         validationManager.addValidator("nome", new CampoValidator());
         validationManager.addValidator("cognome", new CampoValidator());
     }
-    public Cliente registrazione(String email,String password,String nome,String cognome){
+
+    public Cliente registrazione(String email, String password, String nome, String cognome) {
         if (!validationManager.validate(Map.of("email", email, "password", password, "nome", nome, "cognome", cognome))
                 || utenteDAO.retrieveByEmail(email) != null) {
             return null;
         }
-        Cliente cliente = new Cliente(email, password, nome, cognome);
+        String passHash = PasswordHash.hash(password);
+        Cliente cliente = new Cliente(email, passHash, nome, cognome);
         clienteDAO.create(cliente);
         return cliente;
     }
