@@ -21,7 +21,7 @@ public class ProiezioneDAO {
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement(INSERT_PROIEZIONE, Statement.RETURN_GENERATED_KEYS)) {
             ps.setInt(1, proiezione.getId());
-            ps.setDate(2, proiezione.getDataProiezione());
+            ps.setDate(2, Date.valueOf(proiezione.getDataProiezione()));
             ps.setInt(3, proiezione.getFilmProiezione().getId());
             ps.setInt(4, proiezione.getSalaProiezione().getId());
             ps.setInt(5, proiezione.getOrarioProiezione().getId());
