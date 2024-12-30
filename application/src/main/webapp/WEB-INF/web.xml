@@ -16,6 +16,20 @@
         <exception-type>java.lang.Exception</exception-type>
         <location>/WEB-INF/jsp/error.jsp</location>
     </error-page>
-
-
+    <filter>
+        <filter-name>GestSedeFilter</filter-name>
+        <filter-class>it.unisa.application.utilities.GestSedeFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>GestSedeFilter</filter-name>
+        <url-pattern>/gestione_sala/*</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>ClienteFilter</filter-name>
+        <filter-class>it.unisa.application.utilities.ClienteFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ClienteFilter</filter-name>
+        <url-pattern>/gestione_prenotazione/*</url-pattern>
+    </filter-mapping>
 </web-app>
