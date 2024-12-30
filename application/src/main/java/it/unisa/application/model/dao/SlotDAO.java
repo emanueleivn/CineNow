@@ -17,6 +17,7 @@ public class SlotDAO {
     }
 
     public Slot retriveById(int id){
+
         String sql = "select * from slot where id = ?";
 
         try (Connection connection = ds.getConnection();
