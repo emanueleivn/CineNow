@@ -9,6 +9,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class SedeDAO {
@@ -39,5 +41,30 @@ public class SedeDAO {
         }
 
         return null;
+    }
+
+    public List<Sede> retirveAll(){
+        String sql = "SELECT * FROM sede";
+        List<Sede> sedi = new ArrayList<Sede>();
+        try (Connection connection = ds.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                String indirizzo = rs.getString("via") + ", " + rs.getString("città") + ", " + rs.getString("cap");
+                sedi.add(new Sede(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        indirizzo
+                ));
+            }
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return sedi;
     }
 }
