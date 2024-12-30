@@ -5,17 +5,19 @@
 </head>
 <body>
 <h1>Aggiungi Prenotazione</h1>
+
 <form action="<%= request.getContextPath() %>/aggiungiOrdine" method="post">
-  <label for="emailCliente">Email Cliente:</label>
-  <input type="email" id="emailCliente" name="emailCliente" required><br>
-
   <label for="idProiezione">ID Proiezione:</label>
-  <input type="number" id="idProiezione" name="idProiezione" required><br>
+  <input type="text" id="idProiezione" name="idProiezione" required><br><br>
 
-  <label for="posti">Posti (Formato: idSala,fila,numero separati da punto e virgola):</label>
-  <input type="text" id="posti" name="posti" placeholder="Esempio: 1,A,1;1,A,2" required><br>
+  <label for="posti">Posti (formato: idSala,fila,numero; esempio: 1,A,5):</label>
+  <input type="text" id="posti" name="posti" required><br><br>
 
-  <button type="submit">Prenota</button>
+  <button type="submit">Aggiungi Prenotazione</button>
 </form>
+
+<% if (request.getAttribute("errorMessage") != null) { %>
+<p style="color:red;"><%= request.getAttribute("errorMessage") %></p>
+<% } %>
 </body>
 </html>
