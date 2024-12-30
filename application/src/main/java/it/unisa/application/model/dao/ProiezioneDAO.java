@@ -1,10 +1,7 @@
 package it.unisa.application.model.dao;
 
 import it.unisa.application.database_connection.DataSourceSingleton;
-import it.unisa.application.model.entity.Film;
-import it.unisa.application.model.entity.Prenotazione;
-import it.unisa.application.model.entity.Proiezione;
-import it.unisa.application.model.entity.Slot;
+import it.unisa.application.model.entity.*;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -25,13 +22,47 @@ public class ProiezioneDAO {
             ps.setInt(3, proiezione.getFilmProiezione().getId());
             ps.setInt(4, proiezione.getSalaProiezione().getId());
             ps.setInt(5, proiezione.getOrarioProiezione().getId());
+            return ps.executeUpdate() > 0;
 
         }catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
+    }
 
-        return false;
+    public Proiezione retirveById(int id){
+        String sql = "SELECT * FROM proiezione WHERE id = ?";
+        try (Connection connection = ds.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+
+            if(rs.next()){
+                Proiezione proiezione = new Proiezione();
+                proiezione.setId(rs.getInt("id"));
+
+                Film film = new Film();
+                film.setId(rs.getInt("id_film"));
+
+                Sala sala = new Sala();
+                sala.setId(rs.getInt("id_sala"));
+
+                Slot slotOrario = new Slot();
+                slotOrario.setId(rs.getInt("id_orario"));
+
+                proiezione.setFilmProiezione(film);
+                proiezione.setDataProiezione(rs.getDate("data").toLocalDate());
+                proiezione.setSalaProiezione(sala);
+                proiezione.setOrarioProiezione(slotOrario);
+
+                return proiezione;
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 
