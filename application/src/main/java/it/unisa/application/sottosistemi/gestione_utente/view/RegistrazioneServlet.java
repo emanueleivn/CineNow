@@ -33,7 +33,7 @@ public class RegistrazioneServlet extends HttpServlet {
         Cliente cliente = regServ.registrazione(email, password, nome, cognome);
         if(cliente!=null){
             HttpSession session = req.getSession();
-            session.setAttribute("clienteLoggato", cliente);
+            session.setAttribute("cliente", cliente);
             resp.sendRedirect(req.getContextPath() + "/index.jsp");
         }else{
             req.setAttribute("errorMessage", "Formato non corretto o errore inserimento dati");

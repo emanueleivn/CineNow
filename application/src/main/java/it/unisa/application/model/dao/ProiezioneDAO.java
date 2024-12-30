@@ -9,14 +9,14 @@ import java.sql.*;
 public class ProiezioneDAO {
     private static final String INSERT_PROIEZIONE = "INSERT INTO proiezione(id, data, id_film, id_sala, id_orario) VALUES(?, ?, ?, ?, ?)";
 
-    public Proiezione aggiungiProiezione(Slot s, Date d, Film film){
+    public Proiezione aggiungiProiezione(Slot s, Date d, Film film) {
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              PreparedStatement ps = connection.prepareStatement(INSERT_PROIEZIONE, Statement.RETURN_GENERATED_KEYS)) {
 
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
+        return null;
     }
+
 }

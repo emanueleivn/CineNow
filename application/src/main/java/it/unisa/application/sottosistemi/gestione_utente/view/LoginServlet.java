@@ -26,7 +26,7 @@ public class LoginServlet extends HttpServlet {
         Cliente cliente = authService.login(email, password);
         if (cliente != null) {
             HttpSession session = request.getSession();
-            session.setAttribute("clienteLoggato", cliente);
+            session.setAttribute("cliente", cliente);
             response.sendRedirect(request.getContextPath() + "/index.jsp");
         } else {
             request.setAttribute("errorMessage", "Formato non corretto o errore inserimento dati");

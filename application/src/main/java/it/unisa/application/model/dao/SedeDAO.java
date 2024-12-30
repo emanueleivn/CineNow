@@ -8,12 +8,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SedeDAO {
     /*
     * getProgrammazione() -> List<Proiezione>
     * */
-
+/*
     public List<Proiezione> getProgrammazione(){
         List<Proiezione> proiezioni = new ArrayList<Proiezione>();
         String query = "SELECT * FROM proiezione";
@@ -40,4 +41,6 @@ public class SedeDAO {
 
         return proiezioni;
     }
+    */
+
 }
