@@ -6,7 +6,9 @@ import it.unisa.application.model.entity.*;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PrenotazioneDAO {
     private final DataSource ds;
@@ -58,44 +60,86 @@ public class PrenotazioneDAO {
 
     public List<Prenotazione> retrieveAllByCliente(Cliente cliente) {
         List<Prenotazione> prenotazioni = new ArrayList<>();
-        String sql = "SELECT * FROM prenotazione WHERE email_cliente = ?";
+        String sql = "SELECT " +
+                "p.id AS prenotazione_id, " +
+                "pr.id AS proiezione_id, " +
+                "pr.data AS data_proiezione, " +
+                "sl.ora_inizio, " +
+                "f.id AS film_id, " +
+                "f.titolo AS film_titolo, " +
+                "f.durata, " +
+                "s.id AS sala_id, " +
+                "s.numero AS numero_sala, " +
+                "pp.fila AS fila_posto, " +
+                "pp.numero AS numero_posto " +
+                "FROM prenotazione p " +
+                "JOIN proiezione pr ON p.id_proiezione = pr.id " +
+                "JOIN film f ON pr.id_film = f.id " +
+                "JOIN sala s ON pr.id_sala = s.id " +
+                "JOIN slot sl ON pr.id_orario = sl.id " +
+                "LEFT JOIN occupa o ON o.id_prenotazione = p.id " +
+                "LEFT JOIN posto_proiezione pp ON pp.id_sala = o.id_sala AND pp.fila = o.fila AND pp.numero = o.numero AND pp.id_proiezione = pr.id " +
+                "WHERE p.email_cliente = ?";
+
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, cliente.getEmail());
             ResultSet rs = ps.executeQuery();
+
+            Map<Integer, Prenotazione> prenotazioneMap = new HashMap<>();
+
             while (rs.next()) {
-                Prenotazione prenotazione = new Prenotazione();
-                prenotazione.setId(rs.getInt("id"));
-                prenotazione.setCliente(cliente);
-                prenotazione.setProiezione(new Proiezione());
-                prenotazione.getProiezione().setId(rs.getInt("id_proiezione"));
+                int prenotazioneId = rs.getInt("prenotazione_id");
+                Prenotazione prenotazione = prenotazioneMap.getOrDefault(prenotazioneId, null);
 
-                List<PostoProiezione> posti = new ArrayList<>();
-                String sqlPosti = "SELECT * FROM occupa WHERE id_prenotazione = ?";
-                try (PreparedStatement psPosti = connection.prepareStatement(sqlPosti)) {
-                    psPosti.setInt(1, prenotazione.getId());
-                    ResultSet rsPosti = psPosti.executeQuery();
-                    while (rsPosti.next()) {
-                        Posto posto = new Posto();
-                        posto.setSala(new Sala());
-                        posto.getSala().setId(rsPosti.getInt("id_sala"));
-                        posto.setFila(rsPosti.getString("fila").charAt(0));
-                        posto.setNumero(rsPosti.getInt("numero"));
+                if (prenotazione == null) {
+                    Film film = new Film(
+                            rs.getInt("film_id"),
+                            rs.getString("film_titolo"),
+                            null, null,
+                            rs.getInt("durata"),
+                            null, null,
+                            false
+                    );
 
-                        PostoProiezione postoProiezione = new PostoProiezione();
-                        postoProiezione.setPosto(posto);
-                        postoProiezione.setProiezione(prenotazione.getProiezione());
-                        posti.add(postoProiezione);
-                    }
+                    Sala sala = new Sala();
+                    sala.setId(rs.getInt("sala_id"));
+                    sala.setNumeroSala(rs.getInt("numero_sala"));
+
+                    Slot slot = new Slot();
+                    slot.setOraInizio(rs.getTime("ora_inizio"));
+
+                    Proiezione proiezione = new Proiezione();
+                    proiezione.setId(rs.getInt("proiezione_id"));
+                    proiezione.setDataProiezione(rs.getDate("data_proiezione").toLocalDate());
+                    proiezione.setFilmProiezione(film);
+                    proiezione.setSalaProiezione(sala);
+                    proiezione.setOrarioProiezione(slot);
+
+                    prenotazione = new Prenotazione();
+                    prenotazione.setId(prenotazioneId);
+                    prenotazione.setCliente(cliente);
+                    prenotazione.setProiezione(proiezione);
+                    prenotazione.setPostiPrenotazione(new ArrayList<>());
+                    prenotazioneMap.put(prenotazioneId, prenotazione);
                 }
 
-                prenotazione.setPostiPrenotazione(posti);
-                prenotazioni.add(prenotazione);
+                if (rs.getString("fila_posto") != null && rs.getInt("numero_posto") != 0) {
+                    Posto posto = new Posto();
+                    posto.setFila(rs.getString("fila_posto").charAt(0));
+                    posto.setNumero(rs.getInt("numero_posto"));
+
+                    PostoProiezione postoProiezione = new PostoProiezione();
+                    postoProiezione.setPosto(posto);
+                    postoProiezione.setProiezione(prenotazione.getProiezione());
+                    prenotazione.getPostiPrenotazione().add(postoProiezione);
+                }
             }
+
+            prenotazioni.addAll(prenotazioneMap.values());
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return prenotazioni;
     }
-
 }

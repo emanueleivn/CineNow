@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="it.unisa.application.model.entity.Prenotazione" %>
 <%@ page import="java.util.List" %>
+<%@ page import="it.unisa.application.model.entity.PostoProiezione" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -44,23 +45,42 @@
     %>
     <li class="order-item">
       <h3>Codice Prenotazione: <%= String.format("%03d", prenotazione.getId()) %></h3>
-      <p><strong>Film:</strong> <%= prenotazione.getProiezione() != null && prenotazione.getProiezione().getFilmProiezione() != null ? prenotazione.getProiezione().getFilmProiezione().getTitolo() : "Non disponibile" %></p>
-      <p><strong>Sala:</strong> <%= prenotazione.getProiezione() != null && prenotazione.getProiezione().getSalaProiezione() != null ? "Sala " + prenotazione.getProiezione().getSalaProiezione().getNumeroSala() : "Non disponibile" %></p>
-      <p><strong>Data:</strong> <%= prenotazione.getProiezione() != null ? prenotazione.getProiezione().getDataProiezione() : "Non disponibile" %></p>
-      <p><strong>Orario:</strong> <%= prenotazione.getProiezione() != null && prenotazione.getProiezione().getOrarioProiezione() != null ? prenotazione.getProiezione().getOrarioProiezione().getOraInizio() : "Non disponibile" %></p>
+      <p><strong>Film:</strong>
+        <%= prenotazione.getProiezione() != null && prenotazione.getProiezione().getFilmProiezione() != null
+                ? prenotazione.getProiezione().getFilmProiezione().getTitolo()
+                : "Non disponibile" %>
+      </p>
+      <p><strong>Durata:</strong>
+        <%= prenotazione.getProiezione() != null && prenotazione.getProiezione().getFilmProiezione() != null
+                ? prenotazione.getProiezione().getFilmProiezione().getDurata() + " min"
+                : "Non disponibile" %>
+      </p>
+      <p><strong>Sala:</strong>
+        <%= prenotazione.getProiezione() != null && prenotazione.getProiezione().getSalaProiezione() != null
+                ? "Sala " + prenotazione.getProiezione().getSalaProiezione().getNumeroSala()
+                : "Non disponibile" %>
+      </p>
+      <p><strong>Data:</strong>
+        <%= prenotazione.getProiezione() != null
+                ? prenotazione.getProiezione().getDataProiezione()
+                : "Non disponibile" %>
+      </p>
+      <p><strong>Orario:</strong>
+        <%= prenotazione.getProiezione() != null && prenotazione.getProiezione().getOrarioProiezione() != null
+                ? prenotazione.getProiezione().getOrarioProiezione().getOraInizio()
+                : "Non disponibile" %>
+      </p>
       <p><strong>Posti:</strong>
         <%
           if (prenotazione.getPostiPrenotazione() != null && !prenotazione.getPostiPrenotazione().isEmpty()) {
             StringBuilder posti = new StringBuilder();
-            for (int i = 0; i < prenotazione.getPostiPrenotazione().size(); i++) {
-              posti.append(prenotazione.getPostiPrenotazione().get(i).getPosto().getFila())
-                      .append(prenotazione.getPostiPrenotazione().get(i).getPosto().getNumero());
-              if (i < prenotazione.getPostiPrenotazione().size() - 1) {
-                posti.append(", ");
-              }
+            for (PostoProiezione postoProiezione : prenotazione.getPostiPrenotazione()) {
+              posti.append(postoProiezione.getPosto().getFila())
+                      .append(postoProiezione.getPosto().getNumero())
+                      .append(", ");
             }
         %>
-        <%= posti.toString() %>
+        <%= posti.substring(0, posti.length() - 2) %>
         <%
         } else {
         %>
@@ -69,7 +89,6 @@
           }
         %>
       </p>
-
     </li>
     <%
       }
