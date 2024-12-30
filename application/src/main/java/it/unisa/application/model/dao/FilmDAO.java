@@ -2,20 +2,23 @@ package it.unisa.application.model.dao;
 
 import it.unisa.application.database_connection.DataSourceSingleton;
 import it.unisa.application.model.entity.Film;
+
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FilmDAO {
+    private final DataSource ds;
 
-    private static final String INSERT_FILM = "INSERT INTO film (titolo, genere, classificazione, durata, locandina, descrizione, is_proiettato) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    private static final String SELECT_ALL_FILMS = "SELECT * FROM film";
+    public FilmDAO() {
+        this.ds = DataSourceSingleton.getInstance();
+    }
 
-    // Aggiunge un film al catalogo
-    public boolean addFilm(Film film) {
-        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
-             PreparedStatement ps = connection.prepareStatement(INSERT_FILM, Statement.RETURN_GENERATED_KEYS)) {
-
+    public boolean create(Film film) {
+        String sql = "INSERT INTO film (titolo, genere, classificazione, durata, locandina, descrizione, is_proiettato) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection connection = ds.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, film.getTitolo());
             ps.setString(2, film.getGenere());
             ps.setString(3, film.getClassificazione());
@@ -24,7 +27,6 @@ public class FilmDAO {
             ps.setString(6, film.getDescrizione());
             ps.setBoolean(7, film.isProiettato());
             int affectedRows = ps.executeUpdate();
-
             if (affectedRows > 0) {
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
@@ -38,24 +40,46 @@ public class FilmDAO {
         return false;
     }
 
-    // Ottiene tutti i film dal catalogo
-    public List<Film> getAllFilms() {
-        List<Film> films = new ArrayList<>();
-        String query = "SELECT * FROM film";
-        try (Connection connection = DataSourceSingleton.getInstance().getConnection();
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(query)) {
+    public Film retrieveById(int id) {
+        String sql = "SELECT * FROM film WHERE id = ?";
+        try (Connection connection = ds.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Film(
+                        rs.getInt("id"),
+                        rs.getString("titolo"),
+                        rs.getString("genere"),
+                        rs.getString("classificazione"),
+                        rs.getInt("durata"),
+                        rs.getString("locandina"),
+                        rs.getString("descrizione"),
+                        rs.getBoolean("is_proiettato")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-            while (resultSet.next()) {
+    public List<Film> retrieveAll() {
+        List<Film> films = new ArrayList<>();
+        String sql = "SELECT * FROM film";
+        try (Connection connection = ds.getConnection();
+             Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
                 films.add(new Film(
-                        resultSet.getInt("id"),
-                        resultSet.getString("titolo"),
-                        resultSet.getString("genere"),
-                        resultSet.getString("classificazione"),
-                        resultSet.getInt("durata"),
-                        resultSet.getString("locandina"),
-                        resultSet.getString("descrizione"),
-                        resultSet.getBoolean("is_proiettato")
+                        rs.getInt("id"),
+                        rs.getString("titolo"),
+                        rs.getString("genere"),
+                        rs.getString("classificazione"),
+                        rs.getInt("durata"),
+                        rs.getString("locandina"),
+                        rs.getString("descrizione"),
+                        rs.getBoolean("is_proiettato")
                 ));
             }
         } catch (SQLException e) {
@@ -63,6 +87,4 @@ public class FilmDAO {
         }
         return films;
     }
-
 }
-
