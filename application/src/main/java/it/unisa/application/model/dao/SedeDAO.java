@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SedeDAO {
     /*
@@ -27,6 +28,8 @@ public class SedeDAO {
 
                 p.setId(resultSet.getInt("id"));
                 p.setDataProiezione(resultSet.getDate("data").toLocalDate());
+
+                //prova
                 p.setIdFilm(resultSet.getInt("id_film"));
                 p.setIdSala(resultSet.getInt("id_sala"));
                 p.setIdOrario(resultSet.getInt("id_orario"));
