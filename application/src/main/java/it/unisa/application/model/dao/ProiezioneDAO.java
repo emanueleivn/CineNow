@@ -112,7 +112,7 @@ public class ProiezioneDAO {
 
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(2, sede.getId());
+            ps.setInt(1, sede.getId());
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
