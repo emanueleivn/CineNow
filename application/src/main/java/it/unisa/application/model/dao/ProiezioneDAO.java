@@ -103,4 +103,43 @@ public class ProiezioneDAO {
         return proiezioni;
 
     }
+
+    public List<Proiezione> retriveAllBySede(Sede sede){
+        String sql = "SELECT * FROM proiezione WHERE id_sala IN (" +
+                "SELECT id_sala FROM Sala WHERE id_sede = ?)";
+
+        List<Proiezione> proiezioni = new ArrayList<>();
+
+        try (Connection connection = ds.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(2, sede.getId());
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                Proiezione proiezione = new Proiezione();
+                proiezione.setId(rs.getInt("id"));
+
+                Film film = new Film();
+                film.setId(rs.getInt("id_film"));
+                proiezione.setFilmProiezione(film);
+
+
+                proiezione.setDataProiezione(rs.getDate("data").toLocalDate());
+
+                Sala sala = new Sala();
+                sala.setId(rs.getInt("id_sala"));
+                proiezione.setSalaProiezione(sala);
+
+                Slot slotOrario = new Slot();
+                slotOrario.setId(rs.getInt("id_orario"));
+                proiezione.setOrarioProiezione(slotOrario);
+
+                proiezioni.add(proiezione);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return proiezioni;
+    }
 }
