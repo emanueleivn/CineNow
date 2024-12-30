@@ -33,15 +33,12 @@ public class StoricoOrdiniServlet extends HttpServlet {
                 request.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
                 return;
             }
-
-            request.setAttribute("cliente", cliente);
             request.setAttribute("storico", storico);
             request.getRequestDispatcher("/WEB-INF/jsp/storicoOrdini.jsp").forward(request, response);
 
         } catch (IllegalArgumentException e) {
             request.setAttribute("errorMessage", e.getMessage());
             request.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
-
         } catch (Exception e) {
             request.setAttribute("errorMessage", "Si è verificato un errore durante il recupero dello storico ordini.");
             request.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
