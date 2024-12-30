@@ -59,18 +59,32 @@ public class PostoProiezioneDAO {
         return postiProiezione;
     }
 
-    public boolean occupaPosto(PostoProiezione postoProiezione) {
-        String sql = "UPDATE posto_proiezione SET stato = false WHERE id_sala = ? AND fila = ? AND numero = ? AND id_proiezione = ?";
+    public boolean occupaPosto(PostoProiezione postoProiezione, int idPrenotazione) {
+        String updateSql = "UPDATE posto_proiezione SET stato = false WHERE id_sala = ? AND fila = ? AND numero = ? AND id_proiezione = ?";
+        String insertSql = "INSERT INTO occupa (id_sala, fila, numero, id_proiezione, id_prenotazione) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = ds.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, postoProiezione.getPosto().getSala().getId());
-            ps.setString(2, String.valueOf(postoProiezione.getPosto().getFila()));
-            ps.setInt(3, postoProiezione.getPosto().getNumero());
-            ps.setInt(4, postoProiezione.getProiezione().getId());
-            return ps.executeUpdate() > 0;
+             PreparedStatement updatePs = connection.prepareStatement(updateSql);
+             PreparedStatement insertPs = connection.prepareStatement(insertSql)) {
+
+            updatePs.setInt(1, postoProiezione.getPosto().getSala().getId());
+            updatePs.setString(2, String.valueOf(postoProiezione.getPosto().getFila()));
+            updatePs.setInt(3, postoProiezione.getPosto().getNumero());
+            updatePs.setInt(4, postoProiezione.getProiezione().getId());
+            if (updatePs.executeUpdate() <= 0) {
+                return false;
+            }
+
+            insertPs.setInt(1, postoProiezione.getPosto().getSala().getId());
+            insertPs.setString(2, String.valueOf(postoProiezione.getPosto().getFila()));
+            insertPs.setInt(3, postoProiezione.getPosto().getNumero());
+            insertPs.setInt(4, postoProiezione.getProiezione().getId());
+            insertPs.setInt(5, idPrenotazione);
+            return insertPs.executeUpdate() > 0;
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
+
 }

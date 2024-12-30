@@ -1,5 +1,6 @@
 package it.unisa.application.sottosistemi.gestione_prenotazione.service;
 
+import it.unisa.application.model.dao.PostoProiezioneDAO;
 import it.unisa.application.model.dao.PrenotazioneDAO;
 import it.unisa.application.model.entity.Cliente;
 import it.unisa.application.model.entity.PostoProiezione;
@@ -10,6 +11,7 @@ import java.util.List;
 
 public class PrenotazioneService {
     private final PrenotazioneDAO prenotazioneDAO = new PrenotazioneDAO();
+    private final PostoProiezioneDAO postoProiezioneDAO = new PostoProiezioneDAO();
 
     public Prenotazione aggiungiOrdine(Cliente cliente, List<PostoProiezione> posti, Proiezione proiezione) {
         if (cliente == null || posti == null || posti.isEmpty() || proiezione == null) {
@@ -25,7 +27,11 @@ public class PrenotazioneService {
             throw new RuntimeException("Errore durante la creazione della prenotazione.");
         }
 
-        cliente.aggiungiOrdine(posti, proiezione);
+        for (PostoProiezione postoProiezione : posti) {
+            if (!postoProiezioneDAO.occupaPosto(postoProiezione, prenotazione.getId())) {
+                throw new RuntimeException("Errore durante l'occupazione del posto.");
+            }
+        }
 
         return prenotazione;
     }
@@ -34,6 +40,6 @@ public class PrenotazioneService {
         if (cliente == null) {
             throw new IllegalArgumentException("Il cliente non può essere null.");
         }
-        return cliente.storicoOrdini();
+        return prenotazioneDAO.retrieveAllByCliente(cliente);
     }
 }

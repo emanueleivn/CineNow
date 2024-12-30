@@ -3,6 +3,7 @@
   <component name="WebContextManager">
     <option name="state">
       <map>
+        <entry key="file://$PROJECT_DIR$/application/src/main/webapp/WEB-INF/jsp/storicoOrdini.jsp" value="file://$PROJECT_DIR$/application/src/main/webapp/WEB-INF/jsp" />
         <entry key="file://$PROJECT_DIR$/application/src/main/webapp/index.jsp" value="file://$PROJECT_DIR$/application/src/main/webapp" />
       </map>
     </option>
