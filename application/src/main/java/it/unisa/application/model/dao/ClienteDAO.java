@@ -54,6 +54,8 @@ public class ClienteDAO {
                     cliente.setEmail(rs.getString("email"));
                     cliente.setNome(rs.getString("nome"));
                     cliente.setCognome(rs.getString("cognome"));
+                    PrenotazioneDAO pDao = new PrenotazioneDAO();
+                    cliente.setPrenotazioni(pDao.retrieveAllByCliente(cliente));
                     return cliente;
                 }
             }

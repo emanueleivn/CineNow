@@ -9,14 +9,14 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebFilter("/gestoreSedeFilter")
+@WebFilter("/GestSedeFilter")
 public class GestSedeFilter extends HttpFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession(false);
-        Utente utente = (Utente) session.getAttribute("clienteLoggato");
+        Utente utente = (Utente) session.getAttribute("utente");
         if (utente != null && utente.getRuolo().equals("gestore_sede")) {
             chain.doFilter(request, response);
         } else {

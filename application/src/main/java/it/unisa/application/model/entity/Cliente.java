@@ -17,6 +17,7 @@ public class Cliente extends Utente {
         super(email, password, "cliente");
         this.nome = nome;
         this.cognome = cognome;
+        this.prenotazioni = new ArrayList<Prenotazione>();
     }
 
     public String getNome() {

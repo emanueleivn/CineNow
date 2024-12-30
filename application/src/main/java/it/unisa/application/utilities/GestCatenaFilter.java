@@ -9,14 +9,14 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebFilter("/gestoreCatenaFilter")
+@WebFilter("/GestCatenaFilter")
 public class GestCatenaFilter extends HttpFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession(false);
-        Utente utente = (Utente) session.getAttribute("clienteLoggato");
+        Utente utente = (Utente) session.getAttribute("utente");
         if (utente != null && utente.getRuolo().equals("gestore_catena")) {
             chain.doFilter(request, response);
         } else {

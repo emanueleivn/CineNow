@@ -11,7 +11,7 @@
 <body>
 <%
   HttpSession session1 = request.getSession(false);
-  Cliente clienteLoggato = (session1 != null) ? (Cliente) session.getAttribute("clienteLoggato") : null;
+  Cliente clienteLoggato = (session1 != null) ? (Cliente) session.getAttribute("cliente") : null;
 %>
 
 <h1>Benvenuto in CineNow</h1>

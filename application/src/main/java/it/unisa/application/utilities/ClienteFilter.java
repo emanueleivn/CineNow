@@ -9,14 +9,14 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebFilter("/clienteFilter")
+@WebFilter("/ClienteFilter")
 public class ClienteFilter extends HttpFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession(false);
-        Utente utente = (Utente) session.getAttribute("clienteLoggato");
+        Utente utente = (Utente) session.getAttribute("cliente");
         if (utente != null && utente.getRuolo().equals("cliente")) {
             chain.doFilter(request, response);
         } else {

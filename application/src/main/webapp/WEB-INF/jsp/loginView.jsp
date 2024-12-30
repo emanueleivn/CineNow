@@ -19,7 +19,7 @@
 <body>
 
 <header>
-    <img src="logo.jpg" alt="CineNow Logo">
+    <img src="<%= request.getContextPath() %>/images/logo.jpg" alt="CineNow Logo">
     <nav>
         <a href="<%= request.getContextPath() %>/">Home</a>
         <a href="<%= request.getContextPath() %>/catalogo">Catalogo</a>
