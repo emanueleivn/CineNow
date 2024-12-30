@@ -10,6 +10,8 @@ public class Sede {
     private int id;
     private Set<Sala> sale;
 
+    public Sede(){}
+
     public Sede(int id, String nome, String indirizzo){
         this.id = id;
         this.nome = nome;
