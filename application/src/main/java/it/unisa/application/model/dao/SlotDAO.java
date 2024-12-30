@@ -1,6 +1,7 @@
 package it.unisa.application.model.dao;
 
 import it.unisa.application.database_connection.DataSourceSingleton;
+import it.unisa.application.model.entity.Proiezione;
 import it.unisa.application.model.entity.Slot;
 
 import javax.sql.DataSource;
@@ -23,6 +24,29 @@ public class SlotDAO {
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                Slot slot = new Slot();
+                slot.setId(rs.getInt("id"));
+                slot.setOraInizio(rs.getTime("ora_inizio"));
+
+                return slot;
+            }
+
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    public Slot retiveByProiezione(Proiezione proiezione){
+        String sql = "SELECT * FROM slot WHERE id = ?";
+        try (Connection connection = ds.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, proiezione.getOrarioProiezione().getId());
             ResultSet rs = ps.executeQuery();
 
             if(rs.next()){
