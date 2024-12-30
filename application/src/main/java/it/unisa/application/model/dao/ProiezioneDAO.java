@@ -105,8 +105,7 @@ public class ProiezioneDAO {
     }
 
     public List<Proiezione> retriveAllBySede(Sede sede){
-        String sql = "SELECT * FROM proiezione WHERE id_sala IN (" +
-                "SELECT id_sala FROM Sala WHERE id_sede = ?)";
+        String sql = "SELECT p.* FROM proiezione p, sala s WHERE p.id_sala = s.id AND s.id_sede = ? ";
 
         List<Proiezione> proiezioni = new ArrayList<>();
 
