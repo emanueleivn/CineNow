@@ -1,4 +1,4 @@
-package test_gestione_accesso;
+package unit.test_gestione_accesso;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,6 +11,7 @@ import it.unisa.application.sottosistemi.gestione_utente.service.AutenticazioneS
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
+import unit.test_DAO.DatabaseSetupForTest;
 
 import java.sql.Connection;
 import java.sql.SQLException;

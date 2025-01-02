@@ -1,4 +1,4 @@
-package test_gestione_accesso;
+package unit.test_gestione_accesso;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,6 +9,8 @@ import it.unisa.application.model.entity.Cliente;
 import it.unisa.application.sottosistemi.gestione_utente.service.RegistrazioneService;
 import it.unisa.application.utilities.PasswordHash;
 import org.junit.jupiter.api.*;
+import unit.test_DAO.DatabaseSetupForTest;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -83,7 +85,7 @@ public class RegistrazioneServiceTest {
         List<String> invalidPasswords = new ArrayList<>();
         invalidPasswords.add(null);
         invalidPasswords.add("");
-        invalidPasswords.add("short");
+        invalidPasswords.add("shorty");
         invalidPasswords.add("NoSpecialChar123");
         invalidPasswords.add("nouppercase!123");
         invalidPasswords.add("NOLOWERCASE!123");
