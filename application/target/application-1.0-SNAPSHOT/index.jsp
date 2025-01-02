@@ -6,23 +6,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CineNow - Home</title>
-  <style>
-    body { font-family: Arial, sans-serif; background-color: #1c1c1c; color: #ffffff; margin: 0; padding: 0; }
-    header { background: #121212; color: #fff; padding: 15px; display: flex; align-items: center; justify-content: space-between; }
-    header img { height: 150px; margin-right: 15px; }
-    nav { display: flex; align-items: center; position: relative; }
-    nav a { color: #fff; margin: 0 15px; text-decoration: none; position: relative; }
-    .dropdown { position: absolute; display: none; background-color: #333333; border-radius: 5px; top: 45px; left: 0; z-index: 1000; }
-    .dropdown a { color: #ffffff; padding: 10px 20px; display: block; text-decoration: none; }
-    .dropdown a:hover { background-color: #444444; }
-    .profilo.active .dropdown, .catalogo.active .dropdown { display: block; }
-    footer { background: #121212; color: #fff; text-align: center; padding: 10px; position: fixed; bottom: 0; width: 100%; }
-    .content { padding: 20px; text-align: center; }
-    .movie-section { display: flex; justify-content: space-around; flex-wrap: wrap; margin-top: 20px; }
-    .movie { width: 150px; margin: 15px; text-align: center; }
-    .movie img { width: 100px; height: 100px; margin-bottom: 10px; border-radius: 5px; }
-    .btn { padding: 10px 20px; background: #ff3b30; color: #fff; text-decoration: none; border-radius: 5px; display: inline-block; margin-top: 20px; }
-  </style>
+  <!-- Collegamento al file CSS esterno -->
+  <link rel="stylesheet" type="text/css" href="<%= request.getContextPath() %>/static/style/style.css">
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       const catalogoLink = document.querySelector(".catalogo > a");
@@ -88,7 +73,7 @@
   <h1>Benvenuto su CineNow</h1>
   <div class="movie-section">
     <div class="movie">
-      <img src="logo.jpg" alt="Locandina Film">
+      <img src="" alt="Locandina Film">
       <p>Titolo Film 1</p>
     </div>
     <div class="movie">
