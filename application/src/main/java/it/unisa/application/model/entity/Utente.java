@@ -52,4 +52,13 @@ public class Utente {
     public int hashCode() {
         return Objects.hash(email, password);
     }
+
+    @Override
+    public String toString() {
+        return "Utente{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", ruolo='" + ruolo + '\'' +
+                '}';
+    }
 }

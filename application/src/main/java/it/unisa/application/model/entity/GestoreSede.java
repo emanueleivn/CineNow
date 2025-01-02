@@ -20,4 +20,11 @@ public class GestoreSede extends Utente {
         super(email, password, "gestore_sede");
         this.sede = sede;
     }
+
+    @Override
+    public String toString() {
+        return "GestoreSede{" +
+                "sede=" + sede +
+                '}';
+    }
 }

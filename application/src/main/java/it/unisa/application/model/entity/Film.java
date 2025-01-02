@@ -86,4 +86,18 @@ public class Film {
     public void setProiettato(boolean proiettato) {
         isProiettato = proiettato;
     }
+
+    @Override
+    public String toString() {
+        return "Film{" +
+                "id=" + id +
+                ", titolo='" + titolo + '\'' +
+                ", genere='" + genere + '\'' +
+                ", classificazione='" + classificazione + '\'' +
+                ", durata=" + durata +
+                ", locandina='" + locandina + '\'' +
+                ", descrizione='" + descrizione + '\'' +
+                ", isProiettato=" + isProiettato +
+                '}';
+    }
 }
