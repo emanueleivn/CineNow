@@ -47,4 +47,14 @@ public class Prenotazione {
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
+
+    @Override
+    public String toString() {
+        return "Prenotazione{" +
+                "id=" + id +
+                ", proiezione=" + proiezione +
+                ", postiPrenotazione=" + postiPrenotazione +
+                ", cliente=" + cliente +
+                '}';
+    }
 }

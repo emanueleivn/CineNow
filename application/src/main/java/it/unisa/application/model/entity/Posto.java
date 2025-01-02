@@ -36,4 +36,13 @@ public class Posto {
     public void setNumero(int numero) {
         this.numero = numero;
     }
+
+    @Override
+    public String toString() {
+        return "Posto{" +
+                "sala=" + sala +
+                ", fila=" + fila +
+                ", numero=" + numero +
+                '}';
+    }
 }

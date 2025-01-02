@@ -84,4 +84,16 @@ public class Sala {
         }
         return posti;
     }
+
+    @Override
+    public String toString() {
+        return "Sala{" +
+                "id=" + id +
+                ", numeroSala=" + numeroSala +
+                ", capienza=" + capienza +
+                ", slotList=" + slotList +
+                ", proiezioni=" + proiezioni +
+                ", posti=" + posti +
+                '}';
+    }
 }

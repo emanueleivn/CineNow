@@ -44,4 +44,13 @@ public class PostoProiezione {
     public void setStato(boolean stato) {
         this.stato = stato;
     }
+
+    @Override
+    public String toString() {
+        return "PostoProiezione{" +
+                "posto=" + posto +
+                ", proiezione=" + proiezione +
+                ", stato=" + stato +
+                '}';
+    }
 }

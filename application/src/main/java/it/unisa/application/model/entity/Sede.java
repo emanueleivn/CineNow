@@ -63,4 +63,13 @@ public class Sede {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public String toString() {
+        return "Sede{" +
+                "nome='" + nome + '\'' +
+                ", indirizzo='" + indirizzo + '\'' +
+                ", id=" + id +
+                ", sale=" + sale +
+                '}';
+    }
 }

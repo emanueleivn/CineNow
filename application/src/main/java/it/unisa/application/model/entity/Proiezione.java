@@ -79,4 +79,16 @@ public class Proiezione {
                 .findFirst()
                 .ifPresent(postoProiezione -> postoProiezione.setStato(false));
     }
+
+    @Override
+    public String toString() {
+        return "Proiezione{" +
+                "id=" + id +
+                ", filmProiezione=" + filmProiezione +
+                ", salaProiezione=" + salaProiezione +
+                ", dataProiezione=" + dataProiezione +
+                ", postiProiezione=" + postiProiezione +
+                ", orarioProiezione=" + orarioProiezione +
+                '}';
+    }
 }

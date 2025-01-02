@@ -3,9 +3,9 @@ package it.unisa.application.sottosistemi.gestione_utente.service;
 import it.unisa.application.model.dao.ClienteDAO;
 import it.unisa.application.model.dao.UtenteDAO;
 import it.unisa.application.model.entity.Cliente;
-import it.unisa.application.model.entity.Utente;
 import it.unisa.application.utilities.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class RegistrazioneService {
@@ -25,10 +25,16 @@ public class RegistrazioneService {
     }
 
     public Cliente registrazione(String email, String password, String nome, String cognome) {
-        if (!validationManager.validate(Map.of("email", email, "password", password, "nome", nome, "cognome", cognome))
-                || utenteDAO.retrieveByEmail(email) != null) {
+        Map<String, String> inputs = new HashMap<>();
+        inputs.put("email", email);
+        inputs.put("password", password);
+        inputs.put("nome", nome);
+        inputs.put("cognome", cognome);
+
+        if (!validationManager.validate(inputs) || utenteDAO.retrieveByEmail(email) != null) {
             return null;
         }
+
         String passHash = PasswordHash.hash(password);
         Cliente cliente = new Cliente(email, passHash, nome, cognome);
         clienteDAO.create(cliente);
