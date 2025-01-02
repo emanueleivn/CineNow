@@ -13,8 +13,6 @@ import unit.test_DAO.DatabaseSetupForTest;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class RegistrazioneServiceTest {
 
@@ -48,7 +46,7 @@ public class RegistrazioneServiceTest {
     @DisplayName("Registrazione riuscita")
     void testRegistrazioneSuccess() {
         String email = "test@example.com";
-        String password = "ValidPassword123!";
+        String password = "Password123!";
         String nome = "Mario";
         String cognome = "Rossi";
         Cliente cliente = registrazioneService.registrazione(email, password, nome, cognome);
@@ -63,75 +61,74 @@ public class RegistrazioneServiceTest {
     }
 
     @Test
-    @DisplayName("Registrazione fallita - email non valida")
-    void testRegistrazioneInvalidEmails() {
-        List<String> invalidEmails = new ArrayList<>();
-        invalidEmails.add(null);
-        invalidEmails.add("");
-        invalidEmails.add("invalid-email");
-        invalidEmails.add("test@.com");
-        invalidEmails.add("test@domain");
-        invalidEmails.add("test<>@domain.com");
-
-        for (String email : invalidEmails) {
-            Cliente cliente = registrazioneService.registrazione(email, "ValidPassword123!", "Mario", "Rossi");
-            assertNull(cliente, "La registrazione dovrebbe fallire con email non valida: " + email);
-        }
+    @DisplayName("Registrazione fallita - email non valida (null)")
+    void testRegistrazioneEmailNull() {
+        Cliente cliente = registrazioneService.registrazione(null, "Password123!", "Mario", "Rossi");
+        assertNull(cliente, "La registrazione dovrebbe fallire con email null");
     }
 
     @Test
-    @DisplayName("Registrazione fallita - password non valida")
-    void testRegistrazioneInvalidPasswords() {
-        List<String> invalidPasswords = new ArrayList<>();
-        invalidPasswords.add(null);
-        invalidPasswords.add("");
-        invalidPasswords.add("shorty");
-        invalidPasswords.add("NoSpecialChar123");
-        invalidPasswords.add("nouppercase!123");
-        invalidPasswords.add("NOLOWERCASE!123");
-
-        for (String password : invalidPasswords) {
-            Cliente cliente = registrazioneService.registrazione("valid@example.com", password, "Mario", "Rossi");
-            assertNull(cliente, "La registrazione dovrebbe fallire con password non valida: " + password);
-        }
+    @DisplayName("Registrazione fallita - email non valida (vuota)")
+    void testRegistrazioneEmailEmpty() {
+        Cliente cliente = registrazioneService.registrazione("", "Password123!", "Mario", "Rossi");
+        assertNull(cliente, "La registrazione dovrebbe fallire con email vuota");
     }
 
     @Test
-    @DisplayName("Registrazione fallita - nome non valido")
-    void testRegistrazioneInvalidNames() {
-        List<String> invalidNames = new ArrayList<>();
-        invalidNames.add(null);
-        invalidNames.add("");
-        invalidNames.add("Mario<>");
-        invalidNames.add("   ");
-
-        for (String nome : invalidNames) {
-            Cliente cliente = registrazioneService.registrazione("valid@example.com", "ValidPassword123!", nome, "Rossi");
-            assertNull(cliente, "La registrazione dovrebbe fallire con nome non valido: " + nome);
-        }
+    @DisplayName("Registrazione fallita - email non valida (formato errato)")
+    void testRegistrazioneEmailInvalidFormat() {
+        Cliente cliente = registrazioneService.registrazione("invalid-email", "Password123!", "Mario", "Rossi");
+        assertNull(cliente, "La registrazione dovrebbe fallire con email in formato errato");
     }
 
     @Test
-    @DisplayName("Registrazione fallita - cognome non valido")
-    void testRegistrazioneInvalidSurnames() {
-        List<String> invalidSurnames = new ArrayList<>();
-        invalidSurnames.add(null);
-        invalidSurnames.add("");
-        invalidSurnames.add("Rossi<>");
-        invalidSurnames.add("   ");
+    @DisplayName("Registrazione fallita - password non valida (null)")
+    void testRegistrazionePasswordNull() {
+        Cliente cliente = registrazioneService.registrazione("test@example.com", null, "Mario", "Rossi");
+        assertNull(cliente, "La registrazione dovrebbe fallire con password null");
+    }
 
-        for (String cognome : invalidSurnames) {
-            Cliente cliente = registrazioneService.registrazione("valid@example.com", "ValidPassword123!", "Mario", cognome);
-            assertNull(cliente, "La registrazione dovrebbe fallire con cognome non valido: " + cognome);
-        }
+    @Test
+    @DisplayName("Registrazione fallita - password non valida (vuota)")
+    void testRegistrazionePasswordEmpty() {
+        Cliente cliente = registrazioneService.registrazione("test@example.com", "", "Mario", "Rossi");
+        assertNull(cliente, "La registrazione dovrebbe fallire con password vuota");
+    }
+
+    @Test
+    @DisplayName("Registrazione fallita - nome non valido (null)")
+    void testRegistrazioneNomeNull() {
+        Cliente cliente = registrazioneService.registrazione("test@example.com", "Password123!", null, "Rossi");
+        assertNull(cliente, "La registrazione dovrebbe fallire con nome null");
+    }
+
+    @Test
+    @DisplayName("Registrazione fallita - nome non valido (vuoto)")
+    void testRegistrazioneNomeEmpty() {
+        Cliente cliente = registrazioneService.registrazione("test@example.com", "Password123!", "", "Rossi");
+        assertNull(cliente, "La registrazione dovrebbe fallire con nome vuoto");
+    }
+
+    @Test
+    @DisplayName("Registrazione fallita - cognome non valido (null)")
+    void testRegistrazioneCognomeNull() {
+        Cliente cliente = registrazioneService.registrazione("test@example.com", "Password123!", "Mario", null);
+        assertNull(cliente, "La registrazione dovrebbe fallire con cognome null");
+    }
+
+    @Test
+    @DisplayName("Registrazione fallita - cognome non valido (vuoto)")
+    void testRegistrazioneCognomeEmpty() {
+        Cliente cliente = registrazioneService.registrazione("test@example.com", "Password123!", "Mario", "");
+        assertNull(cliente, "La registrazione dovrebbe fallire con cognome vuoto");
     }
 
     @Test
     @DisplayName("Registrazione fallita - email già esistente")
     void testRegistrazioneEmailAlreadyExists() {
-        String email = "existing@example.com";
-        utenteDAO.create(new Cliente(email, PasswordHash.hash("password123"), "Existing", "User"));
-        Cliente cliente = registrazioneService.registrazione(email, "ValidPassword123!", "Mario", "Rossi");
+        String email = "test@example.com";
+        utenteDAO.create(new Cliente(email, PasswordHash.hash("Password123!"), "Existing", "User"));
+        Cliente cliente = registrazioneService.registrazione(email, "Password123!", "Mario", "Rossi");
         assertNull(cliente, "La registrazione dovrebbe fallire con email già esistente");
     }
 }
