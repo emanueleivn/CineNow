@@ -88,7 +88,7 @@
   <h1>Benvenuto su CineNow</h1>
   <div class="movie-section">
     <div class="movie">
-      <img src="logo.jpg" alt="Locandina Film">
+      <img src="" alt="Locandina Film">
       <p>Titolo Film 1</p>
     </div>
     <div class="movie">
