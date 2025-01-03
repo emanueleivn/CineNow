@@ -5,8 +5,23 @@ function validateForm() {
     const email = emailField.value.trim();
     const password = passwordField.value.trim();
     const invalidPasswordRegex = /[<>"'%;()&]/;
+    let hasError = false;
 
-    if (!email || !isValidEmail(email) || invalidPasswordRegex.test(password) || password === '') {
+    // Rimuovi classe di errore prima della validazione
+    emailField.classList.remove('input-error');
+    passwordField.classList.remove('input-error');
+
+    if (!email || !isValidEmail(email)) {
+        emailField.classList.add('input-error');
+        hasError = true;
+    }
+
+    if (!password || password.length < 8 || invalidPasswordRegex.test(password)) {
+        passwordField.classList.add('input-error');
+        hasError = true;
+    }
+
+    if (hasError) {
         errorMessage.style.display = "block";
         return false;
     }
@@ -16,7 +31,8 @@ function validateForm() {
 }
 
 function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // Regex migliorata per validare correttamente un'email
+    const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
     return emailRegex.test(email);
 }
 
@@ -29,35 +45,36 @@ function validateFormReg() {
     const invalidRegex = /[<>\"'%;()&]/;
     let isValid = true;
 
+    // Pulisce gli indizi e gli errori precedenti
     clearHints();
 
     if (nomeField.value.trim() === '' || invalidRegex.test(nomeField.value)) {
         showHint('nome-hint');
-        nomeField.style.border = "2px solid red";
+        nomeField.classList.add('input-error');
         isValid = false;
     }
 
     if (cognomeField.value.trim() === '' || invalidRegex.test(cognomeField.value)) {
         showHint('cognome-hint');
-        cognomeField.style.border = "2px solid red";
+        cognomeField.classList.add('input-error');
         isValid = false;
     }
 
     if (!isValidEmail(emailField.value.trim())) {
         showHint('email-hint');
-        emailField.style.border = "2px solid red";
+        emailField.classList.add('input-error');
         isValid = false;
     }
 
-    if (passwordField.value.trim() === '' || invalidRegex.test(passwordField.value)) {
+    if (passwordField.value.trim() === '' || passwordField.value.trim().length < 8 || invalidRegex.test(passwordField.value)) {
         showHint('password-hint');
-        passwordField.style.border = "2px solid red";
+        passwordField.classList.add('input-error');
         isValid = false;
     }
 
     if (passwordField.value.trim() !== confirmPasswordField.value.trim()) {
         showHint('confirm-password-hint');
-        confirmPasswordField.style.border = "2px solid red";
+        confirmPasswordField.classList.add('input-error');
         isValid = false;
     }
 
@@ -70,21 +87,22 @@ function showHint(id) {
 }
 
 function clearHints() {
+    // Nascondi tutti gli indizi di errore
     document.querySelectorAll('.hint').forEach(hint => {
         hint.style.display = "none";
     });
+
+    // Rimuovi la classe di errore dagli input
     document.querySelectorAll('input').forEach(input => {
-        input.style.border = "";
+        input.classList.remove('input-error');
     });
 }
 
+// Aggiungi evento per rimuovere errori quando l'utente digita
 document.querySelectorAll('input').forEach(input => {
     input.addEventListener('input', function () {
-        this.style.border = "";
-        const hintId = this.id + '-hint';
-        const hintElement = document.getElementById(hintId);
-        if (hintElement) {
-            hintElement.style.display = "none";
-        }
+        this.classList.remove('input-error'); // Rimuove il bordo rosso
+        const errorMessage = document.getElementById('error-message');
+        if (errorMessage) errorMessage.style.display = "none"; // Nasconde il messaggio generale
     });
 });
