@@ -84,4 +84,12 @@ public class Sala {
         }
         return posti;
     }
+
+    public Sala() {
+    }
+
+    public Sala(int id) {
+        this.id = id;
+    }
+
 }

@@ -12,6 +12,10 @@ public class Film {
 
     public Film() {}
 
+    public Film(int id) {
+        this.id = id;
+    }
+
     public Film(int id, String titolo, String genere, String classificazione, int durata, String locandina, String descrizione, boolean isProiettato) {
         this.id = id;
         this.titolo = titolo;
