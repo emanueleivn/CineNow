@@ -63,24 +63,7 @@ public class SedeDAO {
         }
         return sale;
     }
-    public Sala retrieveSalaById(int salaId) {
-        String sql = "SELECT * FROM sala WHERE id = ?";
-        try (Connection connection = ds.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, salaId);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()){
-                Sala s = new Sala();
-                s.setId(rs.getInt("id"));
-                s.setNumeroSala(rs.getInt("numero"));
-                s.setCapienza(rs.getInt("capienza"));
-                return s;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
     public Sede retrieveByGestoreEmail(String email) {
         String sql = "SELECT s.id, s.nome, s.via, s.città, s.cap FROM sede s JOIN gest_sede gs ON s.id = gs.id_sede WHERE gs.email = ?";
         try (Connection connection = ds.getConnection();
@@ -149,4 +132,7 @@ public class SedeDAO {
         }
         return null;
     }
+
+
 }
+
