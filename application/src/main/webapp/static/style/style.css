@@ -1,0 +1,51 @@
+body {
+    background-color: #222222;
+    color: #f8f9fa;
+    font-family:'Luckiest Guy',cursive;
+}
+
+.navbar-brand {
+    color: #ff4b5c !important;
+    font-weight: bold;
+}
+
+.nav-link {
+    color: #f8f9fa !important;
+}
+
+.nav-link:hover {
+    color: #ff4b5c !important;
+}
+
+.dropdown-menu {
+    background-color: #222222;
+    border: none;
+}
+
+.dropdown-item:hover {
+    background-color: #ff4b5c;
+    color: #121212 !important;
+}
+
+.carousel-inner img {
+    max-height: 500px;
+    object-fit: cover;
+}
+
+footer {
+    border-top: 1px solid #444;
+}
+.top-bar{
+    background-image: url("../images/sfondo.png");
+    background-size: cover;
+    background-position: center 40%;
+    height: 350px;
+}
+.nav-link {
+    font-size: 1.2rem;
+    color: #f8f9fa !important;
+}
+
+.nav-link:hover {
+    font-size: 1.2rem;
+}
