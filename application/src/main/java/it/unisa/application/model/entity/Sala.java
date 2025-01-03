@@ -85,11 +85,16 @@ public class Sala {
         return posti;
     }
 
-    public Sala() {
-    }
 
-    public Sala(int id) {
-        this.id = id;
+    @Override
+    public String toString() {
+        return "Sala{" +
+                "id=" + id +
+                ", numeroSala=" + numeroSala +
+                ", capienza=" + capienza +
+                ", slotList=" + slotList +
+                ", proiezioni=" + proiezioni +
+                ", posti=" + posti +
+                '}';
     }
-
 }

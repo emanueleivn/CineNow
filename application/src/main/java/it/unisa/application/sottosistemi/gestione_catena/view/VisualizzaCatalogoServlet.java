@@ -17,7 +17,7 @@ public class VisualizzaCatalogoServlet extends HttpServlet {
     private final CatalogoService catalogoService = new CatalogoService();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Film> catalogo = catalogoService.getCatalogo();
         if (catalogo.isEmpty()) {
             request.setAttribute("errorMessage", "Nessun film trovato.");

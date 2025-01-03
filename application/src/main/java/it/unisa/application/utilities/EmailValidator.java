@@ -6,8 +6,9 @@ public class EmailValidator implements ValidatorStrategy {
         if (campo == null) {
             return false;
         }
-        return campo.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$") && !containsInvalidCharacters(campo);
+        return campo.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$") && !containsInvalidCharacters(campo);
     }
+
 }
 
 

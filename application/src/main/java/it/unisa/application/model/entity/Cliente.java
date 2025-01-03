@@ -53,4 +53,12 @@ public class Cliente extends Utente {
         prenotazioni.add(prenotazione);
     }
 
+    @Override
+    public String toString() {
+        return "Cliente{" +
+                "nome='" + nome + '\'' +
+                ", cognome='" + cognome + '\'' +
+                ", prenotazioni=" + prenotazioni +
+                '}';
+    }
 }
