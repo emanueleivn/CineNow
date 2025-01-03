@@ -5,8 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CineNow - Login</title>
-    <script src="${pageContext.request.contextPath}/static/js/validation.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/validation.js" defer></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/static/style/style.css">
+    <style>
+        a {
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: coral; /* Cambia colore a corallo quando l'utente passa il mouse sopra */
+        }
+
+        a:focus, a:active {
+            color: coral; /* Cambia colore a corallo quando il link è attivo o selezionato */
+        }
+
+    </style>
 </head>
 <body>
 
@@ -16,12 +30,12 @@
 
 <div class="content">
     <h2>Accedi al tuo account</h2>
-    <div id="error-message" class="error-message" style="display: none;">
+    <div id="error-message" class="error-message">
         Email o password non corretti.
     </div>
     <form action="<%= request.getContextPath() %>/login" method="post" onsubmit="return validateForm()">
-        <input type="text" name="email" placeholder="Email" autofocus required>
-        <input type="password" name="password" placeholder="Password" required>
+        <input type="text" id="email" name="email" placeholder="Email" autofocus required>
+        <input type="password" id="password" name="password" placeholder="Password" required>
         <button type="submit" class="btn">Accedi</button>
     </form>
     <p>Non sei registrato? <a href="<%=request.getContextPath() %>/registrazione" style="color: #ff3b30;">Iscriviti
@@ -33,4 +47,3 @@
 </footer>
 </body>
 </html>
-

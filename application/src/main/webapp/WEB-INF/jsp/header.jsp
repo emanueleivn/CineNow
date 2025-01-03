@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="static/style/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhai+2&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
-
 </head>
 <body>
 <header>
@@ -63,6 +62,8 @@
                             %>
                             <li><a class="dropdown-item text-light"
                                    href="<%= request.getContextPath() %>/login">Login</a></li>
+                            <li><a class="dropdown-item text-light"
+                                   href="<%= request.getContextPath() %>/registrazione">Registrati ora</a></li>
                             <%
                                 }
                             %>

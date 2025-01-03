@@ -103,4 +103,65 @@ footer {
     text-decoration-color: coral;
 }
 
+/*Login form*/
+.content {
+    padding: 20px;
+    max-width: 400px;
+    margin: auto;
+}
 
+input[type="text"], input[type="password"],input[type="email"] .btn {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #333333;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #333333;
+    color: #ffffff;
+}
+
+.btn {
+    background: #ff3b30;
+    color: #fff;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+    margin: 5px 0 10px;
+}
+.btn:hover{
+    background-color: coral;
+}
+/* Stile per il messaggio di errore */
+.error-message {
+    color: #ff3b30;
+    font-weight: bold;
+    font-family: 'Arial', sans-serif;
+    background-color: #ffe6e6;
+    padding: 10px;
+    border: 1px solid #ff3b30;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    display: none;
+}
+
+.input-error {
+    border: 2px solid #ff3b30;
+    border-radius: 5px;
+    outline: none;
+}
+
+.content p a {
+    text-decoration: none !important;
+    color: inherit;
+}
+
+.content p a:hover {
+    color: coral!important;
+    text-decoration: underline !important;
+}
+
+.content p a:focus, p a:active {
+    color: coral !important;
+}
