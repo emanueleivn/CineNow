@@ -6,7 +6,11 @@ public class Slot {
     private int id;
     private Time oraInizio;
 
-    public Slot(){
+    public Slot() {
+    }
+
+    public Slot(int id) {
+        this.id = id;
     }
 
     public Time getOraInizio() {

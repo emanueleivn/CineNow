@@ -12,6 +12,13 @@ public class Sala {
     private List<Proiezione> proiezioni;
     private List<Posto> posti;
 
+    public Sala() {
+    }
+
+    public Sala(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }
@@ -84,6 +91,7 @@ public class Sala {
         }
         return posti;
     }
+
 
     @Override
     public String toString() {
