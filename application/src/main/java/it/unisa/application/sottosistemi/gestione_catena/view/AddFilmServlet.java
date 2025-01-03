@@ -2,6 +2,7 @@ package it.unisa.application.sottosistemi.gestione_catena.view;
 
 import it.unisa.application.sottosistemi.gestione_catena.service.CatalogoService;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,8 +13,10 @@ import jakarta.servlet.http.Part;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @WebServlet("/addFilm")
@@ -22,7 +25,6 @@ import java.util.UUID;
         maxRequestSize = 1024 * 1024 * 50) // 50MB
 public class AddFilmServlet extends HttpServlet {
     private static final String UPLOAD_DIR = "images";
-
     private final CatalogoService catalogoService = new CatalogoService();
 
     @Override
@@ -39,29 +41,26 @@ public class AddFilmServlet extends HttpServlet {
             String genere = request.getParameter("genere");
             String classificazione = request.getParameter("classificazione");
             Part filePart = request.getPart("locandina");
+
             if (filePart == null || filePart.getSize() == 0) {
                 throw new IllegalArgumentException("La locandina è obbligatoria.");
             }
-            String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-            String applicationPath = getServletContext().getRealPath("");
-            String uploadFilePath = applicationPath + File.separator + UPLOAD_DIR;
 
-            File uploadDir = new File(uploadFilePath);
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
+            // Converti la locandina in byte array
+            byte[] locandinaBytes;
+            try (InputStream fileContent = filePart.getInputStream()) {
+                locandinaBytes = fileContent.readAllBytes();
             }
 
-            String sanitizedFileName = UUID.randomUUID() + "_" + fileName.replaceAll("\\s+", "_");
-            String filePath = uploadFilePath + File.separator + sanitizedFileName;
-            Files.copy(filePart.getInputStream(), Paths.get(filePath));
+            // Salva i dati nel database
+            catalogoService.addFilmCatalogo(titolo, durata, descrizione, locandinaBytes, genere, classificazione);
 
-            String relativePath = UPLOAD_DIR + "/" + sanitizedFileName;
-
-            catalogoService.addFilmCatalogo(titolo, durata, descrizione, relativePath, genere, classificazione);
             response.sendRedirect(request.getContextPath() + "/catalogo");
         } catch (Exception e) {
             request.setAttribute("errorMessage", e.getMessage());
             request.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
         }
     }
+
+
 }

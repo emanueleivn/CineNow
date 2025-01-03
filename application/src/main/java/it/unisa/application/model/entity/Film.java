@@ -6,7 +6,7 @@ public class Film {
     private String genere;
     private String classificazione;
     private int durata;
-    private String locandina;
+    private byte[] locandina;
     private String descrizione;
     private boolean isProiettato;
 
@@ -16,7 +16,7 @@ public class Film {
         this.id = id;
     }
 
-    public Film(int id, String titolo, String genere, String classificazione, int durata, String locandina, String descrizione, boolean isProiettato) {
+    public Film(int id, String titolo, String genere, String classificazione, int durata, byte[] locandina, String descrizione, boolean isProiettato) {
         this.id = id;
         this.titolo = titolo;
         this.genere = genere;
@@ -67,11 +67,11 @@ public class Film {
         this.durata = durata;
     }
 
-    public String getLocandina() {
+    public byte[] getLocandina() {
         return locandina;
     }
 
-    public void setLocandina(String locandina) {
+    public void setLocandina(byte[] locandina) {
         this.locandina = locandina;
     }
 

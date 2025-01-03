@@ -86,12 +86,12 @@ public class SedeDAO {
     public List<Film> retrieveFilm(int sedeId) throws SQLException {
         List<Film> filmList = new ArrayList<>();
         String query = """
-                SELECT DISTINCT f.id, f.titolo, f.genere, f.classificazione, f.durata, f.locandina, f.descrizione, f.is_proiettato
-                FROM film f
-                JOIN proiezione p ON f.id = p.id_film
-                JOIN sala s ON p.id_sala = s.id
-                WHERE s.id_sede = ?
-                """;
+            SELECT DISTINCT f.id, f.titolo, f.genere, f.classificazione, f.durata, f.locandina, f.descrizione, f.is_proiettato
+            FROM film f
+            JOIN proiezione p ON f.id = p.id_film
+            JOIN sala s ON p.id_sala = s.id
+            WHERE s.id_sede = ?
+            """;
 
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement(query)) {
@@ -104,7 +104,7 @@ public class SedeDAO {
                     film.setGenere(rs.getString("genere"));
                     film.setClassificazione(rs.getString("classificazione"));
                     film.setDurata(rs.getInt("durata"));
-                    film.setLocandina(rs.getString("locandina"));
+                    film.setLocandina(rs.getBytes("locandina")); // Cambiato da getString a getBytes
                     film.setDescrizione(rs.getString("descrizione"));
                     film.setProiettato(rs.getBoolean("is_proiettato"));
                     filmList.add(film);

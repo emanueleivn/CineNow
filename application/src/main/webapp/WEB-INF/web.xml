@@ -34,4 +34,8 @@
         <filter-name>ClienteFilter</filter-name>
         <url-pattern>/gestione_prenotazione/*</url-pattern>
     </filter-mapping>
+    <context-param>
+        <param-name>uploadDir</param-name>
+        <param-value>C:/Users/emiio/IdeaProjects/CineNow/src/main/webapp/static/images/locandine</param-value>
+    </context-param>
 </web-app>

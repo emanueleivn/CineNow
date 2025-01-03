@@ -1,5 +1,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="it.unisa.application.model.entity.Film" %>
+<%@ page import="java.util.Base64" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -25,6 +26,10 @@
     List<Film> catalogo = (List<Film>) request.getAttribute("catalogo");
     if (catalogo != null && !catalogo.isEmpty()) {
       for (Film film : catalogo) {
+        String base64Image = null;
+        if (film.getLocandina() != null) {
+          base64Image = Base64.getEncoder().encodeToString(film.getLocandina());
+        }
   %>
   <tr>
     <td><%= film.getTitolo() %></td>
@@ -33,9 +38,13 @@
     <td><%= film.getClassificazione() %></td>
     <td><%= film.getGenere() %></td>
     <td>
-      <img src="<%= request.getContextPath() + "/" + film.getLocandina() %>"
+      <% if (base64Image != null) { %>
+      <img src="data:image/jpeg;base64,<%= base64Image %>"
            alt="Locandina di <%= film.getTitolo() %>"
            width="100">
+      <% } else { %>
+      Nessuna locandina disponibile
+      <% } %>
     </td>
   </tr>
   <%
