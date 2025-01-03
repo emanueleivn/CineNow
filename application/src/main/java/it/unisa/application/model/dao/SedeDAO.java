@@ -14,7 +14,7 @@ public class SedeDAO {
     public SedeDAO() {
         this.ds = DataSourceSingleton.getInstance();
     }
-    public Sede retriveById(int id) {
+    public Sede retrieveById(int id) {
         String sql = "SELECT s.id, s.nome, s.via, s.città, s.cap FROM sede s WHERE s.id = ?";
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -29,7 +29,7 @@ public class SedeDAO {
         }
         return null;
     }
-    public List<Sede> retirveAll(){
+    public List<Sede> retrieveAll(){
         String sql = "SELECT * FROM sede";
         List<Sede> sedi = new ArrayList<>();
         try (Connection connection = ds.getConnection();
@@ -63,6 +63,57 @@ public class SedeDAO {
         }
         return sale;
     }
+
+    public Sede retrieveByGestoreEmail(String email) {
+        String sql = "SELECT s.id, s.nome, s.via, s.città, s.cap FROM sede s JOIN gest_sede gs ON s.id = gs.id_sede WHERE gs.email = ?";
+        try (Connection connection = ds.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                String indirizzo = rs.getString("via") + ", " + rs.getString("città") + ", " + rs.getString("cap");
+                return new Sede(rs.getInt("id"), rs.getString("nome"), indirizzo);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+
+    public List<Film> retrieveFilm(int sedeId) throws SQLException {
+        List<Film> filmList = new ArrayList<>();
+        String query = """
+                SELECT DISTINCT f.id, f.titolo, f.genere, f.classificazione, f.durata, f.locandina, f.descrizione, f.is_proiettato
+                FROM film f
+                JOIN proiezione p ON f.id = p.id_film
+                JOIN sala s ON p.id_sala = s.id
+                WHERE s.id_sede = ?
+                """;
+
+        try (Connection connection = ds.getConnection();
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, sedeId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Film film = new Film();
+                    film.setId(rs.getInt("id"));
+                    film.setTitolo(rs.getString("titolo"));
+                    film.setGenere(rs.getString("genere"));
+                    film.setClassificazione(rs.getString("classificazione"));
+                    film.setDurata(rs.getInt("durata"));
+                    film.setLocandina(rs.getString("locandina"));
+                    film.setDescrizione(rs.getString("descrizione"));
+                    film.setProiettato(rs.getBoolean("is_proiettato"));
+                    filmList.add(film);
+                }
+            }
+        }
+        return filmList;
+    }
+
     public Sala retrieveSalaById(int salaId) {
         String sql = "SELECT * FROM sala WHERE id = ?";
         try (Connection connection = ds.getConnection();
@@ -81,20 +132,7 @@ public class SedeDAO {
         }
         return null;
     }
-    public Sede retrieveByGestoreEmail(String email) {
-        String sql = "SELECT s.id, s.nome, s.via, s.città, s.cap FROM sede s JOIN gest_sede gs ON s.id = gs.id_sede WHERE gs.email = ?";
-        try (Connection connection = ds.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                String indirizzo = rs.getString("via") + ", " + rs.getString("città") + ", " + rs.getString("cap");
-                return new Sede(rs.getInt("id"), rs.getString("nome"), indirizzo);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
-        return null;
-    }
+
 }
+

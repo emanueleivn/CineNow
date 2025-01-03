@@ -55,6 +55,7 @@ footer {
     position: relative;
 }
 
+
 .film-card img {
     width: 100%;
     height: auto;
@@ -63,6 +64,7 @@ footer {
     border-top-right-radius: 10px;
     max-height: 85%;
     object-fit: cover;
+
 }
 
 .film-card-body {
@@ -73,6 +75,7 @@ footer {
 .film-title {
     font-size: 1.5rem;
     color: #ff4b5c;
+
     text-decoration: none;
 }
 
@@ -165,3 +168,4 @@ input[type="text"], input[type="password"],input[type="email"] .btn {
 .content p a:focus, p a:active {
     color: coral !important;
 }
+

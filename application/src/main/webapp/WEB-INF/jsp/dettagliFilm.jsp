@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="<%= request.getContextPath() %>static/style/style.css">
 </head>
 <body>
+
 <jsp:include page="/WEB-INF/jsp/header.jsp"/>
 <div class="container my-5">
     <div class="row">
@@ -17,6 +18,7 @@
             <!--<img src="${film.locandina}" alt="Locandina ${film.titolo}" class="img-fluid rounded shadow">-->
             <img src="${pageContext.request.contextPath}/static/images/locandine/maria.jpg"
                  alt="Locandina ${film.titolo}" class="img-fluid rounded shadow">
+
         </div>
         <div class="col-md-8">
             <h1 class="text-danger">${film.titolo}</h1>
@@ -25,6 +27,7 @@
                 <li><strong>Durata:</strong> ${film.durata} minuti</li>
                 <li><strong>Genere:</strong> ${film.genere}</li>
                 <li><strong>Classificazione:</strong> ${film.classificazione}</li>
+
                 <li>
                     <form method="post" action="${pageContext.request.contextPath}/Proiezioni">
                     <button type="submit">Prenota</button>
@@ -38,5 +41,6 @@
 <footer>
     <jsp:include page="/WEB-INF/jsp/footer.jsp"/>
 </footer>
+
 </body>
 </html>

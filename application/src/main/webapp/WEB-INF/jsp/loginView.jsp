@@ -1,4 +1,6 @@
+
 <%@ page contentType="text/html;charset=UTF-8" %>
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -25,7 +27,9 @@
 <body>
 
 <header>
+
     <jsp:include page="/WEB-INF/jsp/header.jsp"/>
+
 </header>
 
 <div class="content">
