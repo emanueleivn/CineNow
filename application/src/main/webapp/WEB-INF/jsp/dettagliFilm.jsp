@@ -15,7 +15,8 @@
 <div class="container my-5">
     <div class="row">
         <div class="col-md-4">
-            <img src="${film.locandina}" alt="Locandina ${film.titolo}" class="img-fluid rounded shadow">
+            <!--<img src="${film.locandina}" alt="Locandina ${film.titolo}" class="img-fluid rounded shadow">-->
+            <img src="${pageContext.request.contextPath}/static/images/locandine/maria.jpg" alt="Locandina ${film.titolo}" class="img-fluid rounded shadow">
         </div>
         <div class="col-md-8">
             <h1 class="text-danger">${film.titolo}</h1>
