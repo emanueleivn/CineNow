@@ -30,7 +30,7 @@
             <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="index.jsp">Home</a>
+                        <a class="nav-link" href="<%= request.getContextPath() %>/Home">Home</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="catalogoDropdown" role="button"
@@ -38,9 +38,9 @@
                             Catalogo
                         </a>
                         <ul class="dropdown-menu bg-dark text-light" aria-labelledby="catalogoDropdown">
-                            <li><a class="dropdown-item text-light" href="catalogoMercogliano.jsp">Sede Mercogliano</a>
+                            <li><a class="dropdown-item text-light" href="<%= request.getContextPath() %>/Catalogo?sede=Mercogliano">Sede Mercogliano</a>
                             </li>
-                            <li><a class="dropdown-item text-light" href="catalogoAquila.jsp">Sede L'Aquila</a></li>
+                            <li><a class="dropdown-item text-light" href="<%= request.getContextPath() %>/Catalogo?sede=Laquila">Sede L'Aquila</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">

@@ -49,3 +49,25 @@ footer {
 .nav-link:hover {
     font-size: 1.2rem;
 }
+.film-card {
+    background-color: #333;
+    border: 1px solid #444;
+    border-radius: 10px;
+}
+
+.film-card img {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    object-fit: cover;
+    height: 300px;
+}
+
+.film-card-body {
+    padding: 15px;
+    text-align: center;
+}
+
+.film-title {
+    font-size: 1.5rem;
+    color: #ff4b5c;
+}

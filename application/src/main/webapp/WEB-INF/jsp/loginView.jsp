@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -74,7 +74,7 @@
 <body>
 
 <header>
-    <img src="<%= request.getContextPath() %>/images/logo.jpg" alt="CineNow Logo">
+    <img src="<%= request.getContextPath() %>static/images/logo.png" alt="CineNow Logo">
     <nav>
         <a href="<%= request.getContextPath() %>/">Home</a>
         <a href="<%= request.getContextPath() %>/catalogo">Catalogo</a>
