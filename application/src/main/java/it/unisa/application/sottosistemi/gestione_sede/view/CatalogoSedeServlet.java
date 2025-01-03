@@ -24,6 +24,7 @@ public class CatalogoSedeServlet extends HttpServlet {
             case "Mercogliano":
                 try {
                     catalogo = sedeDAO.retrieveFilm(1);
+                    req.setAttribute("sede", "Mercogliano");
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -31,6 +32,7 @@ public class CatalogoSedeServlet extends HttpServlet {
             case "Laquila":
                 try {
                     catalogo = sedeDAO.retrieveFilm(2);
+                    req.setAttribute("sede", "L'Aquila");
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -41,7 +43,6 @@ public class CatalogoSedeServlet extends HttpServlet {
                 return;
         }
         req.setAttribute("catalogo", catalogo);
-        req.setAttribute("sede", "Mercogliano");
         req.getRequestDispatcher("/WEB-INF/jsp/catalogoSede.jsp").forward(req, resp);
     }
 }
