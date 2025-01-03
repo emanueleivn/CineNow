@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -45,18 +46,30 @@ public class VisualizzaCatalogoServletTest {
     @Test
     void testDoGetWithFilms() throws ServletException, IOException {
         CatalogoService service = new CatalogoService();
-        service.addFilmCatalogo("Inception", 148, "Un thriller spettacolare", "inception.jpg", "thriller", "VM14");
+        byte[] locandina = "Esempio di locandina".getBytes(); // Mock della locandina come byte[]
+        service.addFilmCatalogo("Inception", 148, "Un thriller spettacolare", locandina, "thriller", "VM14");
+
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         RequestDispatcher rd = mock(RequestDispatcher.class);
+
         when(request.getRequestDispatcher("/WEB-INF/jsp/catalogo.jsp")).thenReturn(rd);
+
         servletTest.doGet(request, response);
+
         verify(rd).forward(request, response);
+
         ArgumentCaptor<String> attrNameCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<Object> attrValueCaptor = ArgumentCaptor.forClass(Object.class);
+
         verify(request).setAttribute(attrNameCaptor.capture(), attrValueCaptor.capture());
+
         assertEquals("catalogo", attrNameCaptor.getValue());
+
         List<Film> films = (List<Film>) attrValueCaptor.getValue();
+
         assertTrue(films.stream().anyMatch(f -> "Inception".equals(f.getTitolo())));
+        assertTrue(films.stream().anyMatch(f -> Arrays.equals(locandina, f.getLocandina())));
     }
+
 }

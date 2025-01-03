@@ -76,16 +76,16 @@ public class DatabaseSetupForTest {
                             ON UPDATE CASCADE
                     );
 
-                    CREATE TABLE IF NOT EXISTS film (
-                        id INT PRIMARY KEY AUTO_INCREMENT,
-                        titolo VARCHAR(255) NOT NULL,
-                        genere VARCHAR(100) NOT NULL,
-                        classificazione VARCHAR(50) NOT NULL,
-                        durata INT NOT NULL,
-                        locandina VARCHAR(255) NOT NULL,
-                        descrizione TEXT NOT NULL,
-                        is_proiettato BOOLEAN DEFAULT FALSE
-                    );
+                     CREATE TABLE IF NOT EXISTS film (
+                            id INT PRIMARY KEY AUTO_INCREMENT,
+                            titolo VARCHAR(255) NOT NULL,
+                            genere VARCHAR(100) NOT NULL,
+                            classificazione VARCHAR(50) NOT NULL,
+                            durata INT NOT NULL,
+                            locandina MEDIUMBLOB,
+                            descrizione TEXT NOT NULL,
+                            is_proiettato BOOLEAN DEFAULT FALSE
+                        );
 
                     CREATE TABLE IF NOT EXISTS slot (
                         id INT PRIMARY KEY AUTO_INCREMENT,

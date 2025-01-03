@@ -23,7 +23,7 @@ public class FilmDAO {
             ps.setString(2, film.getGenere());
             ps.setString(3, film.getClassificazione());
             ps.setInt(4, film.getDurata());
-            ps.setString(5, film.getLocandina());
+            ps.setBytes(5, film.getLocandina());
             ps.setString(6, film.getDescrizione());
             ps.setBoolean(7, film.isProiettato());
             int affectedRows = ps.executeUpdate();
@@ -53,7 +53,7 @@ public class FilmDAO {
                         rs.getString("genere"),
                         rs.getString("classificazione"),
                         rs.getInt("durata"),
-                        rs.getString("locandina"),
+                        rs.getBytes("locandina"),
                         rs.getString("descrizione"),
                         rs.getBoolean("is_proiettato")
                 );
@@ -77,7 +77,7 @@ public class FilmDAO {
                         rs.getString("genere"),
                         rs.getString("classificazione"),
                         rs.getInt("durata"),
-                        rs.getString("locandina"),
+                        rs.getBytes("locandina"), // Cambiato da getString a getBytes
                         rs.getString("descrizione"),
                         rs.getBoolean("is_proiettato")
                 ));
@@ -87,4 +87,5 @@ public class FilmDAO {
         }
         return films;
     }
+
 }

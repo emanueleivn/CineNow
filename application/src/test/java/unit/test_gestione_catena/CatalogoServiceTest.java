@@ -44,23 +44,25 @@ public class CatalogoServiceTest {
     @Test
     @DisplayName("TC04.1 - Titolo non valido")
     void testTitoloNonValido() {
+        byte[] locandina = "Esempio di locandina".getBytes(); // Mock della locandina come byte[]
         List<String> invalidTitles = new ArrayList<>();
         invalidTitles.add(null);
         invalidTitles.add("");
         invalidTitles.add("invalid<>title");
-
         for (String titolo : invalidTitles) {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-                catalogoService.addFilmCatalogo(titolo, 120, "Descrizione valida", "locandina.jpg", "Fantascienza", "PG-13");
+                catalogoService.addFilmCatalogo(titolo, 120, "Descrizione valida", locandina, "Fantascienza", "PG-13");
             });
             assertEquals("Parametri non validi per l'aggiunta del film.", exception.getMessage(),
                     "Il test con titolo non valido '" + titolo + "' dovrebbe fallire");
         }
     }
 
+
     @Test
     @DisplayName("TC04.2 - Descrizione non valida")
     void testDescrizioneNonValida() {
+        byte[] locandina = "Esempio di locandina".getBytes(); // Mock della locandina come byte[]
         List<String> invalidDescriptions = new ArrayList<>();
         invalidDescriptions.add(null);
         invalidDescriptions.add("");
@@ -68,36 +70,42 @@ public class CatalogoServiceTest {
 
         for (String descrizione : invalidDescriptions) {
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-                catalogoService.addFilmCatalogo("Titolo valido", 120, descrizione, "locandina.jpg", "Fantascienza", "PG-13");
+                catalogoService.addFilmCatalogo("Titolo valido", 120, descrizione, locandina, "Fantascienza", "PG-13");
             });
             assertEquals("Parametri non validi per l'aggiunta del film.", exception.getMessage(),
                     "Il test con descrizione non valida '" + descrizione + "' dovrebbe fallire");
         }
     }
 
+
     @Test
     @DisplayName("TC04.3 - Durata non inserita")
     void testDurataNonInserita() {
+        byte[] locandina = "Esempio di locandina".getBytes(); // Mock della locandina come byte[]
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            catalogoService.addFilmCatalogo("Titolo valido", 0, "Descrizione valida", "locandina.jpg", "Fantascienza", "PG-13");
+            catalogoService.addFilmCatalogo("Titolo valido", 0, "Descrizione valida", locandina, "Fantascienza", "PG-13");
         });
         assertEquals("Parametri non validi per l'aggiunta del film.", exception.getMessage());
     }
+
 
     @Test
     @DisplayName("TC04.4 - Durata <= 0 minuti")
     void testDurataMinimaNonValida() {
+        byte[] locandina = "Esempio di locandina".getBytes(); // Mock della locandina come byte[]
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            catalogoService.addFilmCatalogo("Titolo valido", -1, "Descrizione valida", "locandina.jpg", "Fantascienza", "PG-13");
+            catalogoService.addFilmCatalogo("Titolo valido", -1, "Descrizione valida", locandina, "Fantascienza", "PG-13");
         });
         assertEquals("Parametri non validi per l'aggiunta del film.", exception.getMessage());
     }
 
+
     @Test
     @DisplayName("TC04.5 - Genere non selezionato")
     void testGenereNonSelezionato() {
+        byte[] locandina = "Esempio di locandina".getBytes(); // Mock della locandina come byte[]
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            catalogoService.addFilmCatalogo("Titolo valido", 120, "Descrizione valida", "locandina.jpg", "", "PG-13");
+            catalogoService.addFilmCatalogo("Titolo valido", 120, "Descrizione valida", locandina, "", "PG-13");
         });
         assertEquals("Parametri non validi per l'aggiunta del film.", exception.getMessage());
     }
@@ -105,8 +113,9 @@ public class CatalogoServiceTest {
     @Test
     @DisplayName("TC04.6 - Classificazione non selezionata")
     void testClassificazioneNonSelezionata() {
+        byte[] locandina = "Esempio di locandina".getBytes(); // Mock della locandina come byte[]
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            catalogoService.addFilmCatalogo("Titolo valido", 120, "Descrizione valida", "locandina.jpg", "Fantascienza", "");
+            catalogoService.addFilmCatalogo("Titolo valido", 120, "Descrizione valida", locandina, "Fantascienza", "");
         });
         assertEquals("Parametri non validi per l'aggiunta del film.", exception.getMessage());
     }
@@ -114,7 +123,8 @@ public class CatalogoServiceTest {
     @Test
     @DisplayName("TC04.7 - Film aggiunto con successo")
     void testFilmAggiuntoConSuccesso() {
-        catalogoService.addFilmCatalogo("Titolo valido", 120, "Descrizione valida", "locandina.jpg", "Fantascienza", "PG-13");
+        byte[] locandina = "Esempio di locandina".getBytes(); // Locandina simulata come byte[]
+        catalogoService.addFilmCatalogo("Titolo valido", 120, "Descrizione valida", locandina, "Fantascienza", "PG-13");
         List<Film> catalogo = catalogoService.getCatalogo();
         assertNotNull(catalogo, "Il catalogo non dovrebbe essere null");
         assertEquals(1, catalogo.size(), "Il catalogo dovrebbe contenere un film");
@@ -122,7 +132,7 @@ public class CatalogoServiceTest {
         assertEquals("Titolo valido", film.getTitolo(), "Il titolo del film non corrisponde");
         assertEquals(120, film.getDurata(), "La durata del film non corrisponde");
         assertEquals("Descrizione valida", film.getDescrizione(), "La descrizione del film non corrisponde");
-        assertEquals("locandina.jpg", film.getLocandina(), "La locandina del film non corrisponde");
+        assertArrayEquals(locandina, film.getLocandina(), "La locandina del film non corrisponde");
         assertEquals("Fantascienza", film.getGenere(), "Il genere del film non corrisponde");
         assertEquals("PG-13", film.getClassificazione(), "La classificazione del film non corrisponde");
     }

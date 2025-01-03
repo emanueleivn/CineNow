@@ -41,16 +41,19 @@ public class FilmDAOTest {
     @Test
     @DisplayName("Creazione di un film")
     void testCreateFilm() {
-        Film film = new Film(0, "Titanic", "Drammatico", "PG-13", 195, "titanic.jpg", "Un dramma romantico epico", true);
+        byte[] locandina = "Esempio di locandina".getBytes(); // Locandina mock come byte[]
+        Film film = new Film(0, "Titanic", "Drammatico", "PG-13", 195, locandina, "Un dramma romantico epico", true);
         boolean result = filmDAO.create(film);
         assertTrue(result, "La creazione del film dovrebbe avere successo");
         assertNotEquals(0, film.getId(), "L'ID del film dovrebbe essere generato automaticamente");
     }
 
+
     @Test
     @DisplayName("Recupero di un film tramite ID")
     void testRetrieveById() {
-        Film film = new Film(0, "Titanic", "Drammatico", "PG-13", 195, "titanic.jpg", "Un dramma romantico epico", true);
+        byte[] locandina = "Esempio di locandina".getBytes(); // Locandina mock come byte[]
+        Film film = new Film(0, "Titanic", "Drammatico", "PG-13", 195, locandina, "Un dramma romantico epico", true);
         filmDAO.create(film);
         Film retrievedFilm = filmDAO.retrieveById(film.getId());
         assertNotNull(retrievedFilm, "Il film dovrebbe essere trovato");
@@ -59,7 +62,7 @@ public class FilmDAOTest {
         assertEquals(film.getGenere(), retrievedFilm.getGenere(), "Il genere dovrebbe corrispondere");
         assertEquals(film.getClassificazione(), retrievedFilm.getClassificazione(), "La classificazione dovrebbe corrispondere");
         assertEquals(film.getDurata(), retrievedFilm.getDurata(), "La durata dovrebbe corrispondere");
-        assertEquals(film.getLocandina(), retrievedFilm.getLocandina(), "La locandina dovrebbe corrispondere");
+        assertArrayEquals(film.getLocandina(), retrievedFilm.getLocandina(), "La locandina dovrebbe corrispondere"); // Confronto degli array di byte
         assertEquals(film.getDescrizione(), retrievedFilm.getDescrizione(), "La descrizione dovrebbe corrispondere");
         assertEquals(film.isProiettato(), retrievedFilm.isProiettato(), "Lo stato 'isProiettato' dovrebbe corrispondere");
     }
@@ -67,16 +70,23 @@ public class FilmDAOTest {
     @Test
     @DisplayName("Recupero di tutti i film")
     void testRetrieveAll() {
-        Film film1 = new Film(0, "Titanic", "Drammatico", "PG-13", 195, "titanic.jpg", "Un dramma romantico", true);
-        Film film2 = new Film(1, "Inception", "Fantascienza", "PG-13", 148, "inception.jpg", "Un thriller psicologico", false);
+        byte[] locandina1 = "Esempio di locandina 1".getBytes(); // Locandina mock 1 come byte[]
+        byte[] locandina2 = "Esempio di locandina 2".getBytes(); // Locandina mock 2 come byte[]
+        Film film1 = new Film(0, "Titanic", "Drammatico", "PG-13", 195, locandina1, "Un dramma romantico", true);
+        Film film2 = new Film(0, "Inception", "Fantascienza", "PG-13", 148, locandina2, "Un thriller psicologico", false);
         filmDAO.create(film1);
         filmDAO.create(film2);
         List<Film> films = filmDAO.retrieveAll();
         assertNotNull(films, "La lista di film non dovrebbe essere nulla");
         assertEquals(2, films.size(), "Dovrebbero esserci due film nella lista");
-        Film retrievedFilm1 = films.get(0);
-        assertEquals(film1.getTitolo(), retrievedFilm1.getTitolo(), "Il titolo del primo film dovrebbe corrispondere");
-        Film retrievedFilm2 = films.get(1);
-        assertEquals(film2.getTitolo(), retrievedFilm2.getTitolo(), "Il titolo del secondo film dovrebbe corrispondere");
+
+        Film retrievedFilm1 = films.stream().filter(f -> "Titanic".equals(f.getTitolo())).findFirst().orElse(null);
+        assertNotNull(retrievedFilm1, "Il primo film dovrebbe essere trovato");
+        assertArrayEquals(locandina1, retrievedFilm1.getLocandina(), "La locandina del primo film dovrebbe corrispondere");
+
+        Film retrievedFilm2 = films.stream().filter(f -> "Inception".equals(f.getTitolo())).findFirst().orElse(null);
+        assertNotNull(retrievedFilm2, "Il secondo film dovrebbe essere trovato");
+        assertArrayEquals(locandina2, retrievedFilm2.getLocandina(), "La locandina del secondo film dovrebbe corrispondere");
     }
+
 }

@@ -13,9 +13,9 @@ public class CatalogoService {
     private final FilmDAO filmDAO = new FilmDAO();
     private ValidateStrategyManager validationManager= new ValidateStrategyManager();
 
-    public void addFilmCatalogo(String titolo, int durata, String descrizione, String locandina, String genere, String classificazione) {
+    public void addFilmCatalogo(String titolo, int durata, String descrizione, byte[] locandina, String genere, String classificazione) {
         if (titolo == null || titolo.isEmpty() || durata <= 0 || descrizione == null || descrizione.isEmpty()
-                || locandina == null || locandina.isEmpty() || genere == null || genere.isEmpty()
+                || locandina == null || locandina.length == 0 || genere == null || genere.isEmpty()
                 || classificazione == null || classificazione.isEmpty()) {
             throw new IllegalArgumentException("Parametri non validi per l'aggiunta del film.");
         }

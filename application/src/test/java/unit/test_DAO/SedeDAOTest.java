@@ -84,7 +84,7 @@ public class SedeDAOTest {
 
     @Test
     void testRetrieveById() {
-        Sede sede = sedeDAO.retriveById(1);
+        Sede sede = sedeDAO.retrieveById(1);
         assertNotNull(sede, "La sede non dovrebbe essere null");
         assertEquals(1, sede.getId(), "L'ID della sede dovrebbe essere 1");
         assertEquals("CineNow Napoli", sede.getNome(), "Il nome della sede dovrebbe essere 'CineNow Napoli'");
@@ -93,7 +93,7 @@ public class SedeDAOTest {
 
     @Test
     void testRetrieveAll() {
-        List<Sede> sedi = sedeDAO.retirveAll();
+        List<Sede> sedi = sedeDAO.retrieveAll();
         assertEquals(2, sedi.size(), "Dovrebbero esserci 2 sedi");
 
         Sede sede1 = sedi.getFirst();

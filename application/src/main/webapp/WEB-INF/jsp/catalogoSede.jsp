@@ -1,5 +1,6 @@
 <%@ page import="it.unisa.application.model.entity.Film" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.Base64" %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
@@ -20,14 +21,23 @@
             List<Film> catalogo = (List<Film>) request.getAttribute("catalogo");
             if (catalogo != null && !catalogo.isEmpty()) {
                 for (Film film : catalogo) {
+                    String locandinaBase64 = null;
+                    if (film.getLocandina() != null) {
+                        locandinaBase64 = Base64.getEncoder().encodeToString(film.getLocandina());
+                    }
         %>
         <div class="col-md-4 mb-4">
             <form action="${pageContext.request.contextPath}/DettagliFilm" method="post">
                 <input type="hidden" name="filmId" value="<%= film.getId() %>">
                 <button type="submit" class="film-button" style="border: none;">
                     <div class="film-card">
-                        <img src="${pageContext.request.contextPath}/static/images/locandine/mufasa.jpg"
+                        <% if (locandinaBase64 != null) { %>
+                        <img src="data:image/jpeg;base64,<%= locandinaBase64 %>"
                              alt="Locandina di <%= film.getTitolo() %>" class="img-fluid">
+                        <% } else { %>
+                        <img src="${pageContext.request.contextPath}/static/images/default-locandina.jpg"
+                             alt="Locandina non disponibile" class="img-fluid">
+                        <% } %>
                         <div class="film-card-body">
                             <h5 class="film-title"><%= film.getTitolo() %></h5>
                         </div>
