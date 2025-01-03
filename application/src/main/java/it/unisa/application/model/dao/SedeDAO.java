@@ -14,7 +14,7 @@ public class SedeDAO {
     public SedeDAO() {
         this.ds = DataSourceSingleton.getInstance();
     }
-    public Sede retriveById(int id) {
+    public Sede retrieveById(int id) {
         String sql = "SELECT s.id, s.nome, s.via, s.città, s.cap FROM sede s WHERE s.id = ?";
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -29,7 +29,7 @@ public class SedeDAO {
         }
         return null;
     }
-    public List<Sede> retirveAll(){
+    public List<Sede> retrieveAll(){
         String sql = "SELECT * FROM sede";
         List<Sede> sedi = new ArrayList<>();
         try (Connection connection = ds.getConnection();
@@ -112,5 +112,24 @@ public class SedeDAO {
             }
         }
         return filmList;
+    }
+
+    public Sala retrieveSalaById(int salaId) {
+        String sql = "SELECT * FROM sala WHERE id = ?";
+        try (Connection connection = ds.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, salaId);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()){
+                Sala s = new Sala();
+                s.setId(rs.getInt("id"));
+                s.setNumeroSala(rs.getInt("numero"));
+                s.setCapienza(rs.getInt("capienza"));
+                return s;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
