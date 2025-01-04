@@ -37,7 +37,4 @@ public class ProgrammazioneService {
             return false;
         }
     }
-    public List<Proiezione> getProgrammazioniBySede(int sedeId) {
-        return proiezioneDAO.retrieveAllBySede(sedeId);
-    }
 }

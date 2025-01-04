@@ -1,11 +1,11 @@
-package it.unisa.application.sottosistemi.gestione_sala.view;
+package it.unisa.application.sottosistemi.gestione_sede.view;
 
 import it.unisa.application.model.dao.FilmDAO;
 import it.unisa.application.model.dao.SlotDAO;
 import it.unisa.application.model.entity.Film;
 import it.unisa.application.model.entity.Proiezione;
 import it.unisa.application.model.entity.Slot;
-import it.unisa.application.sottosistemi.gestione_sala.service.ProgrammazioneService;
+import it.unisa.application.sottosistemi.gestione_sede.service.ProgrammazioneSedeService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -18,7 +18,7 @@ public class GestioneProgrammazioneServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int sedeId = Integer.parseInt(request.getParameter("sedeId"));
-        ProgrammazioneService service = new ProgrammazioneService();
+        ProgrammazioneSedeService service = new ProgrammazioneSedeService();
         List<Proiezione> programmazioni = service.getProgrammazioniBySede(sedeId);
         FilmDAO filmDAO = new FilmDAO();
         SlotDAO slotDAO = new SlotDAO();
