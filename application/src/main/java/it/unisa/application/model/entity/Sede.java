@@ -1,5 +1,6 @@
 package it.unisa.application.model.entity;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -10,12 +11,18 @@ public class Sede {
     private int id;
     private Set<Sala> sale;
 
-    public Sede(){}
-
+    public Sede(){
+        sale = new HashSet<>();
+    }
+    public Sede(int id){
+        this.id = id;
+        sale = new HashSet<>();
+    }
     public Sede(int id, String nome, String indirizzo){
         this.id = id;
         this.nome = nome;
         this.indirizzo = indirizzo;
+        this.sale = new HashSet<>();
     }
 
     public String getNome() {

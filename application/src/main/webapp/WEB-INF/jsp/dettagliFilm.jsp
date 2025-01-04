@@ -27,9 +27,10 @@
                 <li><strong>Durata:</strong> ${film.durata} minuti</li>
                 <li><strong>Genere:</strong> ${film.genere}</li>
                 <li><strong>Classificazione:</strong> ${film.classificazione}</li>
-
                 <li>
-                    <form method="post" action="${pageContext.request.contextPath}/Proiezioni">
+                    <form method="post" action="${pageContext.request.contextPath}/ProiezioniFilm">
+                        <input type="hidden" name="film" value="<%= film.getId() %>">
+                        <input type="hidden" name="sedeId" value="<%= request.getAttribute("sedeId") %>">
                     <button type="submit">Prenota</button>
                     </form>
                 </li>

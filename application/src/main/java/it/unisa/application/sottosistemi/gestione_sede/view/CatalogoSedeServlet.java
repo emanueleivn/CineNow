@@ -26,11 +26,13 @@ public class CatalogoSedeServlet extends HttpServlet {
                 sedeObject.setId(1);
                 catalogo = service.getCatalogoSede(sedeObject);
                 req.setAttribute("sede", "Mercogliano");
+                req.setAttribute("sedeId", sedeObject.getId());
                 break;
             case "Laquila":
                 sedeObject.setId(2);
                 catalogo = service.getCatalogoSede(sedeObject);
                 req.setAttribute("sede", "L'Aquila");
+                req.setAttribute("sedeId", sedeObject.getId());
                 break;
             default:
                 req.setAttribute("errorMessage", "Errore caricamento catalogo");
