@@ -1,6 +1,10 @@
 package it.unisa.application.sottosistemi.gestione_sede.view;
 
 import it.unisa.application.model.entity.Proiezione;
+import it.unisa.application.model.entity.Film;
+import it.unisa.application.model.entity.Sede;
+import it.unisa.application.model.dao.FilmDAO;
+import it.unisa.application.model.dao.SedeDAO;
 import it.unisa.application.sottosistemi.gestione_sede.service.ProgrammazioneSedeService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,26 +17,42 @@ import java.util.List;
 
 @WebServlet("/ProiezioniFilm")
 public class ProiezioniFilmServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("errorMessage", "Accesso non consentito");
-        req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
-    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ProgrammazioneSedeService service = new ProgrammazioneSedeService();
-        int sedeId = Integer.parseInt(req.getParameter("sedeId"));
-        int filmId = Integer.parseInt(req.getParameter("filmId"));
-        List<Proiezione> programmazioneFilm = service.getProgrammazioneFilm(filmId, sedeId);
-        if (programmazioneFilm.isEmpty()) {
-            req.setAttribute("errorMessage", "Proiezioni non trovate");
+        FilmDAO filmDAO = new FilmDAO();
+        SedeDAO sedeDAO = new SedeDAO();
+
+        try {
+            int sedeId = Integer.parseInt(req.getParameter("sedeId"));
+            int filmId = Integer.parseInt(req.getParameter("filmId"));
+            List<Proiezione> programmazioneFilm = service.getProgrammazioneFilm(filmId, sedeId);
+            Film film = filmDAO.retrieveById(filmId);
+            Sede sede = sedeDAO.retrieveById(sedeId);
+
+            if (film == null || sede == null) {
+                req.setAttribute("errorMessage", "Film o sede non trovati.");
+                req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
+                return;
+            }
+
+            if (programmazioneFilm.isEmpty()) {
+                req.setAttribute("errorMessage", "Proiezioni non trovate per il film selezionato.");
+                req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
+            } else {
+                req.setAttribute("programmazioneFilm", programmazioneFilm);
+                req.setAttribute("filmNome", film.getTitolo());
+                req.setAttribute("sedeNome", sede.getNome());
+                req.getRequestDispatcher("/WEB-INF/jsp/proiezioniFilm.jsp").forward(req, resp);
+            }
+        } catch (NumberFormatException e) {
+            req.setAttribute("errorMessage", "Parametri non validi.");
+            req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
+        } catch (Exception e) {
+            e.printStackTrace();
+            req.setAttribute("errorMessage", "Si è verificato un errore durante il recupero delle proiezioni.");
             req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
         }
-//        req.setAttribute("programmazioneFilm", programmazioneFilm);
-//        req.getRequestDispatcher("/WEB-INF/jsp/proiezioniFilm.jsp").forward(req, resp);
-        programmazioneFilm.forEach(System.out::println);
-        req.setAttribute("errorMessage", "Proiezioni trovate");
-        req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
     }
 }
