@@ -236,9 +236,7 @@
   </script>
 </head>
 <body>
-<header>
-  <h1>Aggiungi Proiezione</h1>
-</header>
+<jsp:include page="/WEB-INF/jsp/headerSede.jsp"/>
 
 <form action="<%= request.getContextPath() %>/aggiungiProiezione" method="post">
   <input type="hidden" name="sedeId" value="<%= request.getAttribute("sedeId") %>">
