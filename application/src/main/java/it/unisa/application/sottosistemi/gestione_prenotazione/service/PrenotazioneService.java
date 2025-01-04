@@ -42,4 +42,8 @@ public class PrenotazioneService {
         }
         return prenotazioneDAO.retrieveAllByCliente(cliente);
     }
+
+    public List<PostoProiezione> ottieniPostiProiezione(Proiezione proiezione){
+        return postoProiezioneDAO.retrieveAllByProiezione(proiezione);
+    }
 }
