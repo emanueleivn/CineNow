@@ -24,7 +24,7 @@ public class GestioneProgrammazioneServlet extends HttpServlet {
         SlotDAO slotDAO = new SlotDAO();
         for (Proiezione p : programmazioni) {
             Film f = filmDAO.retrieveById(p.getFilmProiezione().getId());
-            Slot s = slotDAO.retriveById(p.getOrarioProiezione().getId());
+            Slot s = slotDAO.retrieveById(p.getOrarioProiezione().getId());
             p.setFilmProiezione(f);
             p.setOrarioProiezione(s);
         }

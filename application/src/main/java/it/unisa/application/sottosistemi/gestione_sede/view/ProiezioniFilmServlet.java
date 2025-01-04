@@ -24,12 +24,15 @@ public class ProiezioniFilmServlet extends HttpServlet {
         ProgrammazioneSedeService service = new ProgrammazioneSedeService();
         int sedeId = Integer.parseInt(req.getParameter("sedeId"));
         int filmId = Integer.parseInt(req.getParameter("filmId"));
-        List<Proiezione> programmazioneFilm =service.getProgrammazioneFilm(filmId, sedeId);
+        List<Proiezione> programmazioneFilm = service.getProgrammazioneFilm(filmId, sedeId);
         if (programmazioneFilm.isEmpty()) {
-            req.setAttribute("errorMessage", "Proizioni non trovate");
+            req.setAttribute("errorMessage", "Proiezioni non trovate");
             req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
         }
-        req.setAttribute("programmazioneFilm", programmazioneFilm);
-        req.getRequestDispatcher("/WEB-INF/jsp/proiezioniFilm.jsp").forward(req, resp);
+//        req.setAttribute("programmazioneFilm", programmazioneFilm);
+//        req.getRequestDispatcher("/WEB-INF/jsp/proiezioniFilm.jsp").forward(req, resp);
+        programmazioneFilm.forEach(System.out::println);
+        req.setAttribute("errorMessage", "Proiezioni trovate");
+        req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
     }
 }

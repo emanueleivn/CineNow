@@ -68,8 +68,8 @@ public class SlotDAOTest {
 
     @Test
     void testRetrieveById() {
-        Slot slot = slotDAO.retriveById(1);
-        assertNotNull(slot, "Il metodo retriveById dovrebbe restituire un oggetto Slot");
+        Slot slot = slotDAO.retrieveById(1);
+        assertNotNull(slot, "Il metodo retrieveById dovrebbe restituire un oggetto Slot");
         assertEquals(1, slot.getId(), "L'ID dello slot dovrebbe essere 1");
         assertEquals("10:00:00", slot.getOraInizio().toString(), "L'ora dello slot dovrebbe essere 10:00:00");
     }
@@ -80,15 +80,15 @@ public class SlotDAOTest {
         Slot slot = new Slot();
         slot.setId(2);
         proiezione.setOrarioProiezione(slot);
-        Slot retrievedSlot = slotDAO.retiveByProiezione(proiezione);
-        assertNotNull(retrievedSlot, "Il metodo retiveByProiezione dovrebbe restituire uno slot");
+        Slot retrievedSlot = slotDAO.retrieveByProiezione(proiezione);
+        assertNotNull(retrievedSlot, "Il metodo retrieveByProiezione dovrebbe restituire uno slot");
         assertEquals(2, retrievedSlot.getId(), "L'ID dello slot dovrebbe essere 2");
         assertEquals("12:00:00", retrievedSlot.getOraInizio().toString(), "L'ora dello slot dovrebbe essere 12:00:00");
     }
 
    /* @Test
     void testRetrieveFreeSlot() {
-        List<Slot> freeSlots = slotDAO.retriveFreeSlot(LocalDate.of(2025, 1, 1), 1);
+        List<Slot> freeSlots = slotDAO.retrieveFreeSlot(LocalDate.of(2025, 1, 1), 1);
 
         assertNotNull(freeSlots, "La lista degli slot liberi non dovrebbe essere null");
         assertEquals(2, freeSlots.size(), "Dovrebbero esserci 2 slot liberi");

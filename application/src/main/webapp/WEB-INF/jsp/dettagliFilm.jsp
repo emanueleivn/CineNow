@@ -29,7 +29,7 @@
                 <li><strong>Classificazione:</strong> ${film.classificazione}</li>
                 <li>
                     <form method="post" action="${pageContext.request.contextPath}/ProiezioniFilm">
-                        <input type="hidden" name="film" value="<%= film.getId() %>">
+                        <input type="hidden" name="filmId" value="<%= film.getId() %>">
                         <input type="hidden" name="sedeId" value="<%= request.getAttribute("sedeId") %>">
                     <button type="submit">Prenota</button>
                     </form>

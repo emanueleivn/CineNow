@@ -11,6 +11,7 @@ public class Sala {
     private List<Slot> slotList;
     private List<Proiezione> proiezioni;
     private List<Posto> posti;
+    private Sede sede;
 
     public Sala() {
     }
@@ -41,6 +42,14 @@ public class Sala {
 
     public void setCapienza(int capienza) {
         this.capienza = capienza;
+    }
+
+    public Sede getSede() {
+        return sede;
+    }
+
+    public void setSede(Sede sede) {
+        this.sede = sede;
     }
 
     public List<Slot> slotList() {

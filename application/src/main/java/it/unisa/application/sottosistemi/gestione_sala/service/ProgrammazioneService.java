@@ -22,7 +22,7 @@ public class ProgrammazioneService {
             Film film = fdao.retrieveById(filmId);
             Sala sala = sedeDAO.retrieveSalaById(salaId);
             for (int sid : slotIds) {
-                Slot sl = slotDAO.retriveById(sid);
+                Slot sl = slotDAO.retrieveById(sid);
                 Proiezione p = new Proiezione();
                 p.setFilmProiezione(film);
                 p.setSalaProiezione(sala);
