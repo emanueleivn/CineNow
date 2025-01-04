@@ -99,7 +99,9 @@
   </ul>
 </div>
 
-<footer>&copy; 2023 CineNow - Tutti i diritti riservati.</footer>
+<footer>
+  <jsp:include page="/WEB-INF/jsp/footer.jsp"/>
+</footer>
 
 </body>
 </html>

@@ -21,5 +21,8 @@
   <input type="text" id="classificazione" name="classificazione" required><br>
   <button type="submit">Salva Film</button>
 </form>
+<footer>
+  <jsp:include page="/WEB-INF/jsp/footer.jsp"/>
+</footer>
 </body>
 </html>

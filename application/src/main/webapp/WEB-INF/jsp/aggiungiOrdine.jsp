@@ -19,5 +19,8 @@
 <% if (request.getAttribute("errorMessage") != null) { %>
 <p style="color:red;"><%= request.getAttribute("errorMessage") %></p>
 <% } %>
+<footer>
+  <jsp:include page="/WEB-INF/jsp/footer.jsp"/>
+</footer>
 </body>
 </html>

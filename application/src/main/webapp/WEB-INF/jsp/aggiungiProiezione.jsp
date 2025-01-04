@@ -297,5 +297,8 @@
 
   <button type="submit">Aggiungi Proiezione</button>
 </form>
+<footer>
+  <jsp:include page="/WEB-INF/jsp/footer.jsp"/>
+</footer>
 </body>
 </html>
