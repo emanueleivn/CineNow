@@ -19,9 +19,9 @@
     border: none;
 }">
         <div class="container-fluid">
-            <span class="navbar-brand text-danger fw-bold ms-3"><img src="static/images/scritta%20sito.png"
+            <a href="<%= request.getContextPath() %>/areaGestoreCatena.jsp" class="nav-link navbar-brand text-danger fw-bold ms-3"><img src="static/images/scritta%20sito.png"
                                                                      alt="CineNow" class="ms-3"
-                                                                     style="height: 70px;"></span>
+                                                                     style="height: 70px;"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -36,7 +36,7 @@
                                    href="<%= request.getContextPath() %>/logout">Logout</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="areaGestoreCatena.jsp">Area gestore catena</a>
+                        <a class="nav-link" href="<%= request.getContextPath() %>/catalogo">Gestione catalogo</a>
                     </li>
                 </ul>
                 <span class="navbar-brand text-danger fw-bold ms-auto" style="font-family:'Baloo Bhai 2',cursive;">Catena-Movieplex</span>
