@@ -45,12 +45,4 @@ public class PostoProiezione {
         this.stato = stato;
     }
 
-    @Override
-    public String toString() {
-        return "PostoProiezione{" +
-                "posto=" + posto +
-                ", proiezione=" + proiezione +
-                ", stato=" + stato +
-                '}';
-    }
 }

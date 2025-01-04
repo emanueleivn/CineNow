@@ -84,11 +84,12 @@ public class Proiezione {
     public String toString() {
         return "Proiezione{" +
                 "id=" + id +
-                ", filmProiezione=" + filmProiezione +
+                ", filmProiezione=" + filmProiezione +  // Assumendo che Film non abbia riferimenti ciclici
                 ", salaProiezione=" + salaProiezione +
                 ", dataProiezione=" + dataProiezione +
-                ", postiProiezione=" + postiProiezione +
+                ", postiProiezione=" + (postiProiezione != null ? postiProiezione.size() : 0) +  // Stampiamo solo il numero di posti
                 ", orarioProiezione=" + orarioProiezione +
                 '}';
     }
+
 }
