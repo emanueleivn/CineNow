@@ -4,6 +4,7 @@
   <title>Aggiungi Nuovo Film</title>
 </head>
 <body>
+<jsp:include page="/WEB-INF/jsp/headerCatena.jsp"/>
 <h1>Aggiungi Nuovo Film</h1>
 <form action="<%= request.getContextPath() %>/addFilm" method="POST" enctype="multipart/form-data">
   <label for="titolo">Titolo:</label>
