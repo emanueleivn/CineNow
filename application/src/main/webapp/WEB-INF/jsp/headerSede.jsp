@@ -1,4 +1,5 @@
 <%@ page import="it.unisa.application.model.entity.Cliente" %>
+<%@ page import="it.unisa.application.model.entity.GestoreSede" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,14 +15,17 @@
 <header>
   <div class="top-bar d-flex align-items-center justify-content-start bg-light py-2 px-3">
   </div>
-
+  <%
+    HttpSession session1 = request.getSession(false);
+    GestoreSede gestore = (session1 != null) ? (GestoreSede) session1.getAttribute("gestoreSede") : null;
+  %>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: #000000 !important;
     border: none;
 }">
     <div class="container-fluid">
-            <span class="navbar-brand text-danger fw-bold ms-3"><img src="static/images/scritta%20sito.png"
+            <a href="<%= request.getContextPath() %>/areaGestoreSede.jsp" class="nav-link navbar-brand text-danger fw-bold ms-3"><img src="static/images/scritta%20sito.png"
                                                                      alt="CineNow" class="ms-3"
-                                                                     style="height: 70px;"></span>
+                                                                     style="height: 70px;"></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
               aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -36,8 +40,13 @@
                href="<%= request.getContextPath() %>/logout">Logout</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="areaGestoreSede.jsp">Area gestore sede</a>
-          </li>
+            <%
+              if (gestore != null && gestore.getSede() != null) {
+            %>
+            <a href="<%= request.getContextPath() %>/gestioneProgrammazione?sedeId=<%= gestore.getSede().getId() %>">Gestisci Programmazione</a>
+            <%
+              }
+            %></li>
         </ul>
         <span class="navbar-brand text-danger fw-bold ms-auto" style="font-family:'Baloo Bhai 2',cursive;">Catena-Movieplex</span>
       </div>
