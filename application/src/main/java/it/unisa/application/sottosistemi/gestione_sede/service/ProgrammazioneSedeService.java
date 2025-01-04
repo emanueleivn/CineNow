@@ -22,11 +22,7 @@ public class ProgrammazioneSedeService {
     public List<Film> getCatalogoSede(Sede sede){
         SedeDAO sedeDAO = new SedeDAO();
         List<Film> catalogo;
-        try {
-            catalogo =  sedeDAO.retrieveFilm(sede.getId());
-        } catch (SQLException e) {
-            return null;
-        }
+        catalogo =  sedeDAO.retrieveFilm(sede.getId());
         return catalogo;
     }
 }

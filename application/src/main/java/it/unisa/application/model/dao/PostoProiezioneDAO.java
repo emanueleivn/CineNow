@@ -33,8 +33,11 @@ public class PostoProiezioneDAO {
         }
         return false;
     }
-
     public List<PostoProiezione> retrieveAllByProiezione(Proiezione proiezione) {
+        if (proiezione == null) {
+            throw new IllegalArgumentException("La proiezione non può essere null.");
+        }
+
         List<PostoProiezione> postiProiezione = new ArrayList<>();
         String sql = "SELECT * FROM posto_proiezione WHERE id_proiezione = ?";
         try (Connection connection = ds.getConnection();
@@ -44,10 +47,12 @@ public class PostoProiezioneDAO {
             while (rs.next()) {
                 PostoProiezione postoProiezione = new PostoProiezione();
                 Posto posto = new Posto();
-                posto.setSala(new Sala());
-                posto.getSala().setId(rs.getInt("id_sala"));
+                Sala sala = new Sala();
+                sala.setId(rs.getInt("id_sala"));
+                posto.setSala(sala);
                 posto.setFila(rs.getString("fila").charAt(0));
                 posto.setNumero(rs.getInt("numero"));
+
                 postoProiezione.setPosto(posto);
                 postoProiezione.setProiezione(proiezione);
                 postoProiezione.setStato(rs.getBoolean("stato"));
@@ -59,32 +64,55 @@ public class PostoProiezioneDAO {
         return postiProiezione;
     }
 
+
     public boolean occupaPosto(PostoProiezione postoProiezione, int idPrenotazione) {
+        if (postoProiezione == null || postoProiezione.getPosto() == null || postoProiezione.getProiezione() == null) {
+            throw new IllegalArgumentException("PostoProiezione, Posto o Proiezione non può essere null.");
+        }
+
         String updateSql = "UPDATE posto_proiezione SET stato = false WHERE id_sala = ? AND fila = ? AND numero = ? AND id_proiezione = ?";
         String insertSql = "INSERT INTO occupa (id_sala, fila, numero, id_proiezione, id_prenotazione) VALUES (?, ?, ?, ?, ?)";
-        try (Connection connection = ds.getConnection();
-             PreparedStatement updatePs = connection.prepareStatement(updateSql);
-             PreparedStatement insertPs = connection.prepareStatement(insertSql)) {
 
-            updatePs.setInt(1, postoProiezione.getPosto().getSala().getId());
-            updatePs.setString(2, String.valueOf(postoProiezione.getPosto().getFila()));
-            updatePs.setInt(3, postoProiezione.getPosto().getNumero());
-            updatePs.setInt(4, postoProiezione.getProiezione().getId());
-            if (updatePs.executeUpdate() <= 0) {
-                return false;
+        try (Connection connection = ds.getConnection()) {
+            connection.setAutoCommit(false); // Avvio transazione
+
+            try (PreparedStatement updatePs = connection.prepareStatement(updateSql);
+                 PreparedStatement insertPs = connection.prepareStatement(insertSql)) {
+
+                // Aggiornamento dello stato del posto
+                updatePs.setInt(1, postoProiezione.getPosto().getSala().getId());
+                updatePs.setString(2, String.valueOf(postoProiezione.getPosto().getFila()));
+                updatePs.setInt(3, postoProiezione.getPosto().getNumero());
+                updatePs.setInt(4, postoProiezione.getProiezione().getId());
+                if (updatePs.executeUpdate() <= 0) {
+                    connection.rollback();
+                    return false;
+                }
+
+                // Inserimento nella tabella occupa
+                insertPs.setInt(1, postoProiezione.getPosto().getSala().getId());
+                insertPs.setString(2, String.valueOf(postoProiezione.getPosto().getFila()));
+                insertPs.setInt(3, postoProiezione.getPosto().getNumero());
+                insertPs.setInt(4, postoProiezione.getProiezione().getId());
+                insertPs.setInt(5, idPrenotazione);
+                if (insertPs.executeUpdate() <= 0) {
+                    connection.rollback();
+                    return false;
+                }
+
+                connection.commit(); // Commit della transazione
+                return true;
+            } catch (SQLException e) {
+                connection.rollback(); // Rollback in caso di errore
+                throw e;
+            } finally {
+                connection.setAutoCommit(true); // Ripristino modalità automatica
             }
-
-            insertPs.setInt(1, postoProiezione.getPosto().getSala().getId());
-            insertPs.setString(2, String.valueOf(postoProiezione.getPosto().getFila()));
-            insertPs.setInt(3, postoProiezione.getPosto().getNumero());
-            insertPs.setInt(4, postoProiezione.getProiezione().getId());
-            insertPs.setInt(5, idPrenotazione);
-            return insertPs.executeUpdate() > 0;
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
+
 
 }

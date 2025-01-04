@@ -57,19 +57,15 @@ public class SalaDAOTest {
 
     @Test
     void testRetrieveAll() {
-        try {
-            List<Sala> sale = salaDAO.retrieveAll();
-            assertNotNull(sale);
-            assertEquals(2, sale.size(), "Il numero di sale dovrebbe essere 2");
+        List<Sala> sale = salaDAO.retrieveAll();
+        assertNotNull(sale);
+        assertEquals(2, sale.size(), "Il numero di sale dovrebbe essere 2");
 
-            Sala sala1 = sale.getFirst();
-            assertEquals(1, sala1.getId());
-            assertEquals(1, sala1.getId());
-            assertEquals(1, sala1.getNumeroSala());
-            assertEquals(100, sala1.getCapienza());
-        } catch (SQLException e) {
-            fail("Errore durante il test di retrieveAll: " + e.getMessage());
-        }
+        Sala sala1 = sale.getFirst();
+        assertEquals(1, sala1.getId());
+        assertEquals(1, sala1.getId());
+        assertEquals(1, sala1.getNumeroSala());
+        assertEquals(100, sala1.getCapienza());
     }
 
 

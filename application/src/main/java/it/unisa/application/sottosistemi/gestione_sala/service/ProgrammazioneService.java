@@ -7,34 +7,53 @@ import it.unisa.application.model.dao.SlotDAO;
 import it.unisa.application.model.entity.Film;
 import it.unisa.application.model.entity.Proiezione;
 import it.unisa.application.model.entity.Sala;
-import it.unisa.application.model.entity.Slot;
+
 import java.time.LocalDate;
 import java.util.List;
 
 public class ProgrammazioneService {
+    private final FilmDAO filmDAO = new FilmDAO();
+    private final SedeDAO sedeDAO = new SedeDAO();
     private final ProiezioneDAO proiezioneDAO = new ProiezioneDAO();
+    private final SlotDAO proiezioneSlotDAO = new SlotDAO();
+
+    public List<Film> getCatalogoFilm() {
+        return filmDAO.retrieveAll();
+    }
+
+    public List<Sala> getSaleBySede(int sedeId) {
+        return sedeDAO.retrieveSaleBySede(sedeId);
+    }
+
     public boolean aggiungiProiezione(int filmId, int salaId, List<Integer> slotIds, LocalDate data) {
         try {
-            FilmDAO fdao = new FilmDAO();
-            SedeDAO sedeDAO = new SedeDAO();
-            SlotDAO slotDAO = new SlotDAO();
-            ProiezioneDAO pdao = new ProiezioneDAO();
-            Film film = fdao.retrieveById(filmId);
-            Sala sala = sedeDAO.retrieveSalaById(salaId);
-            for (int sid : slotIds) {
-                Slot sl = slotDAO.retrieveById(sid);
-                Proiezione p = new Proiezione();
-                p.setFilmProiezione(film);
-                p.setSalaProiezione(sala);
-                p.setOrarioProiezione(sl);
-                p.setDataProiezione(data);
-                if (!pdao.create(p)) {
+            // Creazione della proiezione
+            Proiezione proiezione = new Proiezione();
+            proiezione.setFilmProiezione(new Film(filmId));
+            proiezione.setSalaProiezione(new Sala(salaId));
+            proiezione.setDataProiezione(data);
+
+            System.out.println("Creazione proiezione: filmId=" + filmId + ", salaId=" + salaId + ", data=" + data);
+
+            if (!proiezioneDAO.create(proiezione)) {
+                System.err.println("Errore durante la creazione della proiezione.");
+                return false;
+            }
+
+            // Associazione degli slot alla proiezione
+            for (int slotId : slotIds) {
+                System.out.println("Associazione slotId=" + slotId + " alla proiezioneId=" + proiezione.getId());
+                if (!proiezioneSlotDAO.associaSlot(proiezione.getId(), slotId)) {
+                    System.err.println("Errore durante l'associazione dello slot: slotId=" + slotId);
                     return false;
                 }
             }
+
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
+
 }
