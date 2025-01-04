@@ -7,6 +7,7 @@
   <title>Gestione Catalogo Film</title>
 </head>
 <body>
+<jsp:include page="/WEB-INF/jsp/headerCatena.jsp"/>
 <h1>Gestione Catalogo Film</h1>
 <button onclick="location.href='<%= request.getContextPath() %>/addFilm'">Aggiungi Film</button>
 
@@ -60,4 +61,7 @@
   </tbody>
 </table>
 </body>
+<footer>
+  <jsp:include page="/WEB-INF/jsp/footer.jsp"/>
+</footer>
 </html>

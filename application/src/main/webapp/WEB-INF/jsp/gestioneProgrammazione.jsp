@@ -60,9 +60,7 @@
     </style>
 </head>
 <body>
-<header>
-    <h1>Gestione Programmazione</h1>
-</header>
+<jsp:include page="/WEB-INF/jsp/headerSede.jsp"/>
 <div class="content">
     <a href="<%= request.getContextPath() %>/aggiungiProiezione?sedeId=<%= request.getParameter("sedeId") %>">
         Aggiungi Proiezione
@@ -103,5 +101,8 @@
         }
     %>
 </div>
+<footer>
+    <jsp:include page="/WEB-INF/jsp/footer.jsp"/>
+</footer>
 </body>
 </html>

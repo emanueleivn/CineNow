@@ -7,58 +7,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Area Gestore Sede</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1c1c1c;
-      color: #ffffff;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background: #121212;
-      color: #fff;
-      padding: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    header img {
-      height: 100px;
-      margin-right: 15px;
-    }
-    nav {
-      display: flex;
-      align-items: center;
-    }
-    nav a {
-      color: #fff;
-      margin: 0 15px;
-      text-decoration: none;
-    }
-    .content {
-      padding: 20px;
-      text-align: center;
-    }
-    .btn {
-      padding: 10px 20px;
-      background: #ff3b30;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-      display: inline-block;
-      margin-top: 20px;
-    }
-    footer {
-      background: #121212;
-      color: #fff;
-      text-align: center;
-      padding: 10px;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-    }
-  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static/style/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhai+2&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
 </head>
 <body>
 <%
@@ -66,19 +18,7 @@
   GestoreSede gestore = (session1 != null) ? (GestoreSede) session1.getAttribute("gestoreSede") : null;
 %>
 
-<header>
-  <img src="static/images/logo.png" alt="CineNow Logo">
-  <nav>
-    <a href="<%= request.getContextPath() %>/logout">Logout</a>
-    <%
-      if (gestore != null && gestore.getSede() != null) {
-    %>
-    <a href="<%= request.getContextPath() %>/gestioneProgrammazione?sedeId=<%= gestore.getSede().getId() %>">Gestisci Programmazione</a>
-    <%
-      }
-    %>
-  </nav>
-</header>
+<jsp:include page="/WEB-INF/jsp/headerSede.jsp"/>
 
 <div class="content">
   <h1>Area Gestore Sede</h1>

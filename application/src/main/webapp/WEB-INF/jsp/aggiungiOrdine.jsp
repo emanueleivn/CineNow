@@ -4,6 +4,7 @@
   <title>Aggiungi Prenotazione</title>
 </head>
 <body>
+<jsp:include page="/WEB-INF/jsp/header.jsp"/>
 <h1>Aggiungi Prenotazione</h1>
 
 <form action="<%= request.getContextPath() %>/aggiungiOrdine" method="post">
@@ -19,5 +20,8 @@
 <% if (request.getAttribute("errorMessage") != null) { %>
 <p style="color:red;"><%= request.getAttribute("errorMessage") %></p>
 <% } %>
+<footer>
+  <jsp:include page="/WEB-INF/jsp/footer.jsp"/>
+</footer>
 </body>
 </html>
