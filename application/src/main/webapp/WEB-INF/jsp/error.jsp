@@ -8,4 +8,8 @@
 <p><%= request.getAttribute("errorMessage") != null ? request.getAttribute("errorMessage") : "Errore sconosciuto." %></p>
 <a href="<%= request.getContextPath() %>/index.jsp">Torna alla Home</a>
 </body>
+
+<footer>
+  <jsp:include page="/WEB-INF/jsp/footer.jsp"/>
+</footer>
 </html>
