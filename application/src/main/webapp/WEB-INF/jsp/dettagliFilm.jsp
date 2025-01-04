@@ -1,4 +1,5 @@
 <jsp:useBean id="film" scope="request" type="it.unisa.application.model.entity.Film"/>
+<%@ page import="java.util.Base64" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -15,27 +16,35 @@
 <div class="container my-5">
     <div class="row">
         <div class="col-md-4">
-            <!--<img src="${film.locandina}" alt="Locandina ${film.titolo}" class="img-fluid rounded shadow">-->
-            <img src="${pageContext.request.contextPath}/static/images/locandine/maria.jpg"
-                 alt="Locandina ${film.titolo}" class="img-fluid rounded shadow">
-
+            <%
+                String locandinaBase64 = null;
+                if (film.getLocandina() != null) {
+                    locandinaBase64 = Base64.getEncoder().encodeToString(film.getLocandina());
+                }
+            %>
+            <% if (locandinaBase64 != null) { %>
+            <img src="data:image/jpeg;base64,<%= locandinaBase64 %>"
+                 alt="Locandina di <%= film.getTitolo() %>" class="img-fluid rounded shadow">
+            <% } else { %>
+            <img src="${pageContext.request.contextPath}/static/images/logo.png"
+                 alt="Locandina non disponibile" class="img-fluid rounded shadow">
+            <% } %>
         </div>
         <div class="col-md-8">
-            <h1 class="text-danger">${film.titolo}</h1>
-            <p class="mt-4">${film.descrizione}</p>
+            <h1 class="text-danger"><%= film.getTitolo() %></h1>
+            <p class="mt-4"><%= film.getDescrizione() %></p>
             <ul class="list-unstyled">
-                <li><strong>Durata:</strong> ${film.durata} minuti</li>
-                <li><strong>Genere:</strong> ${film.genere}</li>
-                <li><strong>Classificazione:</strong> ${film.classificazione}</li>
+                <li><strong>Durata:</strong> <%= film.getDurata() %> minuti</li>
+                <li><strong>Genere:</strong> <%= film.getGenere() %></li>
+                <li><strong>Classificazione:</strong> <%= film.getClassificazione() %></li>
                 <li>
                     <form method="post" action="${pageContext.request.contextPath}/ProiezioniFilm">
                         <input type="hidden" name="filmId" value="<%= film.getId() %>">
                         <input type="hidden" name="sedeId" value="<%= request.getAttribute("sedeId") %>">
-                    <button type="submit">Prenota</button>
+                        <button type="submit" class="btn btn-primary">Prenota</button>
                     </form>
                 </li>
             </ul>
-
         </div>
     </div>
 </div>
