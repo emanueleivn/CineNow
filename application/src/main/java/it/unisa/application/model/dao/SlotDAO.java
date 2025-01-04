@@ -14,7 +14,7 @@ public class SlotDAO {
     public SlotDAO() {
         this.ds = DataSourceSingleton.getInstance();
     }
-    public Slot retriveById(int id) {
+    public Slot retrieveById(int id) {
         String sql = "SELECT * FROM slot WHERE id = ?";
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -31,7 +31,7 @@ public class SlotDAO {
         }
         return null;
     }
-    public Slot retiveByProiezione(Proiezione proiezione){
+    public Slot retrieveByProiezione(Proiezione proiezione){
         String sql = "SELECT * FROM slot WHERE id = ?";
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {

@@ -29,13 +29,14 @@
         <div class="col-md-4 mb-4">
             <form action="${pageContext.request.contextPath}/DettagliFilm" method="post">
                 <input type="hidden" name="filmId" value="<%= film.getId() %>">
+                <input type="hidden" name="sedeId" value="<%= request.getAttribute("sedeId") %>">
                 <button type="submit" class="film-button" style="border: none;">
                     <div class="film-card">
                         <% if (locandinaBase64 != null) { %>
                         <img src="data:image/jpeg;base64,<%= locandinaBase64 %>"
                              alt="Locandina di <%= film.getTitolo() %>" class="img-fluid">
                         <% } else { %>
-                        <img src="${pageContext.request.contextPath}/static/images/default-locandina.jpg"
+                        <img src="${pageContext.request.contextPath}/static/images/logo.png"
                              alt="Locandina non disponibile" class="img-fluid">
                         <% } %>
                         <div class="film-card-body">

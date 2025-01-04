@@ -16,7 +16,9 @@ public class ProgrammazioneSedeService {
     public List<Proiezione> getProgrammazioniBySede(int sedeId) {
         return proiezioneDAO.retrieveAllBySede(sedeId);
     }
-    public void getProgrammazioneFilm(int sedeId){}
+    public List<Proiezione> getProgrammazioneFilm(int filmId, int sedeId){
+        return proiezioneDAO.retrieveByFilm(new Film(filmId),new Sede(sedeId));
+    }
     public List<Film> getCatalogoSede(Sede sede){
         SedeDAO sedeDAO = new SedeDAO();
         List<Film> catalogo;

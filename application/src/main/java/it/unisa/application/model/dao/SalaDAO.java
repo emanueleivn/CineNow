@@ -3,6 +3,7 @@ package it.unisa.application.model.dao;
 import it.unisa.application.database_connection.DataSourceSingleton;
 import it.unisa.application.model.entity.Film;
 import it.unisa.application.model.entity.Sala;
+import it.unisa.application.model.entity.Sede;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -14,6 +15,29 @@ public class SalaDAO {
 
     public SalaDAO() {
         this.ds = DataSourceSingleton.getInstance();
+    }
+    public Sala retrieveById(int id) {
+        String sql = "SELECT * FROM sala WHERE id = ?";
+        try (Connection connection = ds.getConnection();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Sala sala = new Sala();
+                sala.setId(rs.getInt("id"));
+                sala.setNumeroSala(rs.getInt("numero"));
+                sala.setCapienza(rs.getInt("capienza"));
+
+                Sede sede = new Sede();
+                sede.setId(rs.getInt("id_sede"));
+                sala.setSede(sede);
+
+                return sala;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public List<Sala> retrieveAll() throws SQLException {
