@@ -15,6 +15,8 @@ import java.util.List;
 
 @WebServlet("/aggiungiProiezione")
 public class AggiungiProiezioneServlet extends HttpServlet {
+    private final ProgrammazioneService service = new ProgrammazioneService();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -28,6 +30,7 @@ public class AggiungiProiezioneServlet extends HttpServlet {
         request.setAttribute("sedeId", sedeId);
         request.getRequestDispatcher("/WEB-INF/jsp/aggiungiProiezione.jsp").forward(request, response);
     }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -47,7 +50,6 @@ public class AggiungiProiezioneServlet extends HttpServlet {
                 slotIds.add(slotId);
                 dataProiezione = day;
             }
-            ProgrammazioneService service = new ProgrammazioneService();
             boolean success = service.aggiungiProiezione(filmId, salaId, slotIds, dataProiezione);
             if (success) {
                 String sedeId = request.getParameter("sedeId");

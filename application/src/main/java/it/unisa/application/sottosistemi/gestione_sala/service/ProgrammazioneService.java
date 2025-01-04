@@ -13,12 +13,12 @@ import java.util.List;
 
 public class ProgrammazioneService {
     private final ProiezioneDAO proiezioneDAO = new ProiezioneDAO();
+
     public boolean aggiungiProiezione(int filmId, int salaId, List<Integer> slotIds, LocalDate data) {
         try {
             FilmDAO fdao = new FilmDAO();
             SedeDAO sedeDAO = new SedeDAO();
             SlotDAO slotDAO = new SlotDAO();
-            ProiezioneDAO pdao = new ProiezioneDAO();
             Film film = fdao.retrieveById(filmId);
             Sala sala = sedeDAO.retrieveSalaById(salaId);
             for (int sid : slotIds) {
@@ -28,7 +28,7 @@ public class ProgrammazioneService {
                 p.setSalaProiezione(sala);
                 p.setOrarioProiezione(sl);
                 p.setDataProiezione(data);
-                if (!pdao.create(p)) {
+                if (!proiezioneDAO.create(p)) {
                     return false;
                 }
             }

@@ -114,6 +114,7 @@ public class ProiezioneDAO {
     public List<Proiezione> retrieveAllBySede(int sedeId) {
         List<Proiezione> proiezioni = new ArrayList<>();
         String sql = """
+
                 SELECT p.*, s.numero AS numero_sala, f.titolo AS titolo_film, sl.ora_inizio AS orario
                 FROM proiezione p
                 JOIN sala s ON p.id_sala = s.id
@@ -122,6 +123,7 @@ public class ProiezioneDAO {
                 WHERE s.id_sede = ?
                 ORDER BY p.data ASC, sl.ora_inizio ASC
                 """;
+
 
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {

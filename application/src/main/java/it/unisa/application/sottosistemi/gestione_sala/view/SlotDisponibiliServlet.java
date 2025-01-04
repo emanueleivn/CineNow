@@ -7,6 +7,7 @@ import it.unisa.application.model.dao.SlotDAO;
 import it.unisa.application.model.entity.Film;
 import it.unisa.application.model.entity.Proiezione;
 import it.unisa.application.model.entity.Slot;
+import it.unisa.application.sottosistemi.gestione_sala.service.SlotService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -19,6 +20,8 @@ import java.util.Map;
 
 @WebServlet("/slotDisponibili")
 public class SlotDisponibiliServlet extends HttpServlet {
+    private final SlotService slotService = new SlotService();
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -27,47 +30,10 @@ public class SlotDisponibiliServlet extends HttpServlet {
             int salaId = Integer.parseInt(request.getParameter("salaId"));
             LocalDate dataInizio = LocalDate.parse(request.getParameter("dataInizio"));
             LocalDate dataFine = LocalDate.parse(request.getParameter("dataFine"));
-            FilmDAO filmDAO = new FilmDAO();
-            ProiezioneDAO pdao = new ProiezioneDAO();
-            SlotDAO slotDAO = new SlotDAO();
-            Film film = filmDAO.retrieveById(filmId);
-            if (film == null) {
-                throw new RuntimeException("Film non esistente.");
-            }
-            int durata = film.getDurata();
-            List<Map<String, Object>> calendar = new ArrayList<>();
-            LocalDate current = dataInizio;
-            while (!current.isAfter(dataFine)) {
-                List<Slot> allSlots = slotDAO.retrieveAllSlots();
-                List<Map<String, Object>> slotList = new ArrayList<>();
-                for (Slot s : allSlots) {
-                    Proiezione existing = pdao.retrieveProiezioneBySalaSlotAndData(salaId, s.getId(), current);
-                    if (existing != null) {
-                        Film fOccupato = filmDAO.retrieveById(existing.getFilmProiezione().getId());
-                        slotList.add(Map.of(
-                                "id", s.getId(),
-                                "oraInizio", s.getOraInizio().toString().substring(0,5),
-                                "occupato", true,
-                                "film", fOccupato.getTitolo()
-                        ));
-                    } else {
-                        slotList.add(Map.of(
-                                "id", s.getId(),
-                                "oraInizio", s.getOraInizio().toString().substring(0,5),
-                                "occupato", false
-                        ));
-                    }
-                }
-                calendar.add(Map.of(
-                        "data", current.toString(),
-                        "slots", slotList
-                ));
-                current = current.plusDays(1);
-            }
+            Map<String, Object> respObj = slotService.getSlotDisponibili(filmId, salaId, dataInizio, dataFine);
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();
-            Map<String, Object> respObj = Map.of("durataFilm", durata, "calendar", calendar);
             out.print(new Gson().toJson(respObj));
             out.flush();
         } catch (Exception e) {

@@ -108,6 +108,7 @@
       let durataFilm = 0;
 
       function caricaCalendario() {
+        $(".error-msg").remove();
         $("#calendar-container").html("");
         const filmId = $("#film").val();
         const dataInizio = $("#dataInizio").val();
@@ -115,6 +116,16 @@
         const salaId = $("#sala").val();
 
         if (filmId && dataInizio && dataFine && salaId) {
+          const oggi = new Date().toISOString().split('T')[0];
+          if (dataInizio < oggi) {
+            $("#calendar-container").html("<p class='error-msg'>La data di inizio non può essere precedente ad oggi.</p>");
+            return;
+          }
+          if (dataInizio > dataFine) {
+            $("#calendar-container").html("<p class='error-msg'>La data di inizio non può essere successiva alla data di fine.</p>");
+            return;
+          }
+
           $.ajax({
             url: '<%= request.getContextPath() %>/slotDisponibili',
             method: 'GET',
@@ -162,7 +173,6 @@
                   $(".error-msg").remove();
                   $(".slot-selected").removeClass("slot-selected");
 
-                  // Calcoliamo quanti blocchi servono
                   const blocchi = Math.ceil(durataFilm / 30);
 
                   const $tbody = $(this).closest("tbody");
@@ -172,12 +182,10 @@
 
                   let newBlock = [];
                   for (let r = startRow; r < startRow + blocchi; r++) {
-                    // Se superiamo l'ultima riga esistente, ci fermiamo (non errore)
                     if (r > totalRows) {
                       break;
                     }
                     const $candidate = $tbody.find("tr").eq(r).find("td").eq(colIndex);
-                    // Se uno slot è occupato, errore
                     if (!$candidate.hasClass("slot-available")) {
                       $("#calendar-container").append(
                               "<p class='error-msg'>Uno degli slot richiesti è già occupato. Selezione non consentita.</p>"
@@ -187,7 +195,6 @@
                     newBlock.push($candidate[0]);
                   }
 
-                  // Se almeno il primo blocco è disponibile, selezioniamo tutto
                   if (newBlock.length === 0) {
                     $("#calendar-container").append(
                             "<p class='error-msg'>Lo slot selezionato o i successivi non sono disponibili.</p>"
@@ -213,7 +220,6 @@
 
       $("#film, #dataInizio, #dataFine, #sala").change(caricaCalendario);
 
-      // Al submit, creiamo input hidden per ogni slot selezionato
       $("form").submit(function(e) {
         $("input[name='slot']").remove();
         const selected = $(".slot-selected");
@@ -289,9 +295,7 @@
 
   <div id="calendar-container">
     <p>
-      Seleziona un film, un intervallo di date e una sala per visualizzare il calendario.<br>
-      - Se un film sfora oltre le 22:00 ma non trova slot successivi, non viene mostrato un errore.<br>
-      - Se uno degli slot necessari è occupato, viene mostrato un errore e la selezione non è consentita.
+      Seleziona un film, un intervallo di date e una sala per visualizzare il calendario.
     </p>
   </div>
 
