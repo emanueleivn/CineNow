@@ -1,8 +1,10 @@
 package it.unisa.application.model.entity;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Proiezione {
     private int id;
@@ -11,9 +13,11 @@ public class Proiezione {
     private LocalDate dataProiezione;
     private List<PostoProiezione> postiProiezione;
     private Slot orarioProiezione;
+    private List<Slot> slotsProiezione;
 
     public Proiezione() {
         postiProiezione = new ArrayList<PostoProiezione>();
+        slotsProiezione = new ArrayList<>();
     }
 
     public Proiezione(int id, Sala salaProiezione, Film filmProiezione, LocalDate dataProiezione, List<PostoProiezione> postiProiezione, Slot orarioProiezione) {
@@ -85,16 +89,34 @@ public class Proiezione {
                 .ifPresent(postoProiezione -> postoProiezione.setStato(false));
     }
 
+    public String getMinOraInizioFormatted() {
+        Optional<LocalTime> minTime = slotsProiezione.stream()
+                .map(slot -> slot.getOraInizio().toLocalTime())
+                .min(LocalTime::compareTo);
+        return minTime.map(time -> time.toString().substring(0, 5)).orElse("N/A");
+    }
+
+    public List<Slot> getSlotsProiezione() {
+        return slotsProiezione;
+    }
+
+    public void setSlotsProiezione(List<Slot> slotsProiezione) {
+        this.slotsProiezione = slotsProiezione;
+    }
+
+    public void aggiungiSlot(Slot slot) {
+        this.slotsProiezione.add(slot);
+    }
+
     @Override
     public String toString() {
         return "Proiezione{" +
                 "id=" + id +
-                ", filmProiezione=" + filmProiezione +  // Assumendo che Film non abbia riferimenti ciclici
+                ", filmProiezione=" + filmProiezione +
                 ", salaProiezione=" + salaProiezione +
                 ", dataProiezione=" + dataProiezione +
-                ", postiProiezione=" + (postiProiezione != null ? postiProiezione.size() : 0) +  // Stampiamo solo il numero di posti
-                ", orarioProiezione=" + orarioProiezione +
+                ", postiProiezione=" + (postiProiezione != null ? postiProiezione.size() : 0) +
+                ", slotsProiezione=" + (slotsProiezione != null ? slotsProiezione.size() : 0) +
                 '}';
     }
-
 }

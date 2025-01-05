@@ -8,6 +8,7 @@ import it.unisa.application.model.entity.Proiezione;
 import it.unisa.application.model.entity.Slot;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,27 +25,36 @@ public class SlotService {
         int durata = film.getDurata();
         List<Map<String, Object>> calendar = new ArrayList<>();
         LocalDate current = dataInizio;
+
         while (!current.isAfter(dataFine)) {
             List<Slot> allSlots = slotDAO.retrieveAllSlots();
             List<Map<String, Object>> slotList = new ArrayList<>();
-            for (Slot s : allSlots) {
-                Proiezione existing = proiezioneDAO.retrieveProiezioneBySalaSlotAndData(salaId, s.getId(), current);
+            for (Slot slot : allSlots) {
+                Proiezione existing = proiezioneDAO.retrieveProiezioneBySalaSlotAndData(salaId, slot.getId(), current);
+                Map<String, Object> slotData = new HashMap<>();
+                slotData.put("id", slot.getId());
+                slotData.put("oraInizio", slot.getOraInizio().toString().substring(0, 5));
                 if (existing != null) {
-                    Film fOccupato = filmDAO.retrieveById(existing.getFilmProiezione().getId());
-                    slotList.add(Map.of(
-                            "id", s.getId(),
-                            "oraInizio", s.getOraInizio().toString().substring(0,5),
-                            "occupato", true,
-                            "film", fOccupato.getTitolo()
-                    ));
+                    Film filmOccupato = filmDAO.retrieveById(existing.getFilmProiezione().getId());
+                    slotData.put("occupato", true);
+                    slotData.put("film", filmOccupato.getTitolo());
                 } else {
-                    slotList.add(Map.of(
-                            "id", s.getId(),
-                            "oraInizio", s.getOraInizio().toString().substring(0,5),
-                            "occupato", false
-                    ));
+                    slotData.put("occupato", false);
                 }
+                slotList.add(slotData);
             }
+
+            Slot lastSlot = allSlots.get(allSlots.size() - 1);
+            int slotEndTime = lastSlot.getOraInizio().toLocalTime().toSecondOfDay() + (30 * 60); // Aggiungere 30 minuti
+
+            if (slotEndTime < (lastSlot.getOraInizio().toLocalTime().toSecondOfDay() + durata * 60)) {
+                Map<String, Object> lastSlotData = new HashMap<>();
+                lastSlotData.put("id", lastSlot.getId());
+                lastSlotData.put("oraInizio", lastSlot.getOraInizio().toString().substring(0, 5));
+                lastSlotData.put("occupato", false);
+                slotList.add(lastSlotData);
+            }
+
             calendar.add(Map.of(
                     "data", current.toString(),
                     "slots", slotList
