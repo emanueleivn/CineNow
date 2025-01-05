@@ -9,6 +9,7 @@ import it.unisa.application.model.entity.Proiezione;
 import it.unisa.application.model.entity.Sala;
 import it.unisa.application.model.entity.Slot;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 public class ProgrammazioneService {
@@ -16,44 +17,41 @@ public class ProgrammazioneService {
 
     public boolean aggiungiProiezione(int filmId, int salaId, List<Integer> slotIds, LocalDate data) {
         try {
+            // DAO Initialization
             FilmDAO filmDAO = new FilmDAO();
             SedeDAO sedeDAO = new SedeDAO();
             SlotDAO slotDAO = new SlotDAO();
+            ProiezioneDAO proiezioneDAO = new ProiezioneDAO();
 
+            // Retrieve Film and Sala
             Film film = filmDAO.retrieveById(filmId);
             Sala sala = sedeDAO.retrieveSalaById(salaId);
 
+            // Validations
             if (film == null) {
                 throw new RuntimeException("Film non trovato.");
             }
             if (sala == null) {
                 throw new RuntimeException("Sala non trovata.");
             }
-
-            int durata = film.getDurata();
-            int slotNecessari = (int) Math.ceil(durata / 30.0);
-
             List<Slot> slotsDisponibili = slotDAO.retrieveAllSlots();
             List<Slot> slotsSelezionati = slotsDisponibili.stream()
                     .filter(slot -> slotIds.contains(slot.getId()))
+                    .sorted(Comparator.comparing(Slot::getOraInizio))
                     .toList();
-
-            if (slotsSelezionati.size() < slotNecessari) {
-                slotNecessari = Math.min(slotsSelezionati.size(), slotNecessari);
-            }
 
             if (slotsSelezionati.isEmpty()) {
                 throw new RuntimeException("Nessuno slot valido selezionato.");
             }
-
+            Slot primoSlot = slotsSelezionati.getFirst();
+            System.out.println(primoSlot);
             Proiezione proiezione = new Proiezione();
             proiezione.setFilmProiezione(film);
             proiezione.setSalaProiezione(sala);
             proiezione.setDataProiezione(data);
-
-            proiezione.setSlotsProiezione(slotsSelezionati.subList(0, slotNecessari));
-
+            proiezione.setOrarioProiezione(primoSlot);
             return proiezioneDAO.create(proiezione);
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;

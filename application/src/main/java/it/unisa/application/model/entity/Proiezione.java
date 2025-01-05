@@ -13,11 +13,9 @@ public class Proiezione {
     private LocalDate dataProiezione;
     private List<PostoProiezione> postiProiezione;
     private Slot orarioProiezione;
-    private List<Slot> slotsProiezione;
 
     public Proiezione() {
         postiProiezione = new ArrayList<PostoProiezione>();
-        slotsProiezione = new ArrayList<>();
     }
 
     public Proiezione(int id, Sala salaProiezione, Film filmProiezione, LocalDate dataProiezione, List<PostoProiezione> postiProiezione, Slot orarioProiezione) {
@@ -82,32 +80,6 @@ public class Proiezione {
         this.orarioProiezione = orarioProiezione;
     }
 
-    public void occupaPosto(PostoProiezione posto) {
-        postiProiezione.stream()
-                .filter(postoProiezione -> postoProiezione.equals(posto))
-                .findFirst()
-                .ifPresent(postoProiezione -> postoProiezione.setStato(false));
-    }
-
-    public String getMinOraInizioFormatted() {
-        Optional<LocalTime> minTime = slotsProiezione.stream()
-                .map(slot -> slot.getOraInizio().toLocalTime())
-                .min(LocalTime::compareTo);
-        return minTime.map(time -> time.toString().substring(0, 5)).orElse("N/A");
-    }
-
-    public List<Slot> getSlotsProiezione() {
-        return slotsProiezione;
-    }
-
-    public void setSlotsProiezione(List<Slot> slotsProiezione) {
-        this.slotsProiezione = slotsProiezione;
-    }
-
-    public void aggiungiSlot(Slot slot) {
-        this.slotsProiezione.add(slot);
-    }
-
     @Override
     public String toString() {
         return "Proiezione{" +
@@ -115,8 +87,8 @@ public class Proiezione {
                 ", filmProiezione=" + filmProiezione +
                 ", salaProiezione=" + salaProiezione +
                 ", dataProiezione=" + dataProiezione +
-                ", postiProiezione=" + (postiProiezione != null ? postiProiezione.size() : 0) +
-                ", slotsProiezione=" + (slotsProiezione != null ? slotsProiezione.size() : 0) +
+                ", postiProiezione=" + postiProiezione +
+                ", orarioProiezione=" + orarioProiezione +
                 '}';
     }
 }

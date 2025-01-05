@@ -16,7 +16,7 @@ public class GestCatenaFilter extends HttpFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpSession session = req.getSession(false);
-        Utente utente = (Utente) session.getAttribute("utente");
+        Utente utente = (Utente) session.getAttribute("gestoreCatena");
         if (utente != null && utente.getRuolo().equals("gestore_catena")) {
             chain.doFilter(request, response);
         } else {

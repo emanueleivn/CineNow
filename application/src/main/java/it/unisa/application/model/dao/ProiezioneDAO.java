@@ -19,50 +19,97 @@ public class ProiezioneDAO {
     }
 
     public boolean create(Proiezione proiezione) {
+        System.out.println(proiezione);
         String insertProiezioneSql = "INSERT INTO proiezione (data, id_film, id_sala, id_orario) VALUES (?, ?, ?, ?)";
         String insertPostiProiezioneSql = """
-                INSERT INTO posto_proiezione (id_sala, fila, numero, id_proiezione, stato)
-                SELECT posto.id_sala, posto.fila, posto.numero, ?, TRUE
-                FROM posto
-                WHERE posto.id_sala = ?
-                """;
+        INSERT INTO posto_proiezione (id_sala, fila, numero, id_proiezione, stato)
+        SELECT posto.id_sala, posto.fila, posto.numero, ?, TRUE
+        FROM posto
+        WHERE posto.id_sala = ?
+        """;
 
         try (Connection connection = ds.getConnection()) {
             connection.setAutoCommit(false);
-            try (PreparedStatement psProiezione = connection.prepareStatement(insertProiezioneSql, Statement.RETURN_GENERATED_KEYS)) {
-                psProiezione.setDate(1, Date.valueOf(proiezione.getDataProiezione()));
-                psProiezione.setInt(2, proiezione.getFilmProiezione().getId());
-                psProiezione.setInt(3, proiezione.getSalaProiezione().getId());
-                psProiezione.setInt(4, proiezione.getOrarioProiezione().getId());
 
-                int affectedRows = psProiezione.executeUpdate();
-                if (affectedRows > 0) {
-                    try (ResultSet rs = psProiezione.getGeneratedKeys()) {
-                        if (rs.next()) {
-                            int idProiezione = rs.getInt(1);
-                            proiezione.setId(idProiezione);
-                            try (PreparedStatement psPostiProiezione = connection.prepareStatement(insertPostiProiezioneSql)) {
-                                psPostiProiezione.setInt(1, idProiezione);
-                                psPostiProiezione.setInt(2, proiezione.getSalaProiezione().getId());
-                                psPostiProiezione.executeUpdate();
+            // Retrieve all available slots
+            List<Slot> availableSlots = new ArrayList<>();
+            try (PreparedStatement psGetSlots = connection.prepareStatement("SELECT id, ora_inizio FROM slot ORDER BY ora_inizio")) {
+                try (ResultSet rs = psGetSlots.executeQuery()) {
+                    while (rs.next()) {
+                        Slot slot = new Slot();
+                        slot.setId(rs.getInt("id"));
+                        slot.setOraInizio(rs.getTime("ora_inizio"));
+                        availableSlots.add(slot);
+                    }
+                }
+            }
+
+            // Determine slot duration and required slots
+            int slotDurationMinutes = Math.abs(availableSlots.get(1).getOraInizio().toLocalTime().toSecondOfDay()
+                    - availableSlots.get(0).getOraInizio().toLocalTime().toSecondOfDay()) / 60;
+            int filmDurationMinutes = proiezione.getFilmProiezione().getDurata();
+            int requiredSlots = (int) Math.ceil(filmDurationMinutes / (double) slotDurationMinutes);
+
+            // Find starting slot index
+            Slot startingSlot = proiezione.getOrarioProiezione();
+            int startIndex = -1;
+            for (int i = 0; i < availableSlots.size(); i++) {
+                if (availableSlots.get(i).getId() == startingSlot.getId()) {
+                    startIndex = i;
+                    break;
+                }
+            }
+
+            if (startIndex == -1) {
+                throw new RuntimeException("Slot di partenza non trovato.");
+            }
+
+            // Adjust the number of slots if it exceeds the available range
+            int actualSlots = Math.min(requiredSlots, availableSlots.size() - startIndex);
+
+            // Create proiezione for each required slot within bounds
+            for (int i = 0; i < actualSlots; i++) {
+                Slot currentSlot = availableSlots.get(startIndex + i);
+
+                try (PreparedStatement psProiezione = connection.prepareStatement(insertProiezioneSql, Statement.RETURN_GENERATED_KEYS)) {
+                    psProiezione.setDate(1, Date.valueOf(proiezione.getDataProiezione()));
+                    psProiezione.setInt(2, proiezione.getFilmProiezione().getId());
+                    psProiezione.setInt(3, proiezione.getSalaProiezione().getId());
+                    psProiezione.setInt(4, currentSlot.getId());
+                    int affectedRows = psProiezione.executeUpdate();
+
+                    if (affectedRows > 0) {
+                        try (ResultSet rs = psProiezione.getGeneratedKeys()) {
+                            if (rs.next()) {
+                                int idProiezione = rs.getInt(1);
+                                proiezione.setId(idProiezione);
+
+                                // Insert posto_proiezione for this proiezione
+                                try (PreparedStatement psPostiProiezione = connection.prepareStatement(insertPostiProiezioneSql)) {
+                                    psPostiProiezione.setInt(1, idProiezione);
+                                    psPostiProiezione.setInt(2, proiezione.getSalaProiezione().getId());
+                                    psPostiProiezione.executeUpdate();
+                                }
                             }
-                            connection.commit();
-                            return true;
                         }
                     }
                 }
-            } catch (SQLException e) {
-                connection.rollback();
-                e.printStackTrace();
-            } finally {
-                connection.setAutoCommit(true);
             }
+            connection.commit();
+            return true;
+
         } catch (SQLException e) {
             e.printStackTrace();
+            try (Connection connection = ds.getConnection()) {
+                connection.rollback();
+            } catch (SQLException rollbackException) {
+                rollbackException.printStackTrace();
+            }
         }
 
         return false;
     }
+
 
 
     public Proiezione retrieveById(int id) {
@@ -109,8 +156,6 @@ public class ProiezioneDAO {
             ps.setInt(1, film.getId());
             ps.setInt(2, sede.getId());
             ResultSet rs = ps.executeQuery();
-
-            // Mappa per gestire le proiezioni uniche
             Map<String, List<Proiezione>> uniqueProiezioni = new HashMap<>();
 
             while (rs.next()) {
