@@ -1,26 +1,31 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector("form");
-    const titoloInput = document.getElementById("titolo");
-    const descrizioneInput = document.getElementById("descrizione");
-    const durataInput = document.getElementById("durata");
+document.addEventListener("DOMContentLoaded", () => {
+    const simboliNonAccettati = /[#$%^&*":{}|<>]/;
 
-    form.addEventListener("submit", function (event) {
-        let isValid = true;
-        const specialCharsRegex = /[^a-zA-Z0-9 ,.!()""-_;\[\]{}*+]/;
-        if (specialCharsRegex.test(titoloInput.value)) {
-            alert("Il campo Titolo non può contenere caratteri speciali non consentiti.");
-            isValid = false;
+    function validaCampo(event) {
+        const campo = event.target;
+        const erroreId = `${campo.id}-errore`;
+        let messaggioErrore = document.getElementById(erroreId);
+
+        if (!messaggioErrore) {
+            messaggioErrore = document.createElement("div");
+            messaggioErrore.id = erroreId;
+            messaggioErrore.style.color = "red";
+            messaggioErrore.style.fontSize = "small";
+            messaggioErrore.style.marginTop = "5px";
+            campo.insertAdjacentElement("afterend", messaggioErrore);
         }
-        if (specialCharsRegex.test(descrizioneInput.value)) {
-            alert("Il campo Descrizione non può contenere caratteri speciali non consentiti.");
-            isValid = false;
+
+        if (simboliNonAccettati.test(campo.value)) {
+            messaggioErrore.textContent = "Questo campo contiene simboli non ammessi.";
+            campo.classList.add("error");
+        } else {
+            messaggioErrore.textContent = "";
+            campo.classList.remove("error");
         }
-        if (isNaN(durataInput.value) || durataInput.value <= 0) {
-            alert("Il campo Durata deve essere un numero positivo.");
-            isValid = false;
-        }
-        if (!isValid) {
-            event.preventDefault();
-        }
+    }
+
+    const campiDaValidare = document.querySelectorAll("#titolo, #descrizione");
+    campiDaValidare.forEach(campo => {
+        campo.addEventListener("change", validaCampo);
     });
 });
