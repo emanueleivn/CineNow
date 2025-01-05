@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet("/AggiungiOrdineServlet")
+@WebServlet("/AggiungiOrdine")
 public class AggiungiOrdineServlet extends HttpServlet {
     private final PrenotazioneService prenotazioneService = new PrenotazioneService();
     private final ProiezioneDAO proiezioneDAO = new ProiezioneDAO();

@@ -28,7 +28,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         Utente utente = authService.login(email, password);
         if (utente != null) {
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(true);
             String ruolo = utente.getRuolo().toLowerCase();
             switch (ruolo) {
                 case "cliente":

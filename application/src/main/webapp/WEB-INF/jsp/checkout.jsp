@@ -76,7 +76,7 @@
         <h3>Totale: €<%= request.getParameter("totale") %></h3>
         <h2>Pagamento</h2>
         <div id="error-message" class="error-message" style="display: none;"></div>
-        <form id="checkoutForm" action="${pageContext.request.contextPath}/AggiungiOrdineServlet" method="post">
+        <form id="checkoutForm" action="${pageContext.request.contextPath}/AggiungiOrdine" method="post">
             <input type="text" id="nomeCarta" name="nomeCarta" placeholder="Nome sulla carta" required>
             <input type="text" id="numeroCarta" name="numeroCarta" placeholder="Numero della carta" maxlength="16" required>
             <input type="text" id="scadenzaCarta" name="scadenzaCarta" placeholder="Data di scadenza (MM/AA)" maxlength="5" required>
