@@ -26,27 +26,22 @@ public class AggiungiProiezioneServlet extends HttpServlet {
             if (sedeIdParam == null || sedeIdParam.trim().isEmpty()) {
                 throw new IllegalArgumentException("Parametro sedeId mancante o nullo.");
             }
-
             int sedeId;
             try {
                 sedeId = Integer.parseInt(sedeIdParam);
             } catch (NumberFormatException e) {
                 throw new IllegalArgumentException("Parametro sedeId non valido: deve essere un numero.");
             }
-
             FilmDAO filmDAO = new FilmDAO();
             SedeDAO sedeDAO = new SedeDAO();
-
             List<Film> films = filmDAO.retrieveAll();
             List<Sala> sale = sedeDAO.retrieveSaleBySede(sedeId);
-
             if (films == null || films.isEmpty()) {
                 throw new RuntimeException("Nessun film disponibile.");
             }
             if (sale == null || sale.isEmpty()) {
                 throw new RuntimeException("Nessuna sala disponibile per la sede selezionata.");
             }
-
             request.setAttribute("sedeId", sedeId);
             request.setAttribute("films", films);
             request.setAttribute("sale", sale);
@@ -65,26 +60,21 @@ public class AggiungiProiezioneServlet extends HttpServlet {
             if (sedeIdParam == null || sedeIdParam.trim().isEmpty()) {
                 throw new IllegalArgumentException("Parametro sedeId mancante o nullo.");
             }
-
             int sedeId = Integer.parseInt(sedeIdParam);
             int filmId = Integer.parseInt(request.getParameter("film"));
             int salaId = Integer.parseInt(request.getParameter("sala"));
             String[] slotScelti = request.getParameterValues("slot");
-
             if (slotScelti == null || slotScelti.length == 0) {
                 throw new IllegalArgumentException("Nessuno slot selezionato.");
             }
-
             List<Integer> slotIds = new ArrayList<>();
             LocalDate dataProiezione = null;
-
             for (String slot : slotScelti) {
                 String[] parts = slot.split(":");
                 int slotId = Integer.parseInt(parts[0]);
                 dataProiezione = LocalDate.parse(parts[1]);
                 slotIds.add(slotId);
             }
-
             boolean success = programmazioneService.aggiungiProiezione(filmId, salaId, slotIds, dataProiezione);
             if (success) {
                 response.sendRedirect("gestioneProgrammazione?sedeId=" + sedeId);
