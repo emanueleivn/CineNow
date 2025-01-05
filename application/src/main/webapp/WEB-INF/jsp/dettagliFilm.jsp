@@ -34,9 +34,9 @@
             <h1 class="text-danger"><%= film.getTitolo() %></h1>
             <p class="mt-4"><%= film.getDescrizione() %></p>
             <ul class="list-unstyled">
-                <li><strong>Durata:</strong> <%= film.getDurata() %> minuti</li>
-                <li><strong>Genere:</strong> <%= film.getGenere() %></li>
-                <li><strong>Classificazione:</strong> <%= film.getClassificazione() %></li>
+                <li style="letter-spacing: 1px;"><strong>Durata:</strong> <%= film.getDurata() %> minuti</li>
+                <li style="letter-spacing: 1px"><strong>Genere:</strong> <%= film.getGenere() %></li>
+                <li style="letter-spacing: 1px"><strong>Classificazione:</strong> <%= film.getClassificazione() %></li>
                 <li>
                     <form method="post" action="${pageContext.request.contextPath}/ProiezioniFilm">
                         <input type="hidden" name="filmId" value="<%= film.getId() %>">

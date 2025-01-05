@@ -33,7 +33,7 @@
       <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link" href="<%= request.getContextPath() %>/Home">Home</a>
+            <a class="nav-link" href="<%= request.getContextPath() %>/areaGestoreSede.jsp">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link"
@@ -43,7 +43,7 @@
             <%
               if (gestore != null && gestore.getSede() != null) {
             %>
-            <a href="<%= request.getContextPath() %>/gestioneProgrammazione?sedeId=<%= gestore.getSede().getId() %>">Gestisci Programmazione</a>
+            <a class= "nav-link" href="<%= request.getContextPath() %>/gestioneProgrammazione?sedeId=<%= gestore.getSede().getId() %>">Gestisci Programmazione</a>
             <%
               }
             %></li>
