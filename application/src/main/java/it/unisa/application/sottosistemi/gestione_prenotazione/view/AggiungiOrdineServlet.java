@@ -20,7 +20,6 @@ import java.util.List;
 
 @WebServlet("/AggiungiOrdineServlet")
 public class AggiungiOrdineServlet extends HttpServlet {
-
     private final PrenotazioneService prenotazioneService = new PrenotazioneService();
     private final ProiezioneDAO proiezioneDAO = new ProiezioneDAO();
 
@@ -42,7 +41,8 @@ public class AggiungiOrdineServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Cliente cliente = (Cliente) session.getAttribute("cliente");
         if (cliente == null) {
-            response.sendRedirect("/Home");
+            request.setAttribute("errorMessage", "Errore generico");
+            request.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
             return;
         }
         try {

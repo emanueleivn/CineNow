@@ -20,9 +20,7 @@ public class ClienteFilter extends HttpFilter implements Filter {
         if (utente != null && utente.getRuolo().equals("cliente")) {
             chain.doFilter(request, response);
         } else {
-            String error = "Non sei autorizzato.";
-            request.setAttribute("errorMessage", error);
-            request.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
+            request.getRequestDispatcher("/login").forward(request, response);
         }
     }
 }
