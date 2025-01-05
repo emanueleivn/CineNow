@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
             switch (ruolo) {
                 case "cliente":
                     session.setAttribute("cliente", utente);
-                    response.sendRedirect(request.getContextPath() + "/index.jsp");
+                    response.sendRedirect(request.getContextPath() + "/Home");
                     break;
                 case "gestore_sede":
                     session.setAttribute("gestoreSede", utente);

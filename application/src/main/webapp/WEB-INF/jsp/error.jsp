@@ -10,7 +10,7 @@
 <body>
 <h1 style="text-align: center">Si è verificato un errore</h1>
 <p><%= request.getAttribute("errorMessage") != null ? request.getAttribute("errorMessage") : "Errore sconosciuto." %></p>
-<a href="<%= request.getContextPath() %>/index.jsp">Torna alla Home</a>
+<a href="<%= request.getContextPath() %>/Home">Torna alla Home</a>
 </body>
 
 <footer>
