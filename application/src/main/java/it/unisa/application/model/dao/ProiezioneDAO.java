@@ -39,7 +39,7 @@ public class ProiezioneDAO {
         return false;
     }
 
-    public Proiezione retirveById(int id) {
+    public Proiezione retrieveById(int id) {
         String sql = "SELECT * FROM proiezione WHERE id = ?";
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -180,4 +180,5 @@ public class ProiezioneDAO {
         }
         return null;
     }
+
 }

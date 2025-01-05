@@ -22,7 +22,7 @@ public class SceltaPostoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             int proiezioneId = Integer.parseInt(req.getParameter("proiezioneId"));
-            Proiezione proiezione = proiezioneDAO.retirveById(proiezioneId);
+            Proiezione proiezione = proiezioneDAO.retrieveById(proiezioneId);
             if (proiezione == null) {
                 req.setAttribute("errorMessage", "Proiezione non trovata.");
                 req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
