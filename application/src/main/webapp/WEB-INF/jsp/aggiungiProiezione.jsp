@@ -127,10 +127,10 @@
           }
 
           $.ajax({
-            url: '<%= request.getContextPath() %>/slotDisponibili',
+            url: "<%= request.getContextPath() %>/slotDisponibili",
             method: 'GET',
             dataType: 'json',
-            data: { filmId, dataInizio, dataFine, salaId },
+            data: { filmId, salaId, dataInizio, dataFine },
             success: function (resp) {
               durataFilm = resp.durataFilm || 0;
 
@@ -157,10 +157,7 @@
                       table += "<td class='slot-unavailable'>" + found.film + "</td>";
                     } else {
                       table +=
-                              "<td class='slot-available' " +
-                              "data-id='" + found.id + "' " +
-                              "data-day='" + g.data + "' " +
-                              "data-orainizio='" + found.oraInizio + "'>" +
+                              "<td class='slot-available' data-id='" + found.id + "' data-day='" + g.data + "' data-orainizio='" + found.oraInizio + "'>" +
                               "Disponibile</td>";
                     }
                   });
@@ -170,43 +167,41 @@
                 $("#calendar-container").html(table);
 
                 $(".slot-available").click(function () {
-                  $(".error-msg").remove();
                   $(".slot-selected").removeClass("slot-selected");
-
                   const blocchi = Math.ceil(durataFilm / 30);
-
-                  const $tbody = $(this).closest("tbody");
-                  const startRow = $tbody.find("tr").index($(this).closest("tr"));
+                  const startRow = $(this).closest("tr").index();
                   const colIndex = $(this).index();
-                  const totalRows = $tbody.find("tr").length - 1;
+                  const $tbody = $(this).closest("tbody");
 
-                  let newBlock = [];
-                  for (let r = startRow; r < startRow + blocchi; r++) {
-                    if (r > totalRows) {
+                  let validSelection = true;
+                  let slotsUsed = 0;
+
+                  for (let i = 0; i < blocchi; i++) {
+                    const $row = $tbody.find("tr").eq(startRow + i);
+                    const $slot = $row.find("td").eq(colIndex);
+
+                    // Ignorare gli slot oltre l'orario massimo (es. 22:00)
+                    if ($slot.length === 0) {
+                      slotsUsed++;
+                      continue;
+                    }
+
+                    // Bloccare se lo slot non è disponibile
+                    if ($slot.hasClass("slot-unavailable")) {
+                      validSelection = false;
                       break;
                     }
-                    const $candidate = $tbody.find("tr").eq(r).find("td").eq(colIndex);
-                    if (!$candidate.hasClass("slot-available")) {
-                      $("#calendar-container").append(
-                              "<p class='error-msg'>Uno degli slot richiesti è già occupato. Selezione non consentita.</p>"
-                      );
-                      return;
-                    }
-                    newBlock.push($candidate[0]);
+
+                    $slot.addClass("slot-selected");
+                    slotsUsed++;
                   }
 
-                  if (newBlock.length === 0) {
-                    $("#calendar-container").append(
-                            "<p class='error-msg'>Lo slot selezionato o i successivi non sono disponibili.</p>"
-                    );
-                    return;
+                  $(".error-msg").remove();
+                  if (!validSelection || slotsUsed < blocchi) {
+                    $("#calendar-container").after("<p class='error-msg'>Non ci sono abbastanza slot disponibili per questa proiezione.</p>");
+                    $(".slot-selected").removeClass("slot-selected"); // Rimuove selezioni non valide
                   }
-
-                  newBlock.forEach(td => {
-                    $(td).addClass("slot-selected");
-                  });
                 });
-
               } else {
                 $("#calendar-container").html("<p>Nessuno slot disponibile.</p>");
               }
@@ -220,26 +215,24 @@
 
       $("#film, #dataInizio, #dataFine, #sala").change(caricaCalendario);
 
-      $("form").submit(function(e) {
+      $("form").submit(function (e) {
         $("input[name='slot']").remove();
-        const selected = $(".slot-selected");
-        if (selected.length === 0) {
-          alert("Seleziona almeno uno slot prima di procedere.");
+        const selectedSlots = $(".slot-selected");
+        if (selectedSlots.length === 0) {
+          alert("Bisogna selezionare almeno uno slot per aggiungere una proiezione.");
           e.preventDefault();
-          return false;
+          return;
         }
-        selected.each(function() {
+        selectedSlots.each(function () {
           const slotId = $(this).data("id");
           const day = $(this).data("day");
-          $("<input>")
-                  .attr("type", "hidden")
-                  .attr("name", "slot")
-                  .val(slotId + ":" + day)
-                  .appendTo("form");
+          $("<input>").attr("type", "hidden").attr("name", "slot").val(slotId + ":" + day).appendTo("form");
         });
       });
     });
   </script>
+
+
 </head>
 <body>
 <jsp:include page="/WEB-INF/jsp/headerSede.jsp"/>
@@ -253,14 +246,10 @@
       <option value="">-- Seleziona --</option>
       <%
         List<Film> films = (List<Film>) request.getAttribute("films");
-        if (films != null) {
-          for (Film f : films) {
+        for (Film film : films) {
       %>
-      <option value="<%= f.getId() %>"><%= f.getTitolo() %></option>
-      <%
-          }
-        }
-      %>
+      <option value="<%= film.getId() %>"><%= film.getTitolo() %></option>
+      <% } %>
     </select>
   </div>
 
@@ -280,25 +269,20 @@
       <option value="">-- Seleziona --</option>
       <%
         List<Sala> sale = (List<Sala>) request.getAttribute("sale");
-        if (sale != null) {
-          for (Sala s : sale) {
+        for (Sala sala : sale) {
       %>
-      <option value="<%= s.getId() %>">Sala <%= s.getNumeroSala() %></option>
-      <%
-          }
-        }
-      %>
+      <option value="<%= sala.getId() %>">Sala <%= sala.getNumeroSala() %></option>
+      <% } %>
     </select>
   </div>
 
   <div id="calendar-container">
-    <p>
-      Seleziona un film, un intervallo di date e una sala per visualizzare il calendario.
-    </p>
+    <p>Seleziona un film, un intervallo di date e una sala per visualizzare il calendario.</p>
   </div>
 
   <button type="submit">Aggiungi Proiezione</button>
 </form>
+
 <footer>
   <jsp:include page="/WEB-INF/jsp/footer.jsp"/>
 </footer>

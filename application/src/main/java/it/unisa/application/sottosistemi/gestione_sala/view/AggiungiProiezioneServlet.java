@@ -8,6 +8,7 @@ import it.unisa.application.sottosistemi.gestione_sala.service.ProgrammazioneSer
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,51 +16,84 @@ import java.util.List;
 
 @WebServlet("/aggiungiProiezione")
 public class AggiungiProiezioneServlet extends HttpServlet {
-    private final ProgrammazioneService service = new ProgrammazioneService();
+    private final ProgrammazioneService programmazioneService = new ProgrammazioneService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int sedeId = Integer.parseInt(request.getParameter("sedeId"));
-        FilmDAO filmDAO = new FilmDAO();
-        SedeDAO sedeDAO = new SedeDAO();
-        List<Film> films = filmDAO.retrieveAll();
-        List<Sala> sale = sedeDAO.retrieveSaleBySede(sedeId);
-        request.setAttribute("films", films);
-        request.setAttribute("sale", sale);
-        request.setAttribute("sedeId", sedeId);
-        request.getRequestDispatcher("/WEB-INF/jsp/aggiungiProiezione.jsp").forward(request, response);
+        try {
+            String sedeIdParam = request.getParameter("sedeId");
+            if (sedeIdParam == null || sedeIdParam.trim().isEmpty()) {
+                throw new IllegalArgumentException("Parametro sedeId mancante o nullo.");
+            }
+
+            int sedeId;
+            try {
+                sedeId = Integer.parseInt(sedeIdParam);
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("Parametro sedeId non valido: deve essere un numero.");
+            }
+
+            FilmDAO filmDAO = new FilmDAO();
+            SedeDAO sedeDAO = new SedeDAO();
+
+            List<Film> films = filmDAO.retrieveAll();
+            List<Sala> sale = sedeDAO.retrieveSaleBySede(sedeId);
+
+            if (films == null || films.isEmpty()) {
+                throw new RuntimeException("Nessun film disponibile.");
+            }
+            if (sale == null || sale.isEmpty()) {
+                throw new RuntimeException("Nessuna sala disponibile per la sede selezionata.");
+            }
+
+            request.setAttribute("sedeId", sedeId);
+            request.setAttribute("films", films);
+            request.setAttribute("sale", sale);
+            request.getRequestDispatcher("/WEB-INF/jsp/aggiungiProiezione.jsp").forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Errore durante il caricamento della pagina: " + e.getMessage());
+            request.getRequestDispatcher("/WEB-INF/jsp/errore.jsp").forward(request, response);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            String sedeIdParam = request.getParameter("sedeId");
+            if (sedeIdParam == null || sedeIdParam.trim().isEmpty()) {
+                throw new IllegalArgumentException("Parametro sedeId mancante o nullo.");
+            }
+
+            int sedeId = Integer.parseInt(sedeIdParam);
             int filmId = Integer.parseInt(request.getParameter("film"));
             int salaId = Integer.parseInt(request.getParameter("sala"));
             String[] slotScelti = request.getParameterValues("slot");
+
             if (slotScelti == null || slotScelti.length == 0) {
-                throw new RuntimeException("Nessuno slot selezionato.");
+                throw new IllegalArgumentException("Nessuno slot selezionato.");
             }
+
             List<Integer> slotIds = new ArrayList<>();
             LocalDate dataProiezione = null;
-            for (String s : slotScelti) {
-                String[] parts = s.split(":");
+
+            for (String slot : slotScelti) {
+                String[] parts = slot.split(":");
                 int slotId = Integer.parseInt(parts[0]);
-                LocalDate day = LocalDate.parse(parts[1]);
+                dataProiezione = LocalDate.parse(parts[1]);
                 slotIds.add(slotId);
-                dataProiezione = day;
             }
-            boolean success = service.aggiungiProiezione(filmId, salaId, slotIds, dataProiezione);
+
+            boolean success = programmazioneService.aggiungiProiezione(filmId, salaId, slotIds, dataProiezione);
             if (success) {
-                String sedeId = request.getParameter("sedeId");
                 response.sendRedirect("gestioneProgrammazione?sedeId=" + sedeId);
             } else {
                 request.setAttribute("errorMessage", "Errore durante l'aggiunta della proiezione.");
                 request.getRequestDispatcher("/WEB-INF/jsp/errore.jsp").forward(request, response);
             }
         } catch (Exception e) {
-            request.setAttribute("errorMessage", "Errore sconosciuto.");
+            request.setAttribute("errorMessage", "Errore durante il salvataggio: " + e.getMessage());
             request.getRequestDispatcher("/WEB-INF/jsp/errore.jsp").forward(request, response);
         }
     }

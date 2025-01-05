@@ -3,21 +3,20 @@ package it.unisa.application.sottosistemi.gestione_sede.service;
 import it.unisa.application.model.dao.FilmDAO;
 import it.unisa.application.model.dao.ProiezioneDAO;
 import it.unisa.application.model.dao.SedeDAO;
-import it.unisa.application.model.dao.SlotDAO;
 import it.unisa.application.model.entity.Film;
 import it.unisa.application.model.entity.Proiezione;
 import it.unisa.application.model.entity.Sede;
-import it.unisa.application.model.entity.Slot;
 
 import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ProgrammazioneSedeService {
     private final ProiezioneDAO proiezioneDAO = new ProiezioneDAO();
     private final FilmDAO filmDAO = new FilmDAO();
-    private final SlotDAO slotDAO = new SlotDAO();
+    private static final Logger logger = Logger.getLogger(ProgrammazioneSedeService.class.getName());
 
     public List<Proiezione> getProgrammazioniBySede(int sedeId) {
         List<Proiezione> programmazioni = proiezioneDAO.retrieveAllBySede(sedeId);
@@ -25,7 +24,15 @@ public class ProgrammazioneSedeService {
             if (!p1.getDataProiezione().equals(p2.getDataProiezione())) {
                 return p1.getDataProiezione().compareTo(p2.getDataProiezione());
             }
-            return p1.getOrarioProiezione().getOraInizio().compareTo(p2.getOrarioProiezione().getOraInizio());
+            LocalTime time1 = p1.getSlotsProiezione().stream()
+                    .map(slot -> slot.getOraInizio().toLocalTime())
+                    .min(LocalTime::compareTo)
+                    .orElse(LocalTime.MIN);
+            LocalTime time2 = p2.getSlotsProiezione().stream()
+                    .map(slot -> slot.getOraInizio().toLocalTime())
+                    .min(LocalTime::compareTo)
+                    .orElse(LocalTime.MIN);
+            return time1.compareTo(time2);
         });
 
         Map<Integer, Map<String, LocalTime>> nextAvailableSlot = new HashMap<>();
@@ -34,10 +41,15 @@ public class ProgrammazioneSedeService {
         for (Proiezione p : programmazioni) {
             int salaId = p.getSalaProiezione().getId();
             String date = p.getDataProiezione().toString();
-            LocalTime startTime = p.getOrarioProiezione().getOraInizio().toLocalTime();
+            LocalTime startTime = p.getSlotsProiezione().stream()
+                    .map(slot -> slot.getOraInizio().toLocalTime())
+                    .min(LocalTime::compareTo)
+                    .orElse(LocalTime.MIN);
             Film film = filmDAO.retrieveById(p.getFilmProiezione().getId());
+
+
             int durata = film.getDurata();
-            int slotsNeeded = durata / 30;
+            int slotsNeeded = (int) Math.ceil(durata / 30.0);
             LocalTime projectionEnd = startTime.plusMinutes(slotsNeeded * 30);
 
             nextAvailableSlot.putIfAbsent(salaId, new HashMap<>());
@@ -45,6 +57,7 @@ public class ProgrammazioneSedeService {
             LocalTime availableTime = salaSlots.getOrDefault(date, LocalTime.MIN);
 
             if (!startTime.isBefore(availableTime)) {
+                p.getSlotsProiezione().sort(Comparator.comparing(slot -> slot.getOraInizio().toLocalTime()));
                 uniqueProiezioni.add(p);
                 salaSlots.put(date, projectionEnd);
             }
@@ -54,15 +67,16 @@ public class ProgrammazioneSedeService {
     }
 
     public List<Proiezione> getProgrammazioneFilm(int filmId, int sedeId){
-        return proiezioneDAO.retrieveByFilm(new Film(filmId),new Sede(sedeId));
+        return proiezioneDAO.retrieveByFilm(new Film(filmId), new Sede(sedeId));
     }
-  
+
     public List<Film> getCatalogoSede(Sede sede){
         SedeDAO sedeDAO = new SedeDAO();
         List<Film> catalogo;
         try {
             catalogo = sedeDAO.retrieveFilm(sede.getId());
         } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Errore nel recupero del catalogo della sede ID " + sede.getId(), e);
             return null;
         }
         return catalogo;

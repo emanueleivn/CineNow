@@ -1,6 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
 <%@ page import="it.unisa.application.model.entity.Proiezione" %>
+<%@ page import="java.util.List" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -62,14 +62,22 @@
 <body>
 <jsp:include page="/WEB-INF/jsp/headerSede.jsp"/>
 <div class="content">
-    <a href="<%= request.getContextPath() %>/aggiungiProiezione?sedeId=<%= request.getParameter("sedeId") %>">
-        Aggiungi Proiezione
-    </a>
     <%
-        List<Proiezione> programmazioni = (List<Proiezione>) request.getAttribute("programmazioni");
+        Integer sedeId = (Integer) request.getAttribute("sedeId");
+        if (sedeId == null) {
+            sedeId = Integer.parseInt(request.getParameter("sedeId"));
+        }
+    %>
+    <a href="<%= request.getContextPath() %>/aggiungiProiezione?sedeId=<%= sedeId %>">
+        Aggiungi Programmazione
+    </a>
+
+    <%
+        List<Proiezione> programmazioni =
+                (List<it.unisa.application.model.entity.Proiezione>) request.getAttribute("programmazioni");
         if (programmazioni == null || programmazioni.isEmpty()) {
     %>
-    <p>Nessuna proiezione presente.</p>
+    <p>Nessuna proiezione presente dalla data odierna.</p>
     <%
     } else {
     %>
@@ -84,15 +92,17 @@
         </thead>
         <tbody>
         <%
-            for (Proiezione p : programmazioni) {
+            for (it.unisa.application.model.entity.Proiezione p : programmazioni) {
+                if (p != null) {
         %>
         <tr>
             <td><%= p.getSalaProiezione().getNumeroSala() %></td>
             <td><%= p.getDataProiezione() %></td>
-            <td><%= p.getOrarioProiezione().getOraInizio() %></td>
+            <td><%= p.getMinOraInizioFormatted() %></td>
             <td><%= p.getFilmProiezione().getTitolo() %></td>
         </tr>
         <%
+                }
             }
         %>
         </tbody>
