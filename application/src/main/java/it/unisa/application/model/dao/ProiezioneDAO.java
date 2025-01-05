@@ -94,14 +94,14 @@ public class ProiezioneDAO {
 
     public List<Proiezione> retrieveByFilm(Film film, Sede sede) {
         String sql = """
-                SELECT p.*, s.numero AS numero_sala, f.titolo AS titolo_film, f.durata AS durata_film, sl.ora_inizio AS orario
-                FROM proiezione p
-                JOIN sala s ON p.id_sala = s.id
-                JOIN film f ON p.id_film = f.id
-                JOIN slot sl ON p.id_orario = sl.id
-                WHERE p.id_film = ? AND s.id_sede = ?
-                ORDER BY p.data ASC, sl.ora_inizio ASC
-                """;
+            SELECT p.*, s.numero AS numero_sala, f.titolo AS titolo_film, f.durata AS durata_film, sl.ora_inizio AS orario
+            FROM proiezione p
+            JOIN sala s ON p.id_sala = s.id
+            JOIN film f ON p.id_film = f.id
+            JOIN slot sl ON p.id_orario = sl.id
+            WHERE p.id_film = ? AND s.id_sede = ?
+            ORDER BY p.data ASC, sl.ora_inizio ASC
+            """;
 
         List<Proiezione> proiezioni = new ArrayList<>();
         try (Connection connection = ds.getConnection();
@@ -109,41 +109,56 @@ public class ProiezioneDAO {
             ps.setInt(1, film.getId());
             ps.setInt(2, sede.getId());
             ResultSet rs = ps.executeQuery();
-            Map<String, Proiezione> uniqueProiezioni = new HashMap<>();
+
+            // Mappa per gestire le proiezioni uniche
+            Map<String, List<Proiezione>> uniqueProiezioni = new HashMap<>();
+
             while (rs.next()) {
                 Proiezione proiezione = new Proiezione();
                 proiezione.setId(rs.getInt("id"));
                 proiezione.setDataProiezione(rs.getDate("data").toLocalDate());
+
                 Sala sala = new Sala();
                 sala.setId(rs.getInt("id_sala"));
                 sala.setNumeroSala(rs.getInt("numero_sala"));
                 proiezione.setSalaProiezione(sala);
+
                 Film filmDetails = new Film();
                 filmDetails.setId(rs.getInt("id_film"));
                 filmDetails.setTitolo(rs.getString("titolo_film"));
-                filmDetails.setDurata(rs.getInt("durata_film")); // Durata del film in minuti
+                filmDetails.setDurata(rs.getInt("durata_film")); // Durata in minuti
                 proiezione.setFilmProiezione(filmDetails);
+
                 Slot slot = new Slot();
                 slot.setId(rs.getInt("id_orario"));
                 slot.setOraInizio(rs.getTime("orario"));
                 proiezione.setOrarioProiezione(slot);
 
+                // Chiave unica basata su titolo, sala e giorno della proiezione
                 String uniqueKey = proiezione.getFilmProiezione().getTitolo() + "|" +
                         proiezione.getSalaProiezione().getId() + "|" +
                         proiezione.getDataProiezione().toString();
 
-                if (!uniqueProiezioni.containsKey(uniqueKey)) {
-                    uniqueProiezioni.put(uniqueKey, proiezione);
-                    proiezioni.add(proiezione);
-                } else {
-                    Proiezione lastProiezione = uniqueProiezioni.get(uniqueKey);
-                    int lastEndMinute = lastProiezione.getOrarioProiezione().getOraInizio().toLocalTime().toSecondOfDay() / 60
-                            + lastProiezione.getFilmProiezione().getDurata();
+                // Recupera la lista di proiezioni uniche per questa chiave
+                List<Proiezione> proiezioniPerChiave = uniqueProiezioni.getOrDefault(uniqueKey, new ArrayList<>());
+
+                boolean aggiungiProiezione = true;
+                for (Proiezione existingProiezione : proiezioniPerChiave) {
+                    int existingEndMinute = existingProiezione.getOrarioProiezione().getOraInizio().toLocalTime().toSecondOfDay() / 60
+                            + existingProiezione.getFilmProiezione().getDurata();
                     int currentStartMinute = proiezione.getOrarioProiezione().getOraInizio().toLocalTime().toSecondOfDay() / 60;
-                    if (currentStartMinute == lastEndMinute) {
-                        proiezioni.add(proiezione);
-                        uniqueProiezioni.put(uniqueKey, proiezione);
+
+                    // Controlla se la nuova proiezione è distinta rispetto a quelle già aggiunte
+                    if (currentStartMinute < existingEndMinute) {
+                        aggiungiProiezione = false;
+                        break;
                     }
+                }
+
+                if (aggiungiProiezione) {
+                    proiezioniPerChiave.add(proiezione);
+                    uniqueProiezioni.put(uniqueKey, proiezioniPerChiave);
+                    proiezioni.add(proiezione);
                 }
             }
         } catch (SQLException e) {
@@ -152,26 +167,25 @@ public class ProiezioneDAO {
         return proiezioni;
     }
 
-
     public List<Proiezione> retrieveAllBySede(int sedeId) {
         List<Proiezione> proiezioni = new ArrayList<>();
         String sql = """
-                SELECT p.*, s.numero AS numero_sala, f.titolo AS titolo_film, f.durata AS durata_film, sl.ora_inizio AS orario
-                FROM proiezione p
-                JOIN sala s ON p.id_sala = s.id
-                JOIN film f ON p.id_film = f.id
-                JOIN slot sl ON p.id_orario = sl.id
-                WHERE s.id_sede = ?
-                ORDER BY p.data ASC, sl.ora_inizio ASC
-                """;
+            SELECT p.*, s.numero AS numero_sala, f.titolo AS titolo_film, f.durata AS durata_film, sl.ora_inizio AS orario
+            FROM proiezione p
+            JOIN sala s ON p.id_sala = s.id
+            JOIN film f ON p.id_film = f.id
+            JOIN slot sl ON p.id_orario = sl.id
+            WHERE s.id_sede = ?
+            ORDER BY p.data ASC, sl.ora_inizio ASC
+            """;
 
         try (Connection connection = ds.getConnection();
              PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, sedeId);
             ResultSet rs = ps.executeQuery();
 
-            Map<String, Proiezione> uniqueProiezioni = new HashMap<>(); // Per filtrare duplicate
-            List<Proiezione> consecutiveProiezioni = new ArrayList<>(); // Per tracciare quelle consecutive
+            // Mappa per tracciare le proiezioni uniche per chiave
+            Map<String, List<Proiezione>> uniqueProiezioni = new HashMap<>();
 
             while (rs.next()) {
                 Proiezione proiezione = new Proiezione();
@@ -191,27 +205,31 @@ public class ProiezioneDAO {
                 proiezione.setOrarioProiezione(slot);
                 proiezione.setDataProiezione(rs.getDate("data").toLocalDate());
 
-                // Chiave univoca: combina film, sala e data
+                // Chiave unica per giorno, sala e film
                 String uniqueKey = proiezione.getFilmProiezione().getTitolo() + "|" +
                         proiezione.getSalaProiezione().getId() + "|" +
                         proiezione.getDataProiezione().toString();
 
-                if (!uniqueProiezioni.containsKey(uniqueKey)) {
-                    // Aggiungi la prima occorrenza della proiezione
-                    uniqueProiezioni.put(uniqueKey, proiezione);
-                    proiezioni.add(proiezione);
-                } else {
-                    // Verifica se è consecutiva alla precedente dello stesso film nella stessa sala
-                    Proiezione lastProiezione = uniqueProiezioni.get(uniqueKey);
-                    int lastEndMinute = lastProiezione.getOrarioProiezione().getOraInizio().toLocalTime().toSecondOfDay() / 60
-                            + lastProiezione.getFilmProiezione().getDurata();
+                // Recupera tutte le proiezioni esistenti per la chiave
+                List<Proiezione> proiezioniPerChiave = uniqueProiezioni.getOrDefault(uniqueKey, new ArrayList<>());
+
+                boolean aggiungiProiezione = true;
+                for (Proiezione existingProiezione : proiezioniPerChiave) {
+                    int existingEndMinute = existingProiezione.getOrarioProiezione().getOraInizio().toLocalTime().toSecondOfDay() / 60
+                            + existingProiezione.getFilmProiezione().getDurata();
                     int currentStartMinute = proiezione.getOrarioProiezione().getOraInizio().toLocalTime().toSecondOfDay() / 60;
 
-                    if (currentStartMinute == lastEndMinute) {
-                        // Proiezione consecutiva, aggiungila
-                        proiezioni.add(proiezione);
-                        uniqueProiezioni.put(uniqueKey, proiezione); // Aggiorna l'ultima
+                    // Verifica se si sovrappone con una proiezione esistente
+                    if (currentStartMinute < existingEndMinute) {
+                        aggiungiProiezione = false;
+                        break;
                     }
+                }
+
+                if (aggiungiProiezione) {
+                    proiezioniPerChiave.add(proiezione);
+                    uniqueProiezioni.put(uniqueKey, proiezioniPerChiave);
+                    proiezioni.add(proiezione);
                 }
             }
         } catch (SQLException e) {

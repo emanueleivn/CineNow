@@ -8,12 +8,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
 </head>
 <body>
-<h1 style="text-align: center">Si è verificato un errore</h1>
-<p><%= request.getAttribute("errorMessage") != null ? request.getAttribute("errorMessage") : "Errore sconosciuto." %></p>
-<a href="<%= request.getContextPath() %>/Home">Torna alla Home</a>
+<div class="container my-5">
+  <div class="card bg-light text-center">
+    <div class="card-body">
+      <h1 class="card-title">Si è verificato un errore</h1>
+      <p class="card-text">
+        <%= request.getAttribute("errorMessage") != null ? request.getAttribute("errorMessage") : "Errore sconosciuto." %>
+      </p>
+      <a href="<%= request.getContextPath() %>/Home" class="btn btn-primary mt-3">Torna alla Home</a>
+    </div>
+  </div>
+</div>
 </body>
-
-<footer>
-  <jsp:include page="/WEB-INF/jsp/footer.jsp"/>
-</footer>
 </html>

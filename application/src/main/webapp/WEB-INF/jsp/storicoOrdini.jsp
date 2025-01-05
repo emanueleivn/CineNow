@@ -32,6 +32,11 @@
                 ? prenotazione.getProiezione().getFilmProiezione().getDurata() + " min"
                 : "Non disponibile" %>
       </p>
+      <p><strong>Sede:</strong>
+        <%= prenotazione.getProiezione().getSalaProiezione().getSede() != null && prenotazione.getProiezione().getSalaProiezione().getSede() != null
+                ?  prenotazione.getProiezione().getSalaProiezione().getSede().getNome()
+                : "Non disponibile" %>
+      </p>
       <p><strong>Sala:</strong>
         <%= prenotazione.getProiezione() != null && prenotazione.getProiezione().getSalaProiezione() != null
                 ? "Sala " + prenotazione.getProiezione().getSalaProiezione().getNumeroSala()
@@ -71,7 +76,12 @@
       }
     } else {
     %>
-    <p class="text-center">Nessuna prenotazione trovata.</p>
+    <div class="card bg-light text-center my-5">
+      <div class="card-body">
+        <h5 class="card-title">Nessun ordine trovato</h5>
+        <p class="card-text">Non hai effettuato alcuna prenotazione. Visita il nostro catalogo per prenotare il tuo prossimo film!</p>
+      </div>
+    </div>
     <% } %>
   </ul>
 </div>

@@ -25,15 +25,22 @@
         <filter-name>GestSedeFilter</filter-name>
         <filter-class>it.unisa.application.utilities.GestSedeFilter</filter-class>
     </filter>
-    <filter-mapping>
-        <filter-name>GestSedeFilter</filter-name>
-        <url-pattern>/gestione_sala/*</url-pattern>
-    </filter-mapping>
-
     <filter>
         <filter-name>ClienteFilter</filter-name>
         <filter-class>it.unisa.application.utilities.ClienteFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>GestCatenaFilter</filter-name>
+        <filter-class>it.unisa.application.utilities.GestCatenaFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>GestCatenaFilter</filter-name>
+        <url-pattern>/addFilm</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>GestCatenaFilter</filter-name>
+        <url-pattern>/catalogo</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>ClienteFilter</filter-name>
         <url-pattern>/AggiungiOrdine</url-pattern>
@@ -49,6 +56,18 @@
     <filter-mapping>
         <filter-name>ClienteFilter</filter-name>
         <url-pattern>/ProiezioniFilm</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>GestSedeFilter</filter-name>
+        <url-pattern>/gestioneProgrammazione</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>GestSedeFilter</filter-name>
+        <url-pattern>/aggiungiProiezione</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>GestSedeFilter</filter-name>
+        <url-pattern>/slotDisponibili</url-pattern>
     </filter-mapping>
     <context-param>
         <param-name>uploadDir</param-name>
