@@ -27,12 +27,6 @@ public class StoricoOrdiniServlet extends HttpServlet {
             }
 
             List<Prenotazione> storico = prenotazioneService.storicoOrdini(cliente);
-
-            if (storico == null || storico.isEmpty()) {
-                request.setAttribute("errorMessage", "Nessuna prenotazione trovata per il cliente.");
-                request.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(request, response);
-                return;
-            }
             request.setAttribute("storico", storico);
             request.getRequestDispatcher("/WEB-INF/jsp/storicoOrdini.jsp").forward(request, response);
 

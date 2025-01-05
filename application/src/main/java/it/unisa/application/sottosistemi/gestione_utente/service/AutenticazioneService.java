@@ -7,6 +7,7 @@ import it.unisa.application.model.entity.Cliente;
 import it.unisa.application.model.entity.GestoreSede;
 import it.unisa.application.model.entity.Sede;
 import it.unisa.application.model.entity.Utente;
+import it.unisa.application.utilities.PasswordHash;
 import jakarta.servlet.http.HttpSession;
 
 public class AutenticazioneService {
@@ -23,7 +24,7 @@ public class AutenticazioneService {
         if (baseUser == null) {
             return null;
         }
-        String passHash = password;
+        String passHash = PasswordHash.hash(password);
         if (!baseUser.getPassword().equals(passHash)) {
             return null;
         }

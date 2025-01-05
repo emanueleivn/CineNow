@@ -28,12 +28,12 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         Utente utente = authService.login(email, password);
         if (utente != null) {
-            HttpSession session = request.getSession();
+            HttpSession session = request.getSession(true);
             String ruolo = utente.getRuolo().toLowerCase();
             switch (ruolo) {
                 case "cliente":
                     session.setAttribute("cliente", utente);
-                    response.sendRedirect(request.getContextPath() + "/index.jsp");
+                    response.sendRedirect(request.getContextPath() + "/Home");
                     break;
                 case "gestore_sede":
                     session.setAttribute("gestoreSede", utente);

@@ -1,118 +1,66 @@
-<%@ page import="it.unisa.application.model.entity.Proiezione" %>
-<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.List" %>
+<%@ page import="it.unisa.application.model.entity.Proiezione" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestione Programmazione</title>
-    <style>
-        body {
-            background-color: #1c1c1c;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #121212;
-            padding: 15px;
-            text-align: center;
-        }
-        h1 {
-            margin: 0;
-        }
-        .content {
-            margin: 20px auto;
-            max-width: 900px;
-            padding: 20px;
-            background-color: #2c2c2c;
-            border-radius: 8px;
-        }
-        a {
-            color: #fff;
-            background-color: #ff3b30;
-            padding: 8px 12px;
-            border-radius: 5px;
-            text-decoration: none;
-            margin-bottom: 15px;
-            display: inline-block;
-        }
-        a:hover {
-            background-color: #e32a1d;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-        th, td {
-            border: 1px solid #444;
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background-color: #444;
-        }
-        td {
-            background-color: #222;
-        }
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/style/style.css">
 </head>
 <body>
 <jsp:include page="/WEB-INF/jsp/headerSede.jsp"/>
-<div class="content">
-    <%
-        Integer sedeId = (Integer) request.getAttribute("sedeId");
-        if (sedeId == null) {
-            sedeId = Integer.parseInt(request.getParameter("sedeId"));
-        }
-    %>
-    <a href="<%= request.getContextPath() %>/aggiungiProiezione?sedeId=<%= sedeId %>">
-        Aggiungi Programmazione
-    </a>
 
-    <%
-        List<Proiezione> programmazioni =
-                (List<it.unisa.application.model.entity.Proiezione>) request.getAttribute("programmazioni");
-        if (programmazioni == null || programmazioni.isEmpty()) {
-    %>
-    <p>Nessuna proiezione presente dalla data odierna.</p>
-    <%
-    } else {
-    %>
-    <table>
-        <thead>
-        <tr>
-            <th>Sala</th>
-            <th>Data</th>
-            <th>Ora Inizio</th>
-            <th>Film</th>
-        </tr>
-        </thead>
-        <tbody>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Gestione Programmazione</h1>
+    <a href="<%= request.getContextPath() %>/aggiungiProiezione?sedeId=<%= request.getParameter("sedeId") %>"
+       class="btn btn-primary mb-4">Aggiungi Proiezione</a>
+    <div class="table-responsive">
         <%
-            for (it.unisa.application.model.entity.Proiezione p : programmazioni) {
-                if (p != null) {
+            List<Proiezione> programmazioni = (List<Proiezione>) request.getAttribute("programmazioni");
+            if (programmazioni != null && !programmazioni.isEmpty()) {
         %>
-        <tr>
-            <td><%= p.getSalaProiezione().getNumeroSala() %></td>
-            <td><%= p.getDataProiezione() %></td>
-            <td><%= p.getMinOraInizioFormatted() %></td>
-            <td><%= p.getFilmProiezione().getTitolo() %></td>
-        </tr>
-        <%
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Sala</th>
+                <th scope="col">Data</th>
+                <th scope="col">Ora Inizio</th>
+                <th scope="col">Film</th>
+            </tr>
+            </thead>
+            <tbody>
+            <%
+                for (Proiezione p : programmazioni) {
+            %>
+            <tr>
+                <td>Sala <%= p.getSalaProiezione().getNumeroSala() %></td>
+                <td><%= p.getDataProiezione() %></td>
+                <td><%= p.getOrarioProiezione().getOraInizio() %></td>
+                <td><%= p.getFilmProiezione().getTitolo() %></td>
+            </tr>
+            <%
                 }
+            %>
+            </tbody>
+        </table>
+        <%
+        } else {
+        %>
+        <div class="alert alert-warning text-center" role="alert">
+            Nessuna proiezione presente.
+        </div>
+        <%
             }
         %>
-        </tbody>
-    </table>
-    <%
-        }
-    %>
+    </div>
 </div>
-<footer>
-    <jsp:include page="/WEB-INF/jsp/footer.jsp"/>
-</footer>
+
+<jsp:include page="/WEB-INF/jsp/footer.jsp"/>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

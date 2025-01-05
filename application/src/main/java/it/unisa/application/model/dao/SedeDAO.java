@@ -12,7 +12,6 @@ import java.util.List;
 
 public class SedeDAO {
     private final DataSource ds;
-
     public SedeDAO() {
         this.ds = DataSourceSingleton.getInstance();
     }
@@ -82,7 +81,6 @@ public class SedeDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -135,7 +133,5 @@ public class SedeDAO {
         }
         return null;
     }
-
-
 }
 

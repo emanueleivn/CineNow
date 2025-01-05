@@ -105,17 +105,18 @@ public class PrenotazioneDAO {
                     Sala sala = new Sala();
                     sala.setId(rs.getInt("sala_id"));
                     sala.setNumeroSala(rs.getInt("numero_sala"));
-
+                    SedeDAO sedeDAO = new SedeDAO();
+                    SalaDAO salaDAO = new SalaDAO();
+                    Sala s = salaDAO.retrieveById(sala.getId());
+                    sala.setSede(sedeDAO.retrieveById(s.getSede().getId()));
                     Slot slot = new Slot();
                     slot.setOraInizio(rs.getTime("ora_inizio"));
-
                     Proiezione proiezione = new Proiezione();
                     proiezione.setId(rs.getInt("proiezione_id"));
                     proiezione.setDataProiezione(rs.getDate("data_proiezione").toLocalDate());
                     proiezione.setFilmProiezione(film);
                     proiezione.setSalaProiezione(sala);
                     proiezione.setOrarioProiezione(slot);
-
                     prenotazione = new Prenotazione();
                     prenotazione.setId(prenotazioneId);
                     prenotazione.setCliente(cliente);

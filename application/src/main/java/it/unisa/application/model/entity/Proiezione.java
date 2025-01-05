@@ -29,6 +29,11 @@ public class Proiezione {
         this.orarioProiezione = orarioProiezione;
     }
 
+    public Proiezione(int i) {
+        this.id = i;
+        this.postiProiezione = new ArrayList<>();
+    }
+
     public int getId() {
         return id;
     }
