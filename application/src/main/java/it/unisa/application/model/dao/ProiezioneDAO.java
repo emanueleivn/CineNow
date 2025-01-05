@@ -34,7 +34,6 @@ public class ProiezioneDAO {
                 psProiezione.setInt(2, proiezione.getFilmProiezione().getId());
                 psProiezione.setInt(3, proiezione.getSalaProiezione().getId());
                 psProiezione.setInt(4, proiezione.getOrarioProiezione().getId());
-
                 int affectedRows = psProiezione.executeUpdate();
                 if (affectedRows > 0) {
                     try (ResultSet rs = psProiezione.getGeneratedKeys()) {

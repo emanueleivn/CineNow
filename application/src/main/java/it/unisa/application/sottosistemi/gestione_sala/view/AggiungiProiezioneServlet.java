@@ -75,6 +75,7 @@ public class AggiungiProiezioneServlet extends HttpServlet {
                 dataProiezione = LocalDate.parse(parts[1]);
                 slotIds.add(slotId);
             }
+            System.out.println(slotIds);
             boolean success = programmazioneService.aggiungiProiezione(filmId, salaId, slotIds, dataProiezione);
             if (success) {
                 response.sendRedirect("gestioneProgrammazione?sedeId=" + sedeId);

@@ -16,6 +16,7 @@ public class ProgrammazioneService {
 
     public boolean aggiungiProiezione(int filmId, int salaId, List<Integer> slotIds, LocalDate data) {
         try {
+            // DAO necessari
             FilmDAO filmDAO = new FilmDAO();
             SedeDAO sedeDAO = new SedeDAO();
             SlotDAO slotDAO = new SlotDAO();
@@ -33,22 +34,22 @@ public class ProgrammazioneService {
             List<Slot> slotsSelezionati = slotsDisponibili.stream()
                     .filter(slot -> slotIds.contains(slot.getId()))
                     .toList();
-            if (slotsSelezionati.size() < slotNecessari) {
-                slotNecessari = Math.min(slotsSelezionati.size(), slotNecessari);
-            }
-            if (slotsSelezionati.isEmpty()) {
-                throw new RuntimeException("Nessuno slot valido selezionato.");
+            if (slotsSelezionati.isEmpty() || slotsSelezionati.size() < slotNecessari) {
+                throw new RuntimeException("Slot insufficienti per la durata del film.");
             }
             Proiezione proiezione = new Proiezione();
             proiezione.setFilmProiezione(film);
             proiezione.setSalaProiezione(sala);
             proiezione.setDataProiezione(data);
             proiezione.setSlotsProiezione(slotsSelezionati.subList(0, slotNecessari));
+            proiezione.setOrarioProiezione(slotsSelezionati.getFirst());
             return proiezioneDAO.create(proiezione);
+
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
     }
+
 
 }
