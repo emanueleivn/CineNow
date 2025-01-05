@@ -66,7 +66,7 @@
         <%
         } else {
         %>
-        Nessun posto prenotato
+        Nessun posto prenotato.
         <%
           }
         %>
