@@ -16,25 +16,48 @@ public class ProgrammazioneService {
 
     public boolean aggiungiProiezione(int filmId, int salaId, List<Integer> slotIds, LocalDate data) {
         try {
-            FilmDAO fdao = new FilmDAO();
+            FilmDAO filmDAO = new FilmDAO();
             SedeDAO sedeDAO = new SedeDAO();
             SlotDAO slotDAO = new SlotDAO();
-            Film film = fdao.retrieveById(filmId);
+
+            Film film = filmDAO.retrieveById(filmId);
             Sala sala = sedeDAO.retrieveSalaById(salaId);
-            for (int sid : slotIds) {
-                Slot sl = slotDAO.retrieveById(sid);
-                Proiezione p = new Proiezione();
-                p.setFilmProiezione(film);
-                p.setSalaProiezione(sala);
-                p.setOrarioProiezione(sl);
-                p.setDataProiezione(data);
-                if (!proiezioneDAO.create(p)) {
-                    return false;
-                }
+
+            if (film == null) {
+                throw new RuntimeException("Film non trovato.");
             }
-            return true;
+            if (sala == null) {
+                throw new RuntimeException("Sala non trovata.");
+            }
+
+            int durata = film.getDurata();
+            int slotNecessari = (int) Math.ceil(durata / 30.0);
+
+            List<Slot> slotsDisponibili = slotDAO.retrieveAllSlots();
+            List<Slot> slotsSelezionati = slotsDisponibili.stream()
+                    .filter(slot -> slotIds.contains(slot.getId()))
+                    .toList();
+
+            if (slotsSelezionati.size() < slotNecessari) {
+                slotNecessari = Math.min(slotsSelezionati.size(), slotNecessari);
+            }
+
+            if (slotsSelezionati.isEmpty()) {
+                throw new RuntimeException("Nessuno slot valido selezionato.");
+            }
+
+            Proiezione proiezione = new Proiezione();
+            proiezione.setFilmProiezione(film);
+            proiezione.setSalaProiezione(sala);
+            proiezione.setDataProiezione(data);
+
+            proiezione.setSlotsProiezione(slotsSelezionati.subList(0, slotNecessari));
+
+            return proiezioneDAO.create(proiezione);
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
+
 }
