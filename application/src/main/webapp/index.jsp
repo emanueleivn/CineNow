@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HomePage - CineNow</title>
+  <link rel="stylesheet" href="static/css/styles.css">
 </head>
 <body>
 <div class="container my-5">
@@ -32,7 +33,31 @@
       <span class="visually-hidden">Next</span>
     </button>
   </div>
+
+  <div class="row text-center my-5" id="info-section">
+    <div class="col-md-4">
+      <div class="card shadow-sm p-4">
+        <h5 class="card-title">Prenota i tuoi biglietti</h5>
+        <p class="card-text">Con CineNow puoi prenotare i tuoi posti in pochi click e senza stress, direttamente online.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm p-4">
+        <h5 class="card-title">Esclusive Movieplex</h5>
+        <p class="card-text">Accedi a contenuti e promozioni riservate per vivere il cinema al massimo, solo nelle sale Movieplex.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm p-4">
+        <h5 class="card-title">Programmazione aggiornata</h5>
+        <p class="card-text">Scopri tutte le novità in programmazione nelle tue sale preferite e non perdere i film più attesi.</p>
+      </div>
+    </div>
+  </div>
 </div>
-<%@ include file="WEB-INF/jsp/footer.jsp" %>
+
+<footer>
+  <%@ include file="WEB-INF/jsp/footer.jsp" %>
+</footer>
 </body>
 </html>

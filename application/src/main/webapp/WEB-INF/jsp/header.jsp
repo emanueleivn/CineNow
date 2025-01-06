@@ -70,7 +70,7 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="about.jsp">About</a>
+                        <a class="nav-link" href="<%= request.getContextPath() %>/About">About</a>
                     </li>
                 </ul>
                 <span class="navbar-brand text-danger fw-bold ms-auto" style="font-family:'Baloo Bhai 2',cursive;">Catena-Movieplex</span>
