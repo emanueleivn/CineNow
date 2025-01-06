@@ -23,6 +23,17 @@ public class RegistrazioneService {
         validationManager.addValidator("nome", new CampoValidator());
         validationManager.addValidator("cognome", new CampoValidator());
     }
+/*Costruttore per il testing*/
+    public RegistrazioneService(UtenteDAO utenteDAOMock, ClienteDAO clienteDAOMock) {
+        this.validationManager = new ValidateStrategyManager();
+        this.utenteDAO = utenteDAOMock;
+        this.clienteDAO = clienteDAOMock;
+        validationManager.addValidator("email", new EmailValidator());
+        validationManager.addValidator("password", new PasswordValidator());
+        validationManager.addValidator("nome", new CampoValidator());
+        validationManager.addValidator("cognome", new CampoValidator());
+    }
+
 
     public Cliente registrazione(String email, String password, String nome, String cognome) {
         Map<String, String> inputs = new HashMap<>();

@@ -1,27 +1,42 @@
-package unit.test_gestione_accesso;
+package integration.gestione_utente;
 
-import it.unisa.application.model.entity.Cliente;
-import it.unisa.application.sottosistemi.gestione_utente.service.RegistrazioneService;
+import it.unisa.application.database_connection.DataSourceSingleton;
 import it.unisa.application.model.dao.ClienteDAO;
 import it.unisa.application.model.dao.UtenteDAO;
+import it.unisa.application.model.entity.Cliente;
+import it.unisa.application.sottosistemi.gestione_utente.service.RegistrazioneService;
 import it.unisa.application.utilities.PasswordHash;
 import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
+import unit.test_DAO.DatabaseSetupForTest;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class RegistrazioneServiceTest {
+class RegistrazioneServiceIntegrationTest {
 
     private RegistrazioneService registrazioneService;
-    private ClienteDAO clienteDAOMock;
-    private UtenteDAO utenteDAOMock;
+    private ClienteDAO clienteDAO;
+    private UtenteDAO utenteDAO;
+
+    @BeforeAll
+    void setupDatabase() {
+        DatabaseSetupForTest.configureH2DataSource();
+    }
 
     @BeforeEach
     void setupService() {
-        clienteDAOMock = Mockito.mock(ClienteDAO.class);
-        utenteDAOMock = Mockito.mock(UtenteDAO.class);
-        registrazioneService = new RegistrazioneService(utenteDAOMock, clienteDAOMock);
+        clienteDAO = new ClienteDAO();
+        utenteDAO = new UtenteDAO();
+        registrazioneService = new RegistrazioneService(utenteDAO, clienteDAO);
+        try (Connection conn = DataSourceSingleton.getInstance().getConnection()) {
+            conn.createStatement().execute("DELETE FROM cliente;");
+            conn.createStatement().execute("DELETE FROM utente;");
+        } catch (SQLException e) {
+            fail("Errore durante la pulizia del database: " + e.getMessage());
+        }
     }
 
     @Test
@@ -32,8 +47,15 @@ class RegistrazioneServiceTest {
 
     @Test
     void testEmailAlreadyExists() {
-        Mockito.when(utenteDAOMock.retrieveByEmail("mariorossi@gmail.com")).thenReturn(new Cliente());
-        Cliente result = registrazioneService.registrazione("mariorossi@gmail.com", "Password123!", "Mario", "Rossi");
+        String email = "mariorossi@gmail.com";
+        String passwordHash = PasswordHash.hash("Password123!");
+        try (Connection conn = DataSourceSingleton.getInstance().getConnection()) {
+            conn.createStatement().executeUpdate("INSERT INTO utente (email, password, ruolo) VALUES ('" + email + "', '" + passwordHash + "', 'cliente');");
+            conn.createStatement().executeUpdate("INSERT INTO cliente (email, nome, cognome) VALUES ('" + email + "', 'Mario', 'Rossi');");
+        } catch (SQLException e) {
+            fail("Errore durante l'inserimento dei dati di test: " + e.getMessage());
+        }
+        Cliente result = registrazioneService.registrazione(email, "Password123!", "Mario", "Rossi");
         assertNull(result, "Registrazione dovrebbe fallire per email già registrata");
     }
 
@@ -81,8 +103,6 @@ class RegistrazioneServiceTest {
 
     @Test
     void testSuccessfulRegistration() {
-        Mockito.when(utenteDAOMock.retrieveByEmail("test@example.com")).thenReturn(null);
-        Mockito.when(clienteDAOMock.create(Mockito.any(Cliente.class))).thenReturn(true);
         Cliente result = registrazioneService.registrazione("test@example.com", "ValidPassword123!", "Mario", "Rossi");
         assertNotNull(result, "Registrazione dovrebbe avere successo");
         assertEquals("test@example.com", result.getEmail(), "L'email registrata non corrisponde");

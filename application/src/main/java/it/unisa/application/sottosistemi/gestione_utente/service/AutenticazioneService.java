@@ -11,13 +11,19 @@ import it.unisa.application.utilities.PasswordHash;
 import jakarta.servlet.http.HttpSession;
 
 public class AutenticazioneService {
-    private final UtenteDAO utenteDAO;
-    private final ClienteDAO clienteDAO;
+    private UtenteDAO utenteDAO;
+    private  ClienteDAO clienteDAO;
 
     public AutenticazioneService() {
         this.utenteDAO = new UtenteDAO();
         this.clienteDAO = new ClienteDAO();
     }
+    /*Costruttore per il testing*/
+    public AutenticazioneService(UtenteDAO utenteDAOMock, ClienteDAO clienteDAOMock) {
+        this.utenteDAO = utenteDAOMock;
+        this.clienteDAO = clienteDAOMock;
+    }
+
 
     public Utente login(String email, String password) {
         Utente baseUser = utenteDAO.retrieveByEmail(email);

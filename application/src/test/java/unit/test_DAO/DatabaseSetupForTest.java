@@ -13,7 +13,6 @@ public class DatabaseSetupForTest {
             ds.setURL("jdbc:h2:mem:CineNow;DB_CLOSE_DELAY=-1");
             ds.setUser("sa");
             ds.setPassword("");
-
             Field instanceField = DataSourceSingleton.class.getDeclaredField("instance");
             instanceField.setAccessible(true);
             instanceField.set(null, ds);

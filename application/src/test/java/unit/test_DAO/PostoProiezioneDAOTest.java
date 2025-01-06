@@ -77,7 +77,6 @@ public class PostoProiezioneDAOTest {
         posto.setFila('B');
         posto.setNumero(3);
         postoProiezione.setPosto(posto);
-
         Proiezione proiezione = new Proiezione();
         proiezione.setId(1);
         postoProiezione.setProiezione(proiezione);

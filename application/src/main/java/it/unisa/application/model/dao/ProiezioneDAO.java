@@ -44,13 +44,10 @@ public class ProiezioneDAO {
                 }
             }
 
-            // Determine slot duration and required slots
             int slotDurationMinutes = Math.abs(availableSlots.get(1).getOraInizio().toLocalTime().toSecondOfDay()
                     - availableSlots.get(0).getOraInizio().toLocalTime().toSecondOfDay()) / 60;
             int filmDurationMinutes = proiezione.getFilmProiezione().getDurata();
             int requiredSlots = (int) Math.ceil(filmDurationMinutes / (double) slotDurationMinutes);
-
-            // Find starting slot index
             Slot startingSlot = proiezione.getOrarioProiezione();
             int startIndex = -1;
             for (int i = 0; i < availableSlots.size(); i++) {
@@ -63,28 +60,21 @@ public class ProiezioneDAO {
             if (startIndex == -1) {
                 throw new RuntimeException("Slot di partenza non trovato.");
             }
-
-            // Adjust the number of slots if it exceeds the available range
             int actualSlots = Math.min(requiredSlots, availableSlots.size() - startIndex);
-
-            // Create proiezione for each required slot within bounds
             for (int i = 0; i < actualSlots; i++) {
                 Slot currentSlot = availableSlots.get(startIndex + i);
-
                 try (PreparedStatement psProiezione = connection.prepareStatement(insertProiezioneSql, Statement.RETURN_GENERATED_KEYS)) {
                     psProiezione.setDate(1, Date.valueOf(proiezione.getDataProiezione()));
                     psProiezione.setInt(2, proiezione.getFilmProiezione().getId());
                     psProiezione.setInt(3, proiezione.getSalaProiezione().getId());
                     psProiezione.setInt(4, currentSlot.getId());
                     int affectedRows = psProiezione.executeUpdate();
-
                     if (affectedRows > 0) {
                         try (ResultSet rs = psProiezione.getGeneratedKeys()) {
                             if (rs.next()) {
                                 int idProiezione = rs.getInt(1);
                                 proiezione.setId(idProiezione);
 
-                                // Insert posto_proiezione for this proiezione
                                 try (PreparedStatement psPostiProiezione = connection.prepareStatement(insertPostiProiezioneSql)) {
                                     psPostiProiezione.setInt(1, idProiezione);
                                     psPostiProiezione.setInt(2, proiezione.getSalaProiezione().getId());
@@ -109,8 +99,6 @@ public class ProiezioneDAO {
 
         return false;
     }
-
-
 
     public Proiezione retrieveById(int id) {
         String sql = "SELECT * FROM proiezione WHERE id = ?";
@@ -255,7 +243,6 @@ public class ProiezioneDAO {
                         proiezione.getSalaProiezione().getId() + "|" +
                         proiezione.getDataProiezione().toString();
 
-                // Recupera tutte le proiezioni esistenti per la chiave
                 List<Proiezione> proiezioniPerChiave = uniqueProiezioni.getOrDefault(uniqueKey, new ArrayList<>());
 
                 boolean aggiungiProiezione = true;
