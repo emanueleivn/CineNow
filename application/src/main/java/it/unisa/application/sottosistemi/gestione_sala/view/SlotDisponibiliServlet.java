@@ -24,7 +24,7 @@ public class SlotDisponibiliServlet extends HttpServlet {
             LocalDate dataInizio = LocalDate.parse(request.getParameter("dataInizio"));
             LocalDate dataFine = LocalDate.parse(request.getParameter("dataFine"));
 
-            Map<String, Object> slots = slotService.getSlotDisponibili(filmId, salaId, dataInizio, dataFine);
+            Map<String, Object> slots = slotService.slotDisponibili(filmId, salaId, dataInizio, dataFine);
 
             response.setContentType("application/json");
             PrintWriter out = response.getWriter();

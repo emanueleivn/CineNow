@@ -17,7 +17,7 @@ public class SlotService {
     private final ProiezioneDAO proiezioneDAO = new ProiezioneDAO();
     private final FilmDAO filmDAO = new FilmDAO();
 
-    public Map<String, Object> getSlotDisponibili(int filmId, int salaId, LocalDate dataInizio, LocalDate dataFine) throws Exception {
+    public Map<String, Object> slotDisponibili(int filmId, int salaId, LocalDate dataInizio, LocalDate dataFine) throws Exception {
         Film film = filmDAO.retrieveById(filmId);
         if (film == null) {
             throw new RuntimeException("Film non esistente.");
