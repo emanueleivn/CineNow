@@ -36,13 +36,6 @@ public class PrenotazioneService {
         return prenotazione;
     }
 
-    public List<Prenotazione> storicoOrdini(Cliente cliente) {
-        if (cliente == null) {
-            throw new IllegalArgumentException("Il cliente non può essere null.");
-        }
-        return prenotazioneDAO.retrieveAllByCliente(cliente);
-    }
-
     public List<PostoProiezione> ottieniPostiProiezione(Proiezione proiezione){
         return postoProiezioneDAO.retrieveAllByProiezione(proiezione);
     }

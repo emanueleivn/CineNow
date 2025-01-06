@@ -4,6 +4,7 @@ import it.unisa.application.model.entity.Cliente;
 import it.unisa.application.model.entity.Prenotazione;
 import it.unisa.application.sottosistemi.gestione_prenotazione.service.PrenotazioneService;
 
+import it.unisa.application.sottosistemi.gestione_prenotazione.service.StoricoOrdiniService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @WebServlet("/storicoOrdini")
 public class StoricoOrdiniServlet extends HttpServlet {
-    private final PrenotazioneService prenotazioneService = new PrenotazioneService();
+    private final StoricoOrdiniService storicoOrdiniService = new StoricoOrdiniService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -26,7 +27,7 @@ public class StoricoOrdiniServlet extends HttpServlet {
                 throw new IllegalArgumentException("Cliente non trovato nella sessione.");
             }
 
-            List<Prenotazione> storico = prenotazioneService.storicoOrdini(cliente);
+            List<Prenotazione> storico = storicoOrdiniService.storicoOrdini(cliente);
             request.setAttribute("storico", storico);
             request.getRequestDispatcher("/WEB-INF/jsp/storicoOrdini.jsp").forward(request, response);
 
