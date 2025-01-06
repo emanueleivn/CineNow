@@ -7,7 +7,16 @@ import it.unisa.application.model.entity.Prenotazione;
 import java.util.List;
 
 public class StoricoOrdiniService {
-    private final PrenotazioneDAO prenotazioneDAO = new PrenotazioneDAO();
+    private PrenotazioneDAO prenotazioneDAO;
+
+    public StoricoOrdiniService() {
+        this.prenotazioneDAO = new PrenotazioneDAO();
+    }
+
+    public StoricoOrdiniService(PrenotazioneDAO prenotazioneDAOMock) {
+        prenotazioneDAO = prenotazioneDAOMock;
+    }
+
     public List<Prenotazione> storicoOrdini(Cliente cliente) {
         if (cliente == null) {
             throw new IllegalArgumentException("Il cliente non può essere null.");

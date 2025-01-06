@@ -10,8 +10,16 @@ import it.unisa.application.model.entity.Proiezione;
 import java.util.List;
 
 public class PrenotazioneService {
-    private final PrenotazioneDAO prenotazioneDAO = new PrenotazioneDAO();
-    private final PostoProiezioneDAO postoProiezioneDAO = new PostoProiezioneDAO();
+    private PrenotazioneDAO prenotazioneDAO = new PrenotazioneDAO();
+    private PostoProiezioneDAO postoProiezioneDAO = new PostoProiezioneDAO();
+
+    public PrenotazioneService() {
+    }
+
+    public PrenotazioneService(PrenotazioneDAO prenotazioneDAOMock, PostoProiezioneDAO postoProiezioneDAOMock) {
+        prenotazioneDAO = prenotazioneDAOMock;
+        postoProiezioneDAO = postoProiezioneDAOMock;
+    }
 
     public Prenotazione aggiungiOrdine(Cliente cliente, List<PostoProiezione> posti, Proiezione proiezione) {
         if (cliente == null || posti == null || posti.isEmpty() || proiezione == null) {
