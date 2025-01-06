@@ -21,7 +21,7 @@ public class GestioneProgrammazioneServlet extends HttpServlet {
         try {
             int sedeId = Integer.parseInt(request.getParameter("sedeId"));
             ProgrammazioneSedeService service = new ProgrammazioneSedeService();
-            List<Proiezione> programmazioni = service.getProgrammazioniBySede(sedeId);
+            List<Proiezione> programmazioni = service.getProgrammazione(sedeId);
             request.setAttribute("programmazioni", programmazioni);
             request.getRequestDispatcher("/WEB-INF/jsp/gestioneProgrammazione.jsp").forward(request, response);
         } catch (NumberFormatException e) {

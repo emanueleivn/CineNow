@@ -27,7 +27,7 @@ public class ProiezioniFilmServlet extends HttpServlet {
         try {
             int sedeId = Integer.parseInt(req.getParameter("sedeId"));
             int filmId = Integer.parseInt(req.getParameter("filmId"));
-            List<Proiezione> programmazioneFilm = service.getProgrammazioneFilm(filmId, sedeId);
+            List<Proiezione> programmazioneFilm = service.getProiezioniFilm(filmId, sedeId);
             Film film = filmDAO.retrieveById(filmId);
             Sede sede = sedeDAO.retrieveById(sedeId);
 

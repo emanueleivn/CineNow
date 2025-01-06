@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 public class ProgrammazioneSedeService {
     private final ProiezioneDAO proiezioneDAO = new ProiezioneDAO();
-    public List<Proiezione> getProgrammazioniBySede(int sedeId) {
+    public List<Proiezione> getProgrammazione(int sedeId) {
         List<Proiezione> programmazioni = proiezioneDAO.retrieveAllBySede(sedeId);
         LocalDate today = LocalDate.now();
         List<Proiezione> proiezioniFuture = programmazioni.stream()
@@ -31,7 +31,7 @@ public class ProgrammazioneSedeService {
 
 
 
-    public List<Proiezione> getProgrammazioneFilm(int filmId, int sedeId){
+    public List<Proiezione> getProiezioniFilm(int filmId, int sedeId){
         List<Proiezione> proiezioni = proiezioneDAO.retrieveByFilm(new Film(filmId),new Sede(sedeId));
         return proiezioni.stream()
                 .filter(p -> !p.getDataProiezione().isBefore(LocalDate.now()) &&
