@@ -23,16 +23,11 @@ public class SalaDAO {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                Sala sala = new Sala();
-                sala.setId(rs.getInt("id"));
-                sala.setNumeroSala(rs.getInt("numero"));
-                sala.setCapienza(rs.getInt("capienza"));
-
-                Sede sede = new Sede();
-                sede.setId(rs.getInt("id_sede"));
-                sala.setSede(sede);
-
-                return sala;
+                Sala s = new Sala();
+                s.setId(rs.getInt("id"));
+                s.setNumeroSala(rs.getInt("numero"));
+                s.setCapienza(rs.getInt("capienza"));
+                return s;
             }
         } catch (SQLException e) {
             e.printStackTrace();

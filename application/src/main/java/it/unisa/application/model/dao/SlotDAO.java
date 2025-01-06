@@ -48,37 +48,6 @@ public class SlotDAO {
         }
         return null;
     }
-    public List<Slot> retriveFreeSlotPerGiorno(int salaId, LocalDate giorno) {
-        List<Slot> freeSlots = new ArrayList<>();
-        String sql = """
-            SELECT s.*
-            FROM slot s
-            WHERE s.data = ?
-              AND NOT EXISTS (
-                SELECT 1
-                FROM proiezione p
-                WHERE p.id_orario = s.id
-                  AND p.id_sala = ?
-                  AND p.data = s.data
-              )
-            ORDER BY s.ora_inizio
-        """;
-        try (Connection conn = ds.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setDate(1, Date.valueOf(giorno));
-            ps.setInt(2, salaId);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Slot slot = new Slot();
-                    slot.setId(rs.getInt("id"));
-                    slot.setOraInizio(rs.getTime("ora_inizio"));
-                    freeSlots.add(slot);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return freeSlots;
-    }
     public List<Slot> retrieveAllSlots() {
         List<Slot> list = new ArrayList<>();
         String sql = "SELECT * FROM slot ORDER BY ora_inizio";

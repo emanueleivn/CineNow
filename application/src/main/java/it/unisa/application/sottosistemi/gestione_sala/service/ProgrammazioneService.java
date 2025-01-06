@@ -1,9 +1,6 @@
 package it.unisa.application.sottosistemi.gestione_sala.service;
 
-import it.unisa.application.model.dao.FilmDAO;
-import it.unisa.application.model.dao.ProiezioneDAO;
-import it.unisa.application.model.dao.SedeDAO;
-import it.unisa.application.model.dao.SlotDAO;
+import it.unisa.application.model.dao.*;
 import it.unisa.application.model.entity.Film;
 import it.unisa.application.model.entity.Proiezione;
 import it.unisa.application.model.entity.Sala;
@@ -17,17 +14,13 @@ public class ProgrammazioneService {
 
     public boolean aggiungiProiezione(int filmId, int salaId, List<Integer> slotIds, LocalDate data) {
         try {
-            // DAO Initialization
             FilmDAO filmDAO = new FilmDAO();
-            SedeDAO sedeDAO = new SedeDAO();
+            SalaDAO salaDAO = new SalaDAO();
             SlotDAO slotDAO = new SlotDAO();
             ProiezioneDAO proiezioneDAO = new ProiezioneDAO();
-
-            // Retrieve Film and Sala
             Film film = filmDAO.retrieveById(filmId);
-            Sala sala = sedeDAO.retrieveSalaById(salaId);
+            Sala sala = salaDAO.retrieveById(salaId);
 
-            // Validations
             if (film == null) {
                 throw new RuntimeException("Film non trovato.");
             }

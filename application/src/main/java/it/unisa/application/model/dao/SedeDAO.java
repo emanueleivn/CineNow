@@ -115,23 +115,5 @@ public class SedeDAO {
         return filmList;
     }
 
-    public Sala retrieveSalaById(int salaId) {
-        String sql = "SELECT * FROM sala WHERE id = ?";
-        try (Connection connection = ds.getConnection();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, salaId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                Sala s = new Sala();
-                s.setId(rs.getInt("id"));
-                s.setNumeroSala(rs.getInt("numero"));
-                s.setCapienza(rs.getInt("capienza"));
-                return s;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }
 
