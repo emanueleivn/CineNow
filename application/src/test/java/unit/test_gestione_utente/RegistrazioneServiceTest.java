@@ -24,62 +24,68 @@ class RegistrazioneServiceTest {
     }
 
     @Test
-    void testInvalidEmailFormat() {
+    void testEmailFormatoNonValido() {
         Cliente result = registrazioneService.registrazione("example@<>", "Password123!", "Mario", "Rossi");
         assertNull(result, "Registrazione dovrebbe fallire per email in formato errato");
+        System.out.println("Email: example@<> , password: Password123!, nome: Mario, cognome: Rossi");
     }
 
     @Test
-    void testEmailAlreadyExists() {
+    void testEmailEsistente() {
         Mockito.when(utenteDAOMock.retrieveByEmail("mariorossi@gmail.com")).thenReturn(new Cliente());
         Cliente result = registrazioneService.registrazione("mariorossi@gmail.com", "Password123!", "Mario", "Rossi");
         assertNull(result, "Registrazione dovrebbe fallire per email già registrata");
+        System.out.println("Email: mariorossi@gmail.com, password: Password123!, nome: Mario, cognome: Rossi");
     }
 
     @Test
-    void testEmailNotProvided() {
+    void testEmailNonFornita() {
         Cliente result = registrazioneService.registrazione(null, "Password123!", "Mario", "Rossi");
+        Cliente result1 = registrazioneService.registrazione("", "Password123!", "Mario", "Rossi");
         assertNull(result, "Registrazione dovrebbe fallire per email mancante");
+        assertNull(result1, "Registrazione dovrebbe fallire per email mancante");
+        System.out.println("Email: , password: Password123!, nome: Mario, cognome: Rossi");
+        System.out.println("Email: \" \", password: Password123!, nome: Mario, cognome: Rossi");
     }
 
     @Test
-    void testInvalidPasswordFormat() {
+    void testPasswordFormatoNonValido() {
         Cliente result = registrazioneService.registrazione("test@example.com", "short", "Mario", "Rossi");
         assertNull(result, "Registrazione dovrebbe fallire per password in formato errato");
     }
 
     @Test
-    void testPasswordNotProvided() {
+    void testPasswordNonFornita() {
         Cliente result = registrazioneService.registrazione("test@example.com", null, "Mario", "Rossi");
         assertNull(result, "Registrazione dovrebbe fallire per password mancante");
     }
 
     @Test
-    void testInvalidNameFormat() {
+    void testNomeFormatoNonValido() {
         Cliente result = registrazioneService.registrazione("test@example.com", "Password123!", "<", "Rossi");
         assertNull(result, "Registrazione dovrebbe fallire per nome in formato errato");
     }
 
     @Test
-    void testNameNotProvided() {
+    void testNomeNonFornito() {
         Cliente result = registrazioneService.registrazione("test@example.com", "Password123!", null, "Rossi");
         assertNull(result, "Registrazione dovrebbe fallire per nome mancante");
     }
 
     @Test
-    void testInvalidSurnameFormat() {
+    void testCognomeFormatoNonValido() {
         Cliente result = registrazioneService.registrazione("test@example.com", "Password123!", "Mario", " ");
         assertNull(result, "Registrazione dovrebbe fallire per cognome in formato errato");
     }
 
     @Test
-    void testSurnameNotProvided() {
+    void testCognomeNonFornito() {
         Cliente result = registrazioneService.registrazione("test@example.com", "Password123!", "Mario", null);
         assertNull(result, "Registrazione dovrebbe fallire per cognome mancante");
     }
 
     @Test
-    void testSuccessfulRegistration() {
+    void testRegistrazioneEffettuata() {
         Mockito.when(utenteDAOMock.retrieveByEmail("test@example.com")).thenReturn(null);
         Mockito.when(clienteDAOMock.create(Mockito.any(Cliente.class))).thenReturn(true);
         Cliente result = registrazioneService.registrazione("test@example.com", "ValidPassword123!", "Mario", "Rossi");

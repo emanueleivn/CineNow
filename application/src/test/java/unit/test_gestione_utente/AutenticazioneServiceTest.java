@@ -37,28 +37,31 @@ public class AutenticazioneServiceTest {
         assertNotNull(utente, "Il login dovrebbe avere successo");
         assertTrue(utente instanceof Cliente, "L'utente autenticato dovrebbe essere un Cliente");
         assertEquals(email, utente.getEmail(), "L'email non corrisponde");
+        System.out.println("Email:"+email + ", password:"+password);
     }
 
     @Test
     @DisplayName("TC01.2: Login fallito - credenziali errate")
     void testLoginWrongPassword() {
         String email = "test@test.com";
-        String wrongPassword = "12345678";
+        String wrongPassword = "12<345678>";
         String hashedPassword = PasswordHash.hash("Testing1!");
         Utente mockUtente = new Utente(email, hashedPassword, "cliente");
         Mockito.when(utenteDAOMock.retrieveByEmail(email)).thenReturn(mockUtente);
         Utente utente = autenticazioneService.login(email, wrongPassword);
         assertNull(utente, "Il login dovrebbe fallire con password errata");
+        System.out.println("Email:"+email + ", password:"+wrongPassword);
     }
 
     @Test
     @DisplayName("TC01.3: Login fallito - utente non trovato")
     void testLoginUserNotFound() {
         String email = "pippo@pluto.com";
-        String password = "12345678";
+        String password = "Testing1!";
         Mockito.when(utenteDAOMock.retrieveByEmail(email)).thenReturn(null);
         Utente utente = autenticazioneService.login(email, password);
         assertNull(utente, "Il login dovrebbe fallire per utente non trovato");
+        System.out.println("Email:"+email + ", password:"+password);
     }
 
     @Test
