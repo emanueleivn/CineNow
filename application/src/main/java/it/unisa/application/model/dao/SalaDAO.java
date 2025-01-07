@@ -27,6 +27,9 @@ public class SalaDAO {
                 s.setId(rs.getInt("id"));
                 s.setNumeroSala(rs.getInt("numero"));
                 s.setCapienza(rs.getInt("capienza"));
+                Sede sede = new Sede();
+                sede.setId(rs.getInt("id_sede"));
+                s.setSede(sede);
                 return s;
             }
         } catch (SQLException e) {
