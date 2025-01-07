@@ -89,10 +89,6 @@ public class Sala {
         return proiezione;
     }
 
-    /*public Slot slotDisponibili() {
-
-    }*/
-
     private List<PostoProiezione> creaListaPosti(Proiezione proiezione) {
         ArrayList<PostoProiezione> posti = new ArrayList<>();
         for (Posto p : this.posti) {

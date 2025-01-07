@@ -230,15 +230,13 @@ public class ProiezioneDAO {
                 Film film = new Film();
                 film.setId(rs.getInt("id_film"));
                 film.setTitolo(rs.getString("titolo_film"));
-                film.setDurata(rs.getInt("durata_film")); // Durata del film in minuti
+                film.setDurata(rs.getInt("durata_film"));
                 proiezione.setFilmProiezione(film);
                 Slot slot = new Slot();
                 slot.setId(rs.getInt("id_orario"));
                 slot.setOraInizio(rs.getTime("orario"));
                 proiezione.setOrarioProiezione(slot);
                 proiezione.setDataProiezione(rs.getDate("data").toLocalDate());
-
-                // Chiave unica per giorno, sala e film
                 String uniqueKey = proiezione.getFilmProiezione().getTitolo() + "|" +
                         proiezione.getSalaProiezione().getId() + "|" +
                         proiezione.getDataProiezione().toString();
@@ -251,7 +249,6 @@ public class ProiezioneDAO {
                             + existingProiezione.getFilmProiezione().getDurata();
                     int currentStartMinute = proiezione.getOrarioProiezione().getOraInizio().toLocalTime().toSecondOfDay() / 60;
 
-                    // Verifica se si sovrappone con una proiezione esistente
                     if (currentStartMinute < existingEndMinute) {
                         aggiungiProiezione = false;
                         break;

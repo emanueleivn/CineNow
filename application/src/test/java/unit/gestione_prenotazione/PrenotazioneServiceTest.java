@@ -69,7 +69,7 @@ class PrenotazioneServiceTest {
         assertNotNull(result);
         assertEquals(cliente, result.getCliente());
         assertEquals(proiezione, result.getProiezione());
-        assertEquals(posti, result.getPostiPrenotazione());
+        assertEquals(posti, result.getPostiProiezione());
         verify(prenotazioneDAOMock).create(any(Prenotazione.class));
         verify(postoProiezioneDAOMock, times(2)).occupaPosto(any(PostoProiezione.class), eq(100));
     }

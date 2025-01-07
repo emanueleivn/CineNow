@@ -49,7 +49,7 @@ public class Cliente extends Utente {
         Prenotazione prenotazione = new Prenotazione();
         prenotazione.setCliente(this);
         prenotazione.setProiezione(proiezione);
-        prenotazione.setPostiPrenotazione(posti);
+        prenotazione.setPostiProiezione(posti);
         prenotazioni.add(prenotazione);
     }
 

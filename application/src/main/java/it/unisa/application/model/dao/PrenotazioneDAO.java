@@ -121,7 +121,7 @@ public class PrenotazioneDAO {
                     prenotazione.setId(prenotazioneId);
                     prenotazione.setCliente(cliente);
                     prenotazione.setProiezione(proiezione);
-                    prenotazione.setPostiPrenotazione(new ArrayList<>());
+                    prenotazione.setPostiProiezione(new ArrayList<>());
                     prenotazioneMap.put(prenotazioneId, prenotazione);
                 }
 
@@ -133,7 +133,7 @@ public class PrenotazioneDAO {
                     PostoProiezione postoProiezione = new PostoProiezione();
                     postoProiezione.setPosto(posto);
                     postoProiezione.setProiezione(prenotazione.getProiezione());
-                    prenotazione.getPostiPrenotazione().add(postoProiezione);
+                    prenotazione.getPostiProiezione().add(postoProiezione);
                 }
             }
 

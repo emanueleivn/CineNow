@@ -54,9 +54,9 @@
       </p>
       <p><strong>Posti:</strong>
         <%
-          if (prenotazione.getPostiPrenotazione() != null && !prenotazione.getPostiPrenotazione().isEmpty()) {
+          if (prenotazione.getPostiProiezione() != null && !prenotazione.getPostiProiezione().isEmpty()) {
             StringBuilder posti = new StringBuilder();
-            for (PostoProiezione postoProiezione : prenotazione.getPostiPrenotazione()) {
+            for (PostoProiezione postoProiezione : prenotazione.getPostiProiezione()) {
               posti.append(postoProiezione.getPosto().getFila())
                       .append(postoProiezione.getPosto().getNumero())
                       .append(", ");
