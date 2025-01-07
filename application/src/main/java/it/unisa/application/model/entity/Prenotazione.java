@@ -5,7 +5,7 @@ import java.util.List;
 public class Prenotazione {
     private int id;
     private Proiezione proiezione;
-    private List<PostoProiezione> postiProiezione;
+    private List<PostoProiezione> postiPrenotazione;
     private Cliente cliente;
 
     public Prenotazione() {}
@@ -32,12 +32,12 @@ public class Prenotazione {
         this.proiezione = proiezione;
     }
 
-    public List<PostoProiezione> getPostiProiezione() {
-        return postiProiezione;
+    public List<PostoProiezione> getPostiPrenotazione() {
+        return postiPrenotazione;
     }
 
-    public void setPostiProiezione(List<PostoProiezione> postiProiezione) {
-        this.postiProiezione = postiProiezione;
+    public void setPostiPrenotazione(List<PostoProiezione> postiProiezione) {
+        this.postiPrenotazione = postiProiezione;
     }
 
     public Cliente getCliente() {
@@ -53,7 +53,7 @@ public class Prenotazione {
         return "Prenotazione{" +
                 "id=" + id +
                 ", proiezione=" + proiezione +
-                ", postiPrenotazione=" + postiProiezione +
+                ", postiPrenotazione=" + postiPrenotazione +
                 ", cliente=" + cliente +
                 '}';
     }

@@ -103,7 +103,7 @@ public class PrenotazioneDAO {
                     );
 
                     Sala sala = new Sala();
-                    sala.setId(rs.getInt("id_sala"));
+                    sala.setId(rs.getInt("sala_id"));
                     sala.setNumeroSala(rs.getInt("numero_sala"));
                     SedeDAO sedeDAO = new SedeDAO();
                     SalaDAO salaDAO = new SalaDAO();
@@ -121,7 +121,7 @@ public class PrenotazioneDAO {
                     prenotazione.setId(prenotazioneId);
                     prenotazione.setCliente(cliente);
                     prenotazione.setProiezione(proiezione);
-                    prenotazione.setPostiProiezione(new ArrayList<>());
+                    prenotazione.setPostiPrenotazione(new ArrayList<>());
                     prenotazioneMap.put(prenotazioneId, prenotazione);
                 }
 
@@ -133,9 +133,10 @@ public class PrenotazioneDAO {
                     PostoProiezione postoProiezione = new PostoProiezione();
                     postoProiezione.setPosto(posto);
                     postoProiezione.setProiezione(prenotazione.getProiezione());
-                    prenotazione.getPostiProiezione().add(postoProiezione);
+                    prenotazione.getPostiPrenotazione().add(postoProiezione);
                 }
             }
+
             prenotazioni.addAll(prenotazioneMap.values());
         } catch (SQLException e) {
             e.printStackTrace();

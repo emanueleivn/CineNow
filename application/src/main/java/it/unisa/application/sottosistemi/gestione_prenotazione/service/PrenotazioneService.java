@@ -29,7 +29,7 @@ public class PrenotazioneService {
         Prenotazione prenotazione = new Prenotazione();
         prenotazione.setCliente(cliente);
         prenotazione.setProiezione(proiezione);
-        prenotazione.setPostiProiezione(posti);
+        prenotazione.setPostiPrenotazione(posti);
 
         if (!prenotazioneDAO.create(prenotazione)) {
             throw new RuntimeException("Errore durante la creazione della prenotazione.");
