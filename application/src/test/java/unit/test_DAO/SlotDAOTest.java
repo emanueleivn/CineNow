@@ -7,8 +7,10 @@ import it.unisa.application.model.entity.Slot;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -72,6 +74,7 @@ public class SlotDAOTest {
         assertNotNull(slot, "Il metodo retrieveById dovrebbe restituire un oggetto Slot");
         assertEquals(1, slot.getId(), "L'ID dello slot dovrebbe essere 1");
         assertEquals("10:00:00", slot.getOraInizio().toString(), "L'ora dello slot dovrebbe essere 10:00:00");
+        System.out.println("Slot recuperato: ID=" + slot.getId() + ", Ora=" + slot.getOraInizio());
     }
 
     @Test
@@ -84,15 +87,20 @@ public class SlotDAOTest {
         assertNotNull(retrievedSlot, "Il metodo retrieveByProiezione dovrebbe restituire uno slot");
         assertEquals(2, retrievedSlot.getId(), "L'ID dello slot dovrebbe essere 2");
         assertEquals("12:00:00", retrievedSlot.getOraInizio().toString(), "L'ora dello slot dovrebbe essere 12:00:00");
+        System.out.println("Slot recuperato dalla proiezione: ID=" + retrievedSlot.getId() + ", Ora=" + retrievedSlot.getOraInizio());
     }
 
-   /* @Test
-    void testRetrieveFreeSlot() {
-        List<Slot> freeSlots = slotDAO.retrieveFreeSlot(LocalDate.of(2025, 1, 1), 1);
-
-        assertNotNull(freeSlots, "La lista degli slot liberi non dovrebbe essere null");
-        assertEquals(2, freeSlots.size(), "Dovrebbero esserci 2 slot liberi");
-        assertEquals(1, freeSlots.get(0).getId(), "Il primo slot libero dovrebbe avere ID 1");
-        assertEquals(3, freeSlots.get(1).getId(), "Il secondo slot libero dovrebbe avere ID 3");
-    }*/
+    @Test
+    void testRetrieveAllSlots() {
+        List<Slot> slots = slotDAO.retrieveAllSlots();
+        assertNotNull(slots, "La lista degli slot non dovrebbe essere null");
+        assertEquals(4, slots.size(), "Dovrebbero esserci 4 slot nel database");
+        for (Slot slot : slots) {
+            System.out.println("Slot recuperato: ID=" + slot.getId() + ", Ora=" + slot.getOraInizio());
+        }
+        assertEquals(1, slots.get(0).getId(), "Il primo slot dovrebbe avere ID 1");
+        assertEquals(2, slots.get(1).getId(), "Il secondo slot dovrebbe avere ID 2");
+        assertEquals(3, slots.get(2).getId(), "Il terzo slot dovrebbe avere ID 3");
+        assertEquals(4, slots.get(3).getId(), "Il quarto slot dovrebbe avere ID 4");
+    }
 }

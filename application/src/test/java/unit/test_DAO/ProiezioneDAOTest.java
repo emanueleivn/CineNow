@@ -4,12 +4,10 @@ import it.unisa.application.database_connection.DataSourceSingleton;
 import it.unisa.application.model.dao.ProiezioneDAO;
 import it.unisa.application.model.entity.*;
 import org.junit.jupiter.api.*;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ProiezioneDAOTest {
@@ -23,7 +21,6 @@ public class ProiezioneDAOTest {
     @BeforeEach
     void setUp() {
         proiezioneDAO = new ProiezioneDAO();
-
         try (Connection conn = DataSourceSingleton.getInstance().getConnection()) {
             conn.createStatement().execute("DELETE FROM posto;");
             conn.createStatement().execute("DELETE FROM slot;");
@@ -75,6 +72,7 @@ public class ProiezioneDAOTest {
         proiezione.setDataProiezione(LocalDate.now());
         boolean result = proiezioneDAO.create(proiezione);
         assertTrue(result, "Creazione della proiezione fallita");
+        System.out.println("Proiezione creata: Film ID=" + film.getId() + ", Sala ID=" + sala.getId() + ", Slot ID=" + slot.getId() + ", Data=" + proiezione.getDataProiezione());
     }
 
     @Test
@@ -88,6 +86,7 @@ public class ProiezioneDAOTest {
         Proiezione retrieved = proiezioneDAO.retrieveById(1);
         assertNotNull(retrieved, "Proiezione non trovata");
         assertEquals(1, retrieved.getId(), "ID della proiezione non corrispondente");
+        System.out.println("Proiezione recuperata: ID=" + retrieved.getId() + ", Film ID=" + retrieved.getFilmProiezione().getId() + ", Sala ID=" + retrieved.getSalaProiezione().getId() + ", Slot ID=" + retrieved.getOrarioProiezione().getId());
     }
 
     @Test
@@ -106,6 +105,9 @@ public class ProiezioneDAOTest {
         List<Proiezione> proiezioni = proiezioneDAO.retrieveByFilm(film, sede);
         assertNotNull(proiezioni, "La lista di proiezioni è null");
         assertFalse(proiezioni.isEmpty(), "Nessuna proiezione trovata");
+        for (Proiezione p : proiezioni) {
+            System.out.println("Proiezione recuperata: ID=" + p.getId() + ", Film ID=" + p.getFilmProiezione().getId() + ", Sala ID=" + p.getSalaProiezione().getId() + ", Data=" + p.getDataProiezione());
+        }
     }
 
     @Test
@@ -119,5 +121,8 @@ public class ProiezioneDAOTest {
         List<Proiezione> proiezioni = proiezioneDAO.retrieveAllBySede(1);
         assertNotNull(proiezioni, "La lista di proiezioni è null");
         assertFalse(proiezioni.isEmpty(), "Nessuna proiezione trovata");
+        for (Proiezione p : proiezioni) {
+            System.out.println("Proiezione recuperata: ID=" + p.getId() + ", Film ID=" + p.getFilmProiezione().getId() + ", Sala ID=" + p.getSalaProiezione().getId() + ", Data=" + p.getDataProiezione());
+        }
     }
 }

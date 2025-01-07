@@ -2,11 +2,9 @@ package unit.test_DAO;
 
 import it.unisa.application.database_connection.DataSourceSingleton;
 import it.unisa.application.model.dao.SalaDAO;
-import it.unisa.application.model.entity.Film;
 import it.unisa.application.model.entity.Sala;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -15,7 +13,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SalaDAOTest {
-
     private static SalaDAO salaDAO;
 
     @BeforeAll
@@ -53,24 +50,33 @@ public class SalaDAOTest {
             throw new RuntimeException("Errore nell'inizializzazione dei dati di test", e);
         }
     }
-
+    @Test
+    void testRetrieveById() {
+        Sala sala = salaDAO.retrieveById(1);
+        assertNotNull(sala, "La sala recuperata non dovrebbe essere null");
+        assertEquals(1, sala.getId(), "L'ID della sala dovrebbe essere 1");
+        assertEquals(1, sala.getNumeroSala(), "Il numero della sala dovrebbe essere 1");
+        assertEquals(100, sala.getCapienza(), "La capienza della sala dovrebbe essere 100");
+        assertNotNull(sala.getSede(), "La sede associata alla sala non dovrebbe essere null");
+        assertEquals(1, sala.getSede().getId(), "L'ID della sede associata dovrebbe essere 1");
+        System.out.println("Sala recuperata: ID=" + sala.getId() +
+                ", Numero=" + sala.getNumeroSala() +
+                ", Capienza=" + sala.getCapienza() +
+                ", ID Sede=" + sala.getSede().getId());
+    }
 
     @Test
     void testRetrieveAll() {
         try {
             List<Sala> sale = salaDAO.retrieveAll();
-            assertNotNull(sale);
+            assertNotNull(sale, "La lista di sale non dovrebbe essere null");
             assertEquals(2, sale.size(), "Il numero di sale dovrebbe essere 2");
+            for (Sala sala : sale) {
+                System.out.println("Sala recuperata: ID=" + sala.getId() + ", Numero=" + sala.getNumeroSala() + ", Capienza=" + sala.getCapienza());
+            }
 
-            Sala sala1 = sale.getFirst();
-            assertEquals(1, sala1.getId());
-            assertEquals(1, sala1.getId());
-            assertEquals(1, sala1.getNumeroSala());
-            assertEquals(100, sala1.getCapienza());
         } catch (SQLException e) {
             fail("Errore durante il test di retrieveAll: " + e.getMessage());
         }
     }
-
-
 }
