@@ -19,7 +19,6 @@ public class ProiezioneDAO {
     }
 
     public boolean create(Proiezione proiezione) {
-        System.out.println(proiezione);
         String insertProiezioneSql = "INSERT INTO proiezione (data, id_film, id_sala, id_orario) VALUES (?, ?, ?, ?)";
         String insertPostiProiezioneSql = """
         INSERT INTO posto_proiezione (id_sala, fila, numero, id_proiezione, stato)
@@ -31,7 +30,7 @@ public class ProiezioneDAO {
         try (Connection connection = ds.getConnection()) {
             connection.setAutoCommit(false);
 
-            // Retrieve all available slots
+            // Retrieve slot disponibili
             List<Slot> availableSlots = new ArrayList<>();
             try (PreparedStatement psGetSlots = connection.prepareStatement("SELECT id, ora_inizio FROM slot ORDER BY ora_inizio")) {
                 try (ResultSet rs = psGetSlots.executeQuery()) {

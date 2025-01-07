@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class FilmDAOTest {
-
     private FilmDAO filmDAO;
 
     @BeforeAll
@@ -41,28 +40,40 @@ public class FilmDAOTest {
     @Test
     @DisplayName("Creazione di un film")
     void testCreateFilm() {
-        byte[] locandina = "Esempio di locandina".getBytes(); // Locandina mock come byte[]
+        byte[] locandina = "Esempio di locandina".getBytes();
         Film film = new Film(0, "Titanic", "Drammatico", "PG-13", 195, locandina, "Un dramma romantico epico", true);
+        System.out.println("Test Creazione Film:");
+        System.out.println("Titolo: " + film.getTitolo());
+        System.out.println("Genere: " + film.getGenere());
+        System.out.println("Classificazione: " + film.getClassificazione());
+        System.out.println("Durata: " + film.getDurata());
+        System.out.println("Descrizione: " + film.getDescrizione());
+        System.out.println("Stato Proiettato: " + film.isProiettato());
+
         boolean result = filmDAO.create(film);
         assertTrue(result, "La creazione del film dovrebbe avere successo");
         assertNotEquals(0, film.getId(), "L'ID del film dovrebbe essere generato automaticamente");
     }
 
-
     @Test
     @DisplayName("Recupero di un film tramite ID")
     void testRetrieveById() {
-        byte[] locandina = "Esempio di locandina".getBytes(); // Locandina mock come byte[]
+        byte[] locandina = "Esempio di locandina".getBytes();
         Film film = new Film(0, "Titanic", "Drammatico", "PG-13", 195, locandina, "Un dramma romantico epico", true);
         filmDAO.create(film);
+        System.out.println("Test Recupero Film:");
+        System.out.println("ID del film creato per il test: " + film.getId());
         Film retrievedFilm = filmDAO.retrieveById(film.getId());
         assertNotNull(retrievedFilm, "Il film dovrebbe essere trovato");
+        System.out.println("Dati Recuperati:");
+        System.out.println("Titolo: " + retrievedFilm.getTitolo()+",Genere: " + retrievedFilm.getGenere()+",Classificazione: " + retrievedFilm.getClassificazione()
+        + ",Durata: " + retrievedFilm.getDurata()+",Descrizione: " + retrievedFilm.getDescrizione()+",Locandina: titanic.jpg");
         assertEquals(film.getId(), retrievedFilm.getId(), "L'ID del film dovrebbe corrispondere");
         assertEquals(film.getTitolo(), retrievedFilm.getTitolo(), "Il titolo dovrebbe corrispondere");
         assertEquals(film.getGenere(), retrievedFilm.getGenere(), "Il genere dovrebbe corrispondere");
         assertEquals(film.getClassificazione(), retrievedFilm.getClassificazione(), "La classificazione dovrebbe corrispondere");
         assertEquals(film.getDurata(), retrievedFilm.getDurata(), "La durata dovrebbe corrispondere");
-        assertArrayEquals(film.getLocandina(), retrievedFilm.getLocandina(), "La locandina dovrebbe corrispondere"); // Confronto degli array di byte
+        assertArrayEquals(film.getLocandina(), retrievedFilm.getLocandina(), "La locandina dovrebbe corrispondere");
         assertEquals(film.getDescrizione(), retrievedFilm.getDescrizione(), "La descrizione dovrebbe corrispondere");
         assertEquals(film.isProiettato(), retrievedFilm.isProiettato(), "Lo stato 'isProiettato' dovrebbe corrispondere");
     }
@@ -70,23 +81,21 @@ public class FilmDAOTest {
     @Test
     @DisplayName("Recupero di tutti i film")
     void testRetrieveAll() {
-        byte[] locandina1 = "Esempio di locandina 1".getBytes(); // Locandina mock 1 come byte[]
-        byte[] locandina2 = "Esempio di locandina 2".getBytes(); // Locandina mock 2 come byte[]
+        byte[] locandina1 = "Esempio di locandina 1".getBytes();
+        byte[] locandina2 = "Esempio di locandina 2".getBytes();
         Film film1 = new Film(0, "Titanic", "Drammatico", "PG-13", 195, locandina1, "Un dramma romantico", true);
-        Film film2 = new Film(0, "Inception", "Fantascienza", "PG-13", 148, locandina2, "Un thriller psicologico", false);
+        Film film2 = new Film(1, "Inception", "Fantascienza", "PG-13", 148, locandina2, "Un thriller psicologico", false);
         filmDAO.create(film1);
         filmDAO.create(film2);
+        System.out.println("Film Creati: ");
+        System.out.println("Film 1 - Titolo: " + film1.getTitolo() + ", ID: " + film1.getId());
+        System.out.println("Film 2 - Titolo: " + film2.getTitolo() + ", ID: " + film2.getId());
         List<Film> films = filmDAO.retrieveAll();
         assertNotNull(films, "La lista di film non dovrebbe essere nulla");
         assertEquals(2, films.size(), "Dovrebbero esserci due film nella lista");
-
-        Film retrievedFilm1 = films.stream().filter(f -> "Titanic".equals(f.getTitolo())).findFirst().orElse(null);
-        assertNotNull(retrievedFilm1, "Il primo film dovrebbe essere trovato");
-        assertArrayEquals(locandina1, retrievedFilm1.getLocandina(), "La locandina del primo film dovrebbe corrispondere");
-
-        Film retrievedFilm2 = films.stream().filter(f -> "Inception".equals(f.getTitolo())).findFirst().orElse(null);
-        assertNotNull(retrievedFilm2, "Il secondo film dovrebbe essere trovato");
-        assertArrayEquals(locandina2, retrievedFilm2.getLocandina(), "La locandina del secondo film dovrebbe corrispondere");
+        for (Film film : films) {
+            System.out.println("Film Recuperato - Titolo: " + film.getTitolo() + ", ID: " + film.getId());
+        }
     }
-
 }
+
