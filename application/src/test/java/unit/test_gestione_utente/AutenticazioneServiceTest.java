@@ -24,7 +24,6 @@ public class AutenticazioneServiceTest {
     }
 
     @Test
-    @DisplayName("TC01.1: Login riuscito")
     void testLoginSuccess() {
         String email = "test@test.com";
         String password = "Testing1!";
@@ -37,11 +36,10 @@ public class AutenticazioneServiceTest {
         assertNotNull(utente, "Il login dovrebbe avere successo");
         assertTrue(utente instanceof Cliente, "L'utente autenticato dovrebbe essere un Cliente");
         assertEquals(email, utente.getEmail(), "L'email non corrisponde");
-        System.out.println("Email:"+email + ", password:"+password);
+        System.out.println("Login riuscito: Email=" + email + ", Password=" + password);
     }
 
     @Test
-    @DisplayName("TC01.2: Login fallito - credenziali errate")
     void testLoginWrongPassword() {
         String email = "test@test.com";
         String wrongPassword = "12<345678>";
@@ -50,25 +48,24 @@ public class AutenticazioneServiceTest {
         Mockito.when(utenteDAOMock.retrieveByEmail(email)).thenReturn(mockUtente);
         Utente utente = autenticazioneService.login(email, wrongPassword);
         assertNull(utente, "Il login dovrebbe fallire con password errata");
-        System.out.println("Email:"+email + ", password:"+wrongPassword);
+        System.out.println("Login fallito: Email=" + email + ", Password=" + wrongPassword);
     }
 
     @Test
-    @DisplayName("TC01.3: Login fallito - utente non trovato")
     void testLoginUserNotFound() {
         String email = "pippo@pluto.com";
         String password = "Testing1!";
         Mockito.when(utenteDAOMock.retrieveByEmail(email)).thenReturn(null);
         Utente utente = autenticazioneService.login(email, password);
         assertNull(utente, "Il login dovrebbe fallire per utente non trovato");
-        System.out.println("Email:"+email + ", password:"+password);
+        System.out.println("Login fallito: Utente non trovato per Email=" + email + ", Password=" + password);
     }
 
     @Test
-    @DisplayName("Logout")
     void testLogout() {
         HttpSession sessionMock = Mockito.mock(HttpSession.class);
         autenticazioneService.logout(sessionMock);
         Mockito.verify(sessionMock).invalidate();
+        System.out.println("Logout eseguito: sessione invalidata");
     }
 }

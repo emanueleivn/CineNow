@@ -6,6 +6,7 @@ import it.unisa.application.model.entity.Film;
 import it.unisa.application.sottosistemi.gestione_catena.service.CatalogoService;
 import org.junit.jupiter.api.*;
 import unit.test_DAO.DatabaseSetupForTest;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -40,18 +41,7 @@ public class CatalogoServiceTest {
     @Test
     void testTitoloNonFornito() {
         String titolo = null;
-        System.out.println("Titolo: " + titolo);
-        byte[] locandina = "Esempio di locandina".getBytes();
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            catalogoService.addFilmCatalogo(titolo, 120, "Descrizione valida", locandina, "Fantascienza", "PG-13");
-        });
-        assertEquals("Parametri non validi per l'aggiunta del film.", exception.getMessage());
-    }
-
-    @Test
-    void testTitoloVuoto() {
-        String titolo = "";
-        System.out.println("Titolo: " + titolo);
+        System.out.println("Test Titolo Non Fornito: Titolo=" + titolo);
         byte[] locandina = "Esempio di locandina".getBytes();
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             catalogoService.addFilmCatalogo(titolo, 120, "Descrizione valida", locandina, "Fantascienza", "PG-13");
@@ -62,7 +52,7 @@ public class CatalogoServiceTest {
     @Test
     void testTitoloInvalido() {
         String titolo = "invalid<>title";
-        System.out.println("Titolo: " + titolo);
+        System.out.println("Test Titolo Invalido: Titolo=" + titolo);
         byte[] locandina = "Esempio di locandina".getBytes();
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             catalogoService.addFilmCatalogo(titolo, 120, "Descrizione valida", locandina, "Fantascienza", "PG-13");
@@ -73,7 +63,7 @@ public class CatalogoServiceTest {
     @Test
     void testDescrizioneVuota() {
         String descrizione = "";
-        System.out.println("Descrizione: " + descrizione);
+        System.out.println("Test Descrizione Vuota: Descrizione=" + descrizione);
         byte[] locandina = "Esempio di locandina".getBytes();
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             catalogoService.addFilmCatalogo("Titolo valido", 120, descrizione, locandina, "Fantascienza", "PG-13");
@@ -84,7 +74,7 @@ public class CatalogoServiceTest {
     @Test
     void testDescrizioneInvalida() {
         String descrizione = "descrizione<>nonvalida";
-        System.out.println("Descrizione: " + descrizione);
+        System.out.println("Test Descrizione Invalida: Descrizione=" + descrizione);
         byte[] locandina = "Esempio di locandina".getBytes();
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             catalogoService.addFilmCatalogo("Titolo valido", 120, descrizione, locandina, "Fantascienza", "PG-13");
@@ -95,7 +85,7 @@ public class CatalogoServiceTest {
     @Test
     void testDurataNonValida() {
         int durata = 0;
-        System.out.println("Durata: " + durata);
+        System.out.println("Test Durata Non Valida: Durata=" + durata);
         byte[] locandina = "Esempio di locandina".getBytes();
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             catalogoService.addFilmCatalogo("Titolo valido", durata, "Descrizione valida", locandina, "Fantascienza", "PG-13");
@@ -104,9 +94,27 @@ public class CatalogoServiceTest {
     }
 
     @Test
+    void testDurataNonSelezionata() {
+        System.out.println("Test Durata Non Selezionata: Durata= ");
+        byte[] locandina = "Esempio di locandina".getBytes();
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            catalogoService.addFilmCatalogo("Titolo valido", -1, "Descrizione valida", locandina, "Fantascienza", "PG-13");
+        });
+        assertEquals("Parametri non validi per l'aggiunta del film.", exception.getMessage());
+    }
+    @Test
+    void testLocandinaNonSInserita() {
+        System.out.println("Test Locandina Non Inserita: Locandina= null ");
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            catalogoService.addFilmCatalogo("Titolo valido", 50, "Descrizione valida", null, "Fantascienza", "PG-13");
+        });
+        assertEquals("Parametri non validi per l'aggiunta del film.", exception.getMessage());
+    }
+
+    @Test
     void testGenereNonSelezionato() {
         String genere = "";
-        System.out.println("Genere: " + genere);
+        System.out.println("Test Genere Non Selezionato: Genere=" + genere);
         byte[] locandina = "Esempio di locandina".getBytes();
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             catalogoService.addFilmCatalogo("Titolo valido", 120, "Descrizione valida", locandina, genere, "PG-13");
@@ -117,7 +125,7 @@ public class CatalogoServiceTest {
     @Test
     void testClassificazioneNonSelezionata() {
         String classificazione = "";
-        System.out.println("Classificazione: " + classificazione);
+        System.out.println("Test Classificazione Non Selezionata: Classificazione=" + classificazione);
         byte[] locandina = "Esempio di locandina".getBytes();
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             catalogoService.addFilmCatalogo("Titolo valido", 120, "Descrizione valida", locandina, "Fantascienza", classificazione);
@@ -133,12 +141,13 @@ public class CatalogoServiceTest {
         byte[] locandina = "Esempio di locandina".getBytes();
         String genere = "Fantascienza";
         String classificazione = "PG-13";
-        System.out.println("Titolo: " + titolo + ", Durata: " + durata + ", Locandina: locandina.jpg "+", Descrizione: " + descrizione + ", Genere: " + genere + ", Classificazione: " + classificazione);
+        System.out.println("Test Film Aggiunto Con Successo: Titolo=" + titolo + ", Durata=" + durata + ", Genere=" + genere + ", Classificazione=" + classificazione);
         catalogoService.addFilmCatalogo(titolo, durata, descrizione, locandina, genere, classificazione);
         List<Film> catalogo = catalogoService.getCatalogo();
         assertNotNull(catalogo, "Il catalogo non dovrebbe essere null");
         assertEquals(1, catalogo.size(), "Il catalogo dovrebbe contenere un film");
         Film film = catalogo.getFirst();
+        System.out.println("Film aggiunto: Titolo=" + film.getTitolo() + ", Durata=" + film.getDurata() + ", Genere=" + film.getGenere() + ", Classificazione=" + film.getClassificazione());
         assertEquals(titolo, film.getTitolo(), "Il titolo del film non corrisponde");
         assertEquals(durata, film.getDurata(), "La durata del film non corrisponde");
         assertEquals(descrizione, film.getDescrizione(), "La descrizione del film non corrisponde");

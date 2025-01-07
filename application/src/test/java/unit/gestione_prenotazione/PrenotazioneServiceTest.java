@@ -61,7 +61,7 @@ class PrenotazioneServiceTest {
         List<PostoProiezione> posti = Arrays.asList(postoProiezione1, postoProiezione2);
         when(prenotazioneDAOMock.create(any(Prenotazione.class))).thenAnswer(invocation -> {
             Prenotazione prenotazioneArg = invocation.getArgument(0);
-            prenotazioneArg.setId(100); // Simula l'assegnazione dell'ID durante la creazione
+            prenotazioneArg.setId(100);
             return true;
         });
         when(postoProiezioneDAOMock.occupaPosto(any(PostoProiezione.class), eq(100))).thenReturn(true);
@@ -70,12 +70,15 @@ class PrenotazioneServiceTest {
         assertEquals(cliente, result.getCliente());
         assertEquals(proiezione, result.getProiezione());
         assertEquals(posti, result.getPostiPrenotazione());
+        System.out.println("Prenotazione creata: Cliente=" + cliente.getEmail() + ", Proiezione ID=" + proiezione.getId() + ", ID Prenotazione=" + result.getId());
+        posti.forEach(p -> System.out.println("Posto prenotato: Sala ID=" + p.getPosto().getSala().getId() + ", Fila=" + p.getPosto().getFila() + ", Numero=" + p.getPosto().getNumero()));
         verify(prenotazioneDAOMock).create(any(Prenotazione.class));
         verify(postoProiezioneDAOMock, times(2)).occupaPosto(any(PostoProiezione.class), eq(100));
     }
 
     @Test
-    void testAggiungiOrdineFailureOnPrenotazione() {
+    void testAggiungiOrdineFallimento() {
+        System.out.println("Test fallimento causa proiezione");
         Cliente cliente = new Cliente("test@example.com", "password", "Mario", "Rossi");
         Proiezione proiezione = new Proiezione();
         proiezione.setId(1);
@@ -84,18 +87,18 @@ class PrenotazioneServiceTest {
         Posto posto = new Posto(sala, 'A', 1);
         PostoProiezione postoProiezione = new PostoProiezione(posto, proiezione);
         List<PostoProiezione> posti = Collections.singletonList(postoProiezione);
-
         when(prenotazioneDAOMock.create(any(Prenotazione.class))).thenReturn(false);
-
         assertThrows(RuntimeException.class, () ->
                 prenotazioneService.aggiungiOrdine(cliente, posti, proiezione)
         );
+        System.out.println("Tentativo di creare prenotazione fallito: Cliente=" + cliente.getEmail() + ", Proiezione ID=" + proiezione.getId());
         verify(prenotazioneDAOMock).create(any(Prenotazione.class));
         verifyNoInteractions(postoProiezioneDAOMock);
     }
 
     @Test
-    void testAggiungiOrdineFailureOnPosto() {
+    void testAggiungiOrdineFailure() {
+        System.out.println("Test fallimento causa posti");
         Cliente cliente = new Cliente("test@example.com", "password", "Mario", "Rossi");
         Proiezione proiezione = new Proiezione();
         proiezione.setId(1);
@@ -113,12 +116,41 @@ class PrenotazioneServiceTest {
         assertThrows(RuntimeException.class, () ->
                 prenotazioneService.aggiungiOrdine(cliente, posti, proiezione)
         );
+        System.out.println("Tentativo di occupare posto fallito: Sala ID=" + posto.getSala().getId() + ", Fila=" + posto.getFila() + ", Numero=" + posto.getNumero());
         verify(prenotazioneDAOMock).create(any(Prenotazione.class));
         verify(postoProiezioneDAOMock).occupaPosto(any(PostoProiezione.class), eq(100));
     }
+    @Test
+    void testAggiungiOrdineFailurePostiOccupati() {
+        Cliente cliente = new Cliente("test@example.com", "password", "Mario", "Rossi");
+        Proiezione proiezione = new Proiezione();
+        proiezione.setId(1);
+        Sala sala = new Sala();
+        sala.setId(1);
+        System.out.println("posti occupati per il testing: A1,A2");
+        Posto posto1 = new Posto(sala, 'A', 1);
+        Posto posto2 = new Posto(sala, 'A', 2);
+        PostoProiezione postoProiezione1 = new PostoProiezione(posto1, proiezione);
+        PostoProiezione postoProiezione2 = new PostoProiezione(posto2, proiezione);
+        postoProiezione1.setStato(false);
+        postoProiezione2.setStato(false);
+        List<PostoProiezione> posti = Arrays.asList(postoProiezione1, postoProiezione2);
+        when(postoProiezioneDAOMock.retrieveAllByProiezione(proiezione)).thenReturn(posti);
+        assertThrows(RuntimeException.class, () ->
+                prenotazioneService.aggiungiOrdine(cliente, posti, proiezione)
+        );
+
+        System.out.println("Tentativo di prenotazione fallito: Posti già occupati per Proiezione ID=" + proiezione.getId());
+        posti.forEach(p -> System.out.println("Posto occupato: Sala ID=" + p.getPosto().getSala().getId() +
+                ", Fila=" + p.getPosto().getFila() +
+                ", Numero=" + p.getPosto().getNumero()));
+
+        verify(prenotazioneDAOMock, never()).create(any(Prenotazione.class));
+        verifyNoInteractions(postoProiezioneDAOMock);
+    }
 
     @Test
-    void testOttieniPostiProiezione() {
+    void testOttienimentoPostiProiezione() {
         Proiezione proiezione = new Proiezione();
         proiezione.setId(1);
         Sala sala = new Sala();
@@ -133,6 +165,8 @@ class PrenotazioneServiceTest {
         assertNotNull(result);
         assertEquals(2, result.size());
         assertEquals(posti, result);
+        System.out.println("Posti recuperati per Proiezione ID=" + proiezione.getId());
+        posti.forEach(p -> System.out.println("Posto: Sala ID=" + p.getPosto().getSala().getId() + ", Fila=" + p.getPosto().getFila() + ", Numero=" + p.getPosto().getNumero()));
         verify(postoProiezioneDAOMock).retrieveAllByProiezione(proiezione);
     }
 }

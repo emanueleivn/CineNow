@@ -25,7 +25,11 @@ public class PrenotazioneService {
         if (cliente == null || posti == null || posti.isEmpty() || proiezione == null) {
             throw new IllegalArgumentException("Cliente, posti e proiezione non possono essere null.");
         }
-
+        for (PostoProiezione postoProiezione : posti) {
+            if (!postoProiezione.isStato()) {
+                throw new IllegalArgumentException("Posti occupati");
+            }
+        }
         Prenotazione prenotazione = new Prenotazione();
         prenotazione.setCliente(cliente);
         prenotazione.setProiezione(proiezione);

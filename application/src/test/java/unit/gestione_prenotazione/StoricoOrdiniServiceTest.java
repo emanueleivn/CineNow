@@ -34,27 +34,30 @@ class StoricoOrdiniServiceTest {
         List<Prenotazione> expectedPrenotazioni = Arrays.asList(prenotazione1, prenotazione2);
         when(prenotazioneDAOMock.retrieveAllByCliente(cliente)).thenReturn(expectedPrenotazioni);
         List<Prenotazione> result = storicoOrdiniService.storicoOrdini(cliente);
-        assertNotNull(result, "Result should not be null");
-        assertEquals(2, result.size(), "The size of the result should match expected");
-        assertEquals(expectedPrenotazioni, result, "The returned list should match the expected list");
+        assertNotNull(result, "La lista di risultati non dovrebbe essere null");
+        assertEquals(2, result.size(), "La dimensione della lista dovrebbe essere 2");
+        assertEquals(expectedPrenotazioni, result, "La lista restituita dovrebbe corrispondere a quella attesa");
+        System.out.println("Storico ordini per Cliente=" + cliente.getEmail());
+        result.forEach(p -> System.out.println("Prenotazione ID=" + p.getId()));
         verify(prenotazioneDAOMock).retrieveAllByCliente(cliente);
         verifyNoMoreInteractions(prenotazioneDAOMock);
     }
-
 
     @Test
     void testStoricoOrdiniEmpty() {
         Cliente cliente = new Cliente("test@example.com", "password", "Mario", "Rossi");
         when(prenotazioneDAOMock.retrieveAllByCliente(cliente)).thenReturn(Collections.emptyList());
         List<Prenotazione> result = storicoOrdiniService.storicoOrdini(cliente);
-        assertNotNull(result);
-        assertTrue(result.isEmpty());
+        assertNotNull(result, "La lista di risultati non dovrebbe essere null");
+        assertTrue(result.isEmpty(), "La lista dovrebbe essere vuota");
+        System.out.println("Storico ordini vuoto per Cliente=" + cliente.getEmail());
         verify(prenotazioneDAOMock).retrieveAllByCliente(cliente);
     }
 
     @Test
     void testStoricoOrdiniNullCliente() {
         assertThrows(IllegalArgumentException.class, () -> storicoOrdiniService.storicoOrdini(null));
+        System.out.println("Tentativo di recuperare storico ordini con Cliente=null");
         verifyNoInteractions(prenotazioneDAOMock);
     }
 }
