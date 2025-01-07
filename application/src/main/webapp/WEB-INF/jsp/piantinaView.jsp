@@ -145,6 +145,7 @@
     const totalPriceEl = document.getElementById('totalPrice');
     const totalPriceInput = document.getElementById('totalPriceInput');
     const selectedPostiInput = document.getElementById('selectedPostiInput');
+    const checkoutButton = document.querySelector('#checkoutForm button[type="submit"]');
 
     function updateSummary() {
         totalPriceEl.textContent = total;
@@ -177,6 +178,13 @@
         total = 0;
         updateSummary();
     }
+
+    checkoutButton.addEventListener('click', function(event) {
+        if (selectedSeats.length === 0) {
+            event.preventDefault();
+            alert("Devi selezionare almeno un posto prima di procedere al checkout.");
+        }
+    });
 </script>
 
 </body>
