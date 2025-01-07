@@ -103,7 +103,7 @@ public class PrenotazioneDAO {
                     );
 
                     Sala sala = new Sala();
-                    sala.setId(rs.getInt("sala_id"));
+                    sala.setId(rs.getInt("id_sala"));
                     sala.setNumeroSala(rs.getInt("numero_sala"));
                     SedeDAO sedeDAO = new SedeDAO();
                     SalaDAO salaDAO = new SalaDAO();
@@ -136,7 +136,6 @@ public class PrenotazioneDAO {
                     prenotazione.getPostiProiezione().add(postoProiezione);
                 }
             }
-
             prenotazioni.addAll(prenotazioneMap.values());
         } catch (SQLException e) {
             e.printStackTrace();

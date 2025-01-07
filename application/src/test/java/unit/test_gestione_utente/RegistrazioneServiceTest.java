@@ -25,7 +25,7 @@ class RegistrazioneServiceTest {
 
     @Test
     void testEmailFormatoNonValido() {
-        Cliente result = registrazioneService.registrazione("example@<>", "Password123!", "Mario", "Rossi");
+        Cliente result = registrazioneService.registrazione("example@it", "Password123!", "Mario", "Rossi");
         assertNull(result, "Registrazione dovrebbe fallire per email in formato errato");
         System.out.println("Email: example@<> , password: Password123!, nome: Mario, cognome: Rossi");
     }
@@ -50,38 +50,53 @@ class RegistrazioneServiceTest {
 
     @Test
     void testPasswordFormatoNonValido() {
-        Cliente result = registrazioneService.registrazione("test@example.com", "short", "Mario", "Rossi");
+        Cliente result = registrazioneService.registrazione("test@example.com", "pass<", "Mario", "Rossi");
         assertNull(result, "Registrazione dovrebbe fallire per password in formato errato");
+        System.out.println("Email: test@example.com, password: pass<, nome: Mario, cognome: Rossi");
     }
 
     @Test
     void testPasswordNonFornita() {
         Cliente result = registrazioneService.registrazione("test@example.com", null, "Mario", "Rossi");
+        Cliente result1 = registrazioneService.registrazione("test@example.com", "", "Mario", "Rossi");
         assertNull(result, "Registrazione dovrebbe fallire per password mancante");
+        assertNull(result1, "Registrazione dovrebbe fallire per password mancante");
+        System.out.println("Email: test@example.com, password: pass<, nome: Mario, cognome: Rossi");
+        System.out.println("Email: test@example.com, password: \"\", nome: Mario, cognome: Rossi");
     }
 
     @Test
     void testNomeFormatoNonValido() {
-        Cliente result = registrazioneService.registrazione("test@example.com", "Password123!", "<", "Rossi");
+        Cliente result = registrazioneService.registrazione("test@example.com", "Password123!", "Mario<", "Rossi");
         assertNull(result, "Registrazione dovrebbe fallire per nome in formato errato");
+        System.out.println("Email: test@example.com, password: Password123!, nome: <, cognome: Rossi");
     }
 
     @Test
     void testNomeNonFornito() {
         Cliente result = registrazioneService.registrazione("test@example.com", "Password123!", null, "Rossi");
+        Cliente result1 = registrazioneService.registrazione("test@example.com", "Password123!", "", "Rossi");
         assertNull(result, "Registrazione dovrebbe fallire per nome mancante");
+        assertNull(result1, "Registrazione dovrebbe fallire per nome mancante");
+        System.out.println("Email: test@example.com, password: Password123!, nome: null, cognome: Rossi");
+        System.out.println("Email: test@example.com, password: Password123!, nome: \" \", cognome: Rossi");
     }
 
     @Test
     void testCognomeFormatoNonValido() {
-        Cliente result = registrazioneService.registrazione("test@example.com", "Password123!", "Mario", " ");
+        Cliente result = registrazioneService.registrazione("test@example.com", "Password123!", "Mario", "Rossi<");
         assertNull(result, "Registrazione dovrebbe fallire per cognome in formato errato");
+        System.out.println("Email: test@example.com, password: Password123!, nome: Mario, cognome: Rossi<");
     }
 
     @Test
     void testCognomeNonFornito() {
         Cliente result = registrazioneService.registrazione("test@example.com", "Password123!", "Mario", null);
+        Cliente result1 = registrazioneService.registrazione("test@example.com", "Password123!", "Mario", "");
         assertNull(result, "Registrazione dovrebbe fallire per cognome mancante");
+        assertNull(result1, "Registrazione dovrebbe fallire per cognome mancante");
+        System.out.println("Email: test@example.com, password: Password123!, nome: Mario, cognome: null");
+        System.out.println("Email: test@example.com, password: Password123!, nome: Mario, cognome: \" \"");
     }
 
     @Test
@@ -93,5 +108,6 @@ class RegistrazioneServiceTest {
         assertEquals("test@example.com", result.getEmail(), "L'email registrata non corrisponde");
         assertEquals("Mario", result.getNome(), "Il nome registrato non corrisponde");
         assertEquals("Rossi", result.getCognome(), "Il cognome registrato non corrisponde");
+        System.out.println("Email: test@example.com, password: ValidPassword123!, nome: Mario, cognome: Rossi");
     }
 }
