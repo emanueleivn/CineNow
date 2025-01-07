@@ -10,7 +10,16 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ProgrammazioneService {
-    private final ProiezioneDAO proiezioneDAO = new ProiezioneDAO();
+    private ProiezioneDAO proiezioneDAO;
+
+    //Costruttore per il testing
+    public ProgrammazioneService(ProiezioneDAO proiezioneDAOMock) {
+        this.proiezioneDAO = proiezioneDAOMock;
+    }
+
+    public ProgrammazioneService() {
+        this.proiezioneDAO = new ProiezioneDAO();
+    }
 
     public boolean aggiungiProiezione(int filmId, int salaId, List<Integer> slotIds, LocalDate data) {
         try {
@@ -26,6 +35,9 @@ public class ProgrammazioneService {
             }
             if (sala == null) {
                 throw new RuntimeException("Sala non trovata.");
+            }
+            if(data.isBefore(LocalDate.now())){
+                throw new RuntimeException("Errore data.");
             }
             List<Slot> slotsDisponibili = slotDAO.retrieveAllSlots();
             List<Slot> slotsSelezionati = slotsDisponibili.stream()
