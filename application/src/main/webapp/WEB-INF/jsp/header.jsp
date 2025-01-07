@@ -19,7 +19,7 @@
     border: none;
 }">
         <div class="container-fluid">
-            <a href="<%= request.getContextPath() %>/index.jsp" class="nav-link navbar-brand text-danger fw-bold ms-3"><img src="static/images/scritta%20sito.png"
+            <a href="<%= request.getContextPath() %>/Home" class="nav-link navbar-brand text-danger fw-bold ms-3"><img src="static/images/scritta%20sito.png"
                                                                      alt="CineNow" class="ms-3"
                                                                      style="height: 70px;"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
