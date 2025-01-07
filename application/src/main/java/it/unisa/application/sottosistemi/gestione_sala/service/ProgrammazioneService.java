@@ -37,7 +37,6 @@ public class ProgrammazioneService {
                 throw new RuntimeException("Nessuno slot valido selezionato.");
             }
             Slot primoSlot = slotsSelezionati.getFirst();
-            System.out.println(primoSlot);
             Proiezione proiezione = new Proiezione();
             proiezione.setFilmProiezione(film);
             proiezione.setSalaProiezione(sala);

@@ -281,8 +281,8 @@
   </div>
 
   <button type="submit">Aggiungi Proiezione</button>
+  <button type="button" onclick="window.location.href='<%= request.getContextPath() %>/gestioneProgrammazione?sedeId=<%= request.getAttribute("sedeId") %>'" style="margin-top: 5px">Annulla</button>
 </form>
-
 <footer>
   <jsp:include page="/WEB-INF/jsp/footer.jsp"/>
 </footer>
