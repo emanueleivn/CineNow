@@ -1,10 +1,9 @@
-package unit.test_gestione_accesso;
+package unit.test_gestione_utente;
 
 import it.unisa.application.model.entity.Cliente;
 import it.unisa.application.sottosistemi.gestione_utente.service.RegistrazioneService;
 import it.unisa.application.model.dao.ClienteDAO;
 import it.unisa.application.model.dao.UtenteDAO;
-import it.unisa.application.utilities.PasswordHash;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 

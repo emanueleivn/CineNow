@@ -66,6 +66,7 @@
     </select>
 
     <button type="submit" class="btn">Salva Film</button>
+    <button type="button" onclick="window.location.href='<%= request.getContextPath() %>/catalogo'" style="margin-top: 5px">Annulla</button>
   </form>
 </div>
 

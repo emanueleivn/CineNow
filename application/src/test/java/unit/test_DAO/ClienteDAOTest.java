@@ -39,8 +39,7 @@ public class ClienteDAOTest {
     void testCreateCliente() {
         String uniqueEmail = "cliente_" + System.currentTimeMillis() + "@example.com";
         Cliente cliente = new Cliente(uniqueEmail, "hashedPassword", "Mario", "Rossi");
-        assertTrue(clienteDAO.create(cliente), "Creazione cliente fallita");
-        System.out.println("Cliente creato" + cliente);
+        assertTrue(clienteDAO.create(cliente), "Creazione cliente");
     }
 
     @Test
@@ -49,12 +48,10 @@ public class ClienteDAOTest {
         String uniqueEmail = "cliente_" + System.currentTimeMillis() + "@example.com";
         Cliente cliente = new Cliente(uniqueEmail, "hashedPassword", "Mario", "Rossi");
         clienteDAO.create(cliente);
-
         Cliente retrieved = clienteDAO.retrieveByEmail(uniqueEmail, "hashedPassword");
         assertNotNull(retrieved, "Il cliente non è stato trovato");
         assertEquals(uniqueEmail, retrieved.getEmail(), "Email non corrispondente");
         assertEquals("Mario", retrieved.getNome(), "Nome non corrispondente");
         assertEquals("Rossi", retrieved.getCognome(), "Cognome non corrispondente");
-        System.out.println("Cliente recuperato" + retrieved);
     }
 }

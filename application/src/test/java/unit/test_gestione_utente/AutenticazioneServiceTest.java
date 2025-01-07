@@ -1,4 +1,4 @@
-package unit.test_gestione_accesso;
+package unit.test_gestione_utente;
 
 import static org.junit.jupiter.api.Assertions.*;
 import it.unisa.application.model.dao.ClienteDAO;
@@ -40,7 +40,7 @@ public class AutenticazioneServiceTest {
     }
 
     @Test
-    @DisplayName("TC01.2: Login fallito - password errata")
+    @DisplayName("TC01.2: Login fallito - credenziali errate")
     void testLoginWrongPassword() {
         String email = "test@test.com";
         String wrongPassword = "12345678";
