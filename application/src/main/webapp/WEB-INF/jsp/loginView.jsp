@@ -15,11 +15,11 @@
         }
 
         a:hover {
-            color: coral; /* Cambia colore a corallo quando l'utente passa il mouse sopra */
+            color: coral;
         }
 
         a:focus, a:active {
-            color: coral; /* Cambia colore a corallo quando il link è attivo o selezionato */
+            color: coral;
         }
 
     </style>

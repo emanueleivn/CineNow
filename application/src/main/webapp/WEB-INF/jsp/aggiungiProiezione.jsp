@@ -180,13 +180,13 @@
                     const $row = $tbody.find("tr").eq(startRow + i);
                     const $slot = $row.find("td").eq(colIndex);
 
-                    // Ignorare gli slot oltre l'orario massimo (es. 22:00)
+                    // Ignora gli slot oltre l'orario massimo (es. 22:00)
                     if ($slot.length === 0) {
                       slotsUsed++;
                       continue;
                     }
 
-                    // Bloccare se lo slot non è disponibile
+
                     if ($slot.hasClass("slot-unavailable")) {
                       validSelection = false;
                       break;
@@ -199,7 +199,7 @@
                   $(".error-msg").remove();
                   if (!validSelection || slotsUsed < blocchi) {
                     $("#calendar-container").after("<p class='error-msg'>Non ci sono abbastanza slot disponibili per questa proiezione.</p>");
-                    $(".slot-selected").removeClass("slot-selected"); // Rimuove selezioni non valide
+                    $(".slot-selected").removeClass("slot-selected");
                   }
                 });
               } else {
