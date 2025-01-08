@@ -1,55 +1,31 @@
-package unit.test_gestione_sede;
+package integration.gestione_sede;
 
 import it.unisa.application.database_connection.DataSourceSingleton;
-import it.unisa.application.model.dao.ProiezioneDAO;
-import it.unisa.application.model.dao.SedeDAO;
 import it.unisa.application.model.entity.Film;
 import it.unisa.application.model.entity.Proiezione;
-import it.unisa.application.model.entity.Sala;
 import it.unisa.application.model.entity.Sede;
-import it.unisa.application.model.entity.Slot;
 import it.unisa.application.sottosistemi.gestione_sede.service.ProgrammazioneSedeService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import unit.test_DAO.DatabaseSetupForTest;
-
 import java.sql.Connection;
 import java.sql.Statement;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
-class ProgrammazioneSedeServiceTest {
-
-    @InjectMocks
-    private ProgrammazioneSedeService service;
-
-    @Mock
-    private ProiezioneDAO proiezioneDAOMock;
-
-    @Mock
-    private SedeDAO sedeDAOMock;
+class ProgrammazioneSedeServiceIntegrationTest {
+    private static ProgrammazioneSedeService service;
 
     @BeforeAll
     static void setUpDatabase() {
         DatabaseSetupForTest.configureH2DataSource();
+        service = new ProgrammazioneSedeService();
     }
 
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-        populateDatabase();
-    }
-
-    private void populateDatabase() {
+    void populateDatabase() {
         try (Connection connection = DataSourceSingleton.getInstance().getConnection();
              Statement statement = connection.createStatement()) {
             String dataInsertScript = """
@@ -59,7 +35,7 @@ class ProgrammazioneSedeServiceTest {
                 DELETE FROM sede;
                 DELETE FROM slot;
 
-                INSERT INTO sede (id, nome, via, città, cap) VALUES (1, 'Movieplex', 'Via Roma', 'Napoli', '80100');
+                INSERT INTO sede (id, nome, via, città, cap) VALUES (1, 'Cinema Centrale', 'Via Roma', 'Napoli', '80100');
                 INSERT INTO sala (id, id_sede, numero, capienza) VALUES (1, 1, 1, 100);
                 INSERT INTO film (id, titolo, genere, classificazione, durata, descrizione, is_proiettato)
                 VALUES (1, 'Avatar', 'Sci-fi', 'T', 180, 'Film di fantascienza', TRUE),
@@ -78,57 +54,54 @@ class ProgrammazioneSedeServiceTest {
 
     @Test
     void testGetProgrammazione() {
+        System.out.println("Recupero programmazione per sede ID=1.");
         int sedeId = 1;
-        LocalDate today = LocalDate.now();
-        List<Proiezione> proiezioniMock = Arrays.asList(
-                new Proiezione(1, new Sala(1), new Film(1, "Avatar", "Sci-fi", "T", 180, null, "Film di fantascienza", true), today.plusDays(1), null, new Slot(1)),
-                new Proiezione(2, new Sala(1), new Film(2, "Inception", "Thriller", "T", 148, null, "Film sui sogni", true), today.plusDays(2), null, new Slot(2))
-        );
-        when(proiezioneDAOMock.retrieveAllBySede(sedeId)).thenReturn(proiezioniMock);
         List<Proiezione> programmazione = service.getProgrammazione(sedeId);
+        System.out.println("Numero proiezioni trovate: " + programmazione.size());
+        programmazione.forEach(proiezione ->
+                System.out.println("Proiezione - Film: " + proiezione.getFilmProiezione().getTitolo() +
+                        ", Sala: " + proiezione.getSalaProiezione().getNumeroSala() +
+                        ", Data: " + proiezione.getDataProiezione())
+        );
+
         assertNotNull(programmazione, "La programmazione non dovrebbe essere null.");
         assertEquals(2, programmazione.size(), "La programmazione dovrebbe contenere 2 proiezioni.");
         assertTrue(programmazione.stream().anyMatch(p -> p.getFilmProiezione().getTitolo().equals("Avatar")),
                 "La programmazione dovrebbe includere 'Avatar'.");
-        System.out.println("Proiezioni trovate: " + programmazione);
     }
 
     @Test
     void testGetProiezioniFilm() {
+        System.out.println("Recupero proiezioni del film 'Avatar' nella sede ID=1.");
         int filmId = 1;
         int sedeId = 1;
-        LocalDate today = LocalDate.now();
-        List<Proiezione> proiezioniMock = Collections.singletonList(
-                new Proiezione(1, new Sala(1), new Film(filmId, "Avatar", "Sci-fi", "T", 180, null, "Film di fantascienza", true), today.plusDays(1), null, new Slot(1))
-        );
-        when(proiezioneDAOMock.retrieveByFilm(new Film(filmId), new Sede(sedeId))).thenReturn(proiezioniMock);
         List<Proiezione> proiezioniFilm = service.getProiezioniFilm(filmId, sedeId);
-        assertNotNull(proiezioniFilm, "Le proiezioni non dovrebbero essere null.");
-        assertEquals(1, proiezioniFilm.size(), "Dovrebbe esserci una sola proiezione per il film.");
-        assertEquals("Avatar", proiezioniFilm.get(0).getFilmProiezione().getTitolo(),
+        System.out.println("Proiezioni trovate per il film: " + proiezioniFilm.size());
+        proiezioniFilm.forEach(proiezione ->
+                System.out.println("Proiezione - Film: " + proiezione.getFilmProiezione().getTitolo() +
+                        ", Data: " + proiezione.getDataProiezione())
+        );
+        assertNotNull(proiezioniFilm, "Le proiezioni del film non dovrebbero essere null.");
+        assertEquals(1, proiezioniFilm.size(), "Dovrebbe esserci una proiezione per il film 'Avatar'.");
+        assertEquals("Avatar", proiezioniFilm.getFirst().getFilmProiezione().getTitolo(),
                 "Il titolo del film dovrebbe essere 'Avatar'.");
-        System.out.println("Proiezioni trovate: " + proiezioniFilm);
     }
 
     @Test
     void testGetCatalogoSede() {
+        System.out.println("Recupero catalogo per la sede 'Movieplex'.");
         Sede sede = new Sede(1, "Cinema Centrale", "Via Roma");
-        List<Film> catalogoMock = Arrays.asList(
-                new Film(1, "Avatar", "Sci-fi", "T", 180, null, "Film di fantascienza", true),
-                new Film(2, "Inception", "Thriller", "T", 148, null, "Film sui sogni", true)
-        );
-        try {
-            when(sedeDAOMock.retrieveFilm(sede.getId())).thenReturn(catalogoMock);
-        } catch (Exception e) {
-            fail("Errore durante la configurazione del mock.");
-        }
         List<Film> catalogo = service.getCatalogoSede(sede);
+        System.out.println("Film trovati nel catalogo: " + catalogo.size());
+        catalogo.forEach(film ->
+                System.out.println("Film - Titolo: " + film.getTitolo() + ", Genere: " + film.getGenere())
+        );
         assertNotNull(catalogo, "Il catalogo non dovrebbe essere null.");
         assertEquals(2, catalogo.size(), "Il catalogo dovrebbe contenere 2 film.");
         assertTrue(catalogo.stream().anyMatch(f -> f.getTitolo().equals("Avatar")),
                 "Il catalogo dovrebbe includere 'Avatar'.");
         assertTrue(catalogo.stream().anyMatch(f -> f.getTitolo().equals("Inception")),
                 "Il catalogo dovrebbe includere 'Inception'.");
-        System.out.println("Film trovati nel catalogo: " + catalogo);
     }
 }
+

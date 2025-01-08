@@ -24,6 +24,7 @@ class RegistrazioneServiceIntegrationTest {
     @BeforeAll
     void setupDatabase() {
         DatabaseSetupForTest.configureH2DataSource();
+        System.out.println("Setup iniziale del database completato.");
     }
 
     @BeforeEach
@@ -41,8 +42,10 @@ class RegistrazioneServiceIntegrationTest {
 
     @Test
     void testInvalidEmailFormat() {
+        System.out.println("Email di test = example@<>");
         Cliente result = registrazioneService.registrazione("example@<>", "Password123!", "Mario", "Rossi");
-        assertNull(result, "Registrazione dovrebbe fallire per email in formato errato");
+        assertNull(result, "Registrazione dovrebbe fallire per email in formato errato.");
+        System.out.println("Registrazione fallita come previsto.");
     }
 
     @Test
@@ -55,58 +58,77 @@ class RegistrazioneServiceIntegrationTest {
         } catch (SQLException e) {
             fail("Errore durante l'inserimento dei dati di test: " + e.getMessage());
         }
+        System.out.println("Inserimento utente: Email=" + email+", Password=" + "Password123!");
+        System.out.println("Email di test. Email=" + email);
         Cliente result = registrazioneService.registrazione(email, "Password123!", "Mario", "Rossi");
-        assertNull(result, "Registrazione dovrebbe fallire per email già registrata");
+        assertNull(result, "Registrazione dovrebbe fallire per email già registrata.");
+        System.out.println("Registrazione fallita come previsto.");
     }
 
     @Test
     void testEmailNotProvided() {
+        System.out.println("Email di test. Email=");
         Cliente result = registrazioneService.registrazione(null, "Password123!", "Mario", "Rossi");
-        assertNull(result, "Registrazione dovrebbe fallire per email mancante");
+        assertNull(result, "Registrazione dovrebbe fallire per email mancante.");
+        System.out.println("Registrazione fallita come previsto.");
     }
 
     @Test
     void testInvalidPasswordFormat() {
-        Cliente result = registrazioneService.registrazione("test@example.com", "short", "Mario", "Rossi");
-        assertNull(result, "Registrazione dovrebbe fallire per password in formato errato");
+        System.out.println("Password di test = pass<");
+        Cliente result = registrazioneService.registrazione("test@example.com", "pass<", "Mario", "Rossi");
+        assertNull(result, "Registrazione dovrebbe fallire per password in formato errato.");
+        System.out.println("Registrazione fallita come previsto.");
     }
 
     @Test
     void testPasswordNotProvided() {
+        System.out.println("PAssword di test. Password=");
         Cliente result = registrazioneService.registrazione("test@example.com", null, "Mario", "Rossi");
-        assertNull(result, "Registrazione dovrebbe fallire per password mancante");
+        assertNull(result, "Registrazione dovrebbe fallire per password mancante.");
+        System.out.println("Test completato: Registrazione fallita come previsto.");
     }
 
     @Test
     void testInvalidNameFormat() {
+        System.out.println("Nome di test. Nome=<");
         Cliente result = registrazioneService.registrazione("test@example.com", "Password123!", "<", "Rossi");
-        assertNull(result, "Registrazione dovrebbe fallire per nome in formato errato");
+        assertNull(result, "Registrazione dovrebbe fallire per nome in formato errato.");
+        System.out.println("Registrazione fallita come previsto.");
     }
 
     @Test
     void testNameNotProvided() {
+        System.out.println("Nome di test. Nome=");
         Cliente result = registrazioneService.registrazione("test@example.com", "Password123!", null, "Rossi");
-        assertNull(result, "Registrazione dovrebbe fallire per nome mancante");
+        assertNull(result, "Registrazione dovrebbe fallire per nome mancante.");
+        System.out.println("Registrazione fallita come previsto.");
     }
 
     @Test
     void testInvalidSurnameFormat() {
-        Cliente result = registrazioneService.registrazione("test@example.com", "Password123!", "Mario", " ");
-        assertNull(result, "Registrazione dovrebbe fallire per cognome in formato errato");
+        System.out.println("Cognome di test. Cognome=<");
+        Cliente result = registrazioneService.registrazione("test@example.com", "Password123!", "Mario", "<");
+        assertNull(result, "Registrazione dovrebbe fallire per cognome in formato errato.");
+        System.out.println("Registrazione fallita come previsto.");
     }
 
     @Test
     void testSurnameNotProvided() {
+        System.out.println("Cognome di test. Cognome=");
         Cliente result = registrazioneService.registrazione("test@example.com", "Password123!", "Mario", null);
-        assertNull(result, "Registrazione dovrebbe fallire per cognome mancante");
+        assertNull(result, "Registrazione dovrebbe fallire per cognome mancante.");
+        System.out.println("Registrazione fallita come previsto.");
     }
 
     @Test
     void testSuccessfulRegistration() {
+        System.out.println("Utente di test. Email=test@example.com ,Password=ValidPassword123!, Nome=Mario, Cognome=Rossi");
         Cliente result = registrazioneService.registrazione("test@example.com", "ValidPassword123!", "Mario", "Rossi");
-        assertNotNull(result, "Registrazione dovrebbe avere successo");
-        assertEquals("test@example.com", result.getEmail(), "L'email registrata non corrisponde");
-        assertEquals("Mario", result.getNome(), "Il nome registrato non corrisponde");
-        assertEquals("Rossi", result.getCognome(), "Il cognome registrato non corrisponde");
+        assertNotNull(result, "Registrazione dovrebbe avere successo.");
+        assertEquals("test@example.com", result.getEmail(), "L'email registrata non corrisponde.");
+        assertEquals("Mario", result.getNome(), "Il nome registrato non corrisponde.");
+        assertEquals("Rossi", result.getCognome(), "Il cognome registrato non corrisponde.");
+        System.out.println("Registrazione avvenuta con successo.");
     }
 }

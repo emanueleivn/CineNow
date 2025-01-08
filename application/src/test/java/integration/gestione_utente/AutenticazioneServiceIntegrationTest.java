@@ -58,10 +58,12 @@ public class AutenticazioneServiceIntegrationTest {
     void testLoginSuccess() {
         String email = "test@test.com";
         String password = "Testing1!";
+        System.out.println("Utente di test: Email=" + email + ", Password=" + password);
         Utente utente = autenticazioneService.login(email, password);
         assertNotNull(utente, "Il login dovrebbe avere successo");
         assertTrue(utente instanceof Cliente, "L'utente autenticato dovrebbe essere un Cliente");
         assertEquals(email, utente.getEmail(), "L'email non corrisponde");
+        System.out.println("Test completato: Login riuscito con utente " + utente.getEmail());
     }
 
     @Test
@@ -69,8 +71,10 @@ public class AutenticazioneServiceIntegrationTest {
     void testLoginWrongPassword() {
         String email = "test@test.com";
         String wrongPassword = "12345678";
+        System.out.println("Utente di test: Email=" + email + ", Password Errata=" + wrongPassword);
         Utente utente = autenticazioneService.login(email, wrongPassword);
         assertNull(utente, "Il login dovrebbe fallire con password errata");
+        System.out.println("Test completato: Login fallito con password errata.");
     }
 
     @Test
@@ -78,8 +82,10 @@ public class AutenticazioneServiceIntegrationTest {
     void testLoginUserNotFound() {
         String email = "pippo@pluto.com";
         String password = "12345678";
+        System.out.println("Utente di test: Email=" + email + ", Password=" + password);
         Utente utente = autenticazioneService.login(email, password);
         assertNull(utente, "Il login dovrebbe fallire per utente non trovato");
+        System.out.println("Test completato: Utente non trovato.");
     }
 
     @Test
@@ -88,5 +94,6 @@ public class AutenticazioneServiceIntegrationTest {
         HttpSession session = Mockito.mock(HttpSession.class);
         autenticazioneService.logout(session);
         Mockito.verify(session).invalidate();
+        System.out.println("Test completato: Sessione invalidata con successo.");
     }
 }

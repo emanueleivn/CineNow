@@ -46,9 +46,9 @@ class ProgrammazioneServiceTest {
             stmt.execute("DELETE FROM sala;");
             stmt.execute("DELETE FROM sede;");
             stmt.execute("DELETE FROM film;");
-            stmt.execute("INSERT INTO sede (id, nome, via, città, cap) VALUES (1, 'CineNow Napoli', 'Via Roma', 'Napoli', '80100');");
+            stmt.execute("INSERT INTO sede (id, nome, via, città, cap) VALUES (1, 'Moviplex', 'Via Roma', 'Napoli', '80100');");
             stmt.execute("INSERT INTO film (id, titolo, durata, genere, classificazione, descrizione, is_proiettato) " +
-                    "VALUES (1, 'Film Test', 120, 'Azione', 'PG-13', 'Descrizione di test', true);");
+                    "VALUES (1, 'Film Test', 120, 'Azione', 'T', 'Descrizione di test', true);");
             stmt.execute("INSERT INTO sala (id, numero, capienza, id_sede) VALUES (1, 1, 100, 1);");
             stmt.execute("INSERT INTO slot (id, ora_inizio) VALUES (1, '10:00:00');");
             stmt.execute("INSERT INTO slot (id, ora_inizio) VALUES (2, '12:00:00');");
@@ -106,7 +106,7 @@ class ProgrammazioneServiceTest {
     void testSlotNonDisponibili() {
         int filmId = 1;
         int salaId = 1;
-        List<Integer> slotIds = List.of(10, 20); // Slot che non esistono
+        List<Integer> slotIds = List.of(10, 20);
         LocalDate data = LocalDate.of(2025, 1, 10);
         System.out.println("Test Slot Non Disponibili - Input: filmId=" + filmId + ", salaId=" + salaId + ", slotIds=" + slotIds + ", data=" + data);
         Film film = new Film();

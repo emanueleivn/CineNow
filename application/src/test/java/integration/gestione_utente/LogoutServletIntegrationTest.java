@@ -26,6 +26,7 @@ public class LogoutServletIntegrationTest {
     @BeforeAll
     static void setupDatabase() {
         DatabaseSetupForTest.configureH2DataSource();
+        System.out.println("Setup del database completato.");
     }
 
     @BeforeEach
@@ -36,6 +37,7 @@ public class LogoutServletIntegrationTest {
         sessionMock = mock(HttpSession.class);
         dispatcherMock = mock(RequestDispatcher.class);
         logoutServlet.init();
+        System.out.println("Setup iniziale del test completato.");
     }
 
     @Test
@@ -45,7 +47,6 @@ public class LogoutServletIntegrationTest {
         logoutServlet.doGet(requestMock, responseMock);
         verify(sessionMock).invalidate();
         verify(dispatcherMock).forward(requestMock, responseMock);
+        System.out.println("Sessione invalidata e reindirizzato alla Home.");
     }
 }
-
-

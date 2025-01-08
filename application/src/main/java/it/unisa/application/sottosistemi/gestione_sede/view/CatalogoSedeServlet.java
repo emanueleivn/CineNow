@@ -17,6 +17,11 @@ public class CatalogoSedeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String sede = req.getParameter("sede");
+        if (sede == null || sede.isBlank()) {
+            req.setAttribute("errorMessage", "Errore caricamento catalogo: sede non specificata");
+            req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
+            return;
+        }
         Sede sedeObject = new Sede();
         List<Film> catalogo;
         sedeObject.setNome(sede);
