@@ -2,7 +2,7 @@
 <html xmlns:str="http://exslt.org/strings" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Test Results &mdash; FilmDAOTest</title>
+        <title>Test Results &mdash; AddFilmServletIntegrationTest</title>
         <style type="text/css">
           html {
             height: 100%
@@ -572,9 +572,9 @@ jQuery.cookie = function(name, value, options) {
     <body>
         <div id="container">
             <div id="header">
-                <div class="time" xmlns="">53 ms</div>
+                <div class="time" xmlns="">846 ms</div>
                 <h1>
-                    FilmDAOTest: <strong><span class="total" xmlns="http://www.w3.org/1999/xhtml">3 total, </span><span class="passed">3 passed</span></strong>
+                    AddFilmServletIntegrationTest: <strong><span class="total" xmlns="http://www.w3.org/1999/xhtml">5 total, </span><span class="passed">5 passed</span></strong>
                 </h1>
                 <div id="treecontrol">
                     <ul>
@@ -591,29 +591,59 @@ jQuery.cookie = function(name, value, options) {
             </div>
             <div id="content">
                 <ul id="tree">
-                    "C:\Program Files\Java\jdk-23\bin\java.exe" -ea -Didea.test.cyclic.buffer.size=1048576 "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA 2024.2.3\lib\idea_rt.jar=63092:C:\Program Files\JetBrains\IntelliJ IDEA 2024.2.3\bin" -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath "C:\Users\emiio\.m2\repository\org\junit\platform\junit-platform-launcher\1.11.0-M2\junit-platform-launcher-1.11.0-M2.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2024.2.3\lib\idea_rt.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2024.2.3\plugins\junit\lib\junit5-rt.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2024.2.3\plugins\junit\lib\junit-rt.jar;C:\Users\emiio\IdeaProjects\CineNow\application\target\test-classes;C:\Users\emiio\IdeaProjects\CineNow\application\target\classes;C:\Users\emiio\.m2\repository\jakarta\servlet\jakarta.servlet-api\6.1.0\jakarta.servlet-api-6.1.0.jar;C:\Users\emiio\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.11.0-M2\junit-jupiter-api-5.11.0-M2.jar;C:\Users\emiio\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\emiio\.m2\repository\org\junit\platform\junit-platform-commons\1.11.0-M2\junit-platform-commons-1.11.0-M2.jar;C:\Users\emiio\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\emiio\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.11.0-M2\junit-jupiter-engine-5.11.0-M2.jar;C:\Users\emiio\.m2\repository\org\junit\platform\junit-platform-engine\1.11.0-M2\junit-platform-engine-1.11.0-M2.jar;C:\Users\emiio\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar;C:\Users\emiio\.m2\repository\com\mysql\mysql-connector-j\9.1.0\mysql-connector-j-9.1.0.jar;C:\Users\emiio\.m2\repository\com\google\protobuf\protobuf-java\4.26.1\protobuf-java-4.26.1.jar;C:\Users\emiio\.m2\repository\com\h2database\h2\2.1.214\h2-2.1.214.jar;C:\Users\emiio\.m2\repository\org\mockito\mockito-core\4.11.0\mockito-core-4.11.0.jar;C:\Users\emiio\.m2\repository\net\bytebuddy\byte-buddy\1.12.19\byte-buddy-1.12.19.jar;C:\Users\emiio\.m2\repository\net\bytebuddy\byte-buddy-agent\1.12.19\byte-buddy-agent-1.12.19.jar;C:\Users\emiio\.m2\repository\org\objenesis\objenesis\3.3\objenesis-3.3.jar;C:\Users\emiio\.m2\repository\javax\servlet\jstl\1.2\jstl-1.2.jar" com.intellij.rt.junit.JUnitStarter -ideVersion5 -junit5 unit.test_DAO.FilmDAOTest
+                    "C:\Program Files\Java\jdk-23\bin\java.exe" -ea -Didea.test.cyclic.buffer.size=1048576 "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA 2024.2.3\lib\idea_rt.jar=56172:C:\Program Files\JetBrains\IntelliJ IDEA 2024.2.3\bin" -Dfile.encoding=UTF-8 -Dsun.stdout.encoding=UTF-8 -Dsun.stderr.encoding=UTF-8 -classpath "C:\Users\emiio\.m2\repository\org\junit\platform\junit-platform-launcher\1.11.0-M2\junit-platform-launcher-1.11.0-M2.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2024.2.3\lib\idea_rt.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2024.2.3\plugins\junit\lib\junit5-rt.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2024.2.3\plugins\junit\lib\junit-rt.jar;C:\Users\emiio\IdeaProjects\CineNow\application\target\test-classes;C:\Users\emiio\IdeaProjects\CineNow\application\target\classes;C:\Users\emiio\.m2\repository\jakarta\servlet\jakarta.servlet-api\6.1.0\jakarta.servlet-api-6.1.0.jar;C:\Users\emiio\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.11.0-M2\junit-jupiter-api-5.11.0-M2.jar;C:\Users\emiio\.m2\repository\org\opentest4j\opentest4j\1.3.0\opentest4j-1.3.0.jar;C:\Users\emiio\.m2\repository\org\junit\platform\junit-platform-commons\1.11.0-M2\junit-platform-commons-1.11.0-M2.jar;C:\Users\emiio\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\emiio\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.11.0-M2\junit-jupiter-engine-5.11.0-M2.jar;C:\Users\emiio\.m2\repository\org\junit\platform\junit-platform-engine\1.11.0-M2\junit-platform-engine-1.11.0-M2.jar;C:\Users\emiio\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar;C:\Users\emiio\.m2\repository\com\mysql\mysql-connector-j\9.1.0\mysql-connector-j-9.1.0.jar;C:\Users\emiio\.m2\repository\com\google\protobuf\protobuf-java\4.26.1\protobuf-java-4.26.1.jar;C:\Users\emiio\.m2\repository\com\h2database\h2\2.1.214\h2-2.1.214.jar;C:\Users\emiio\.m2\repository\org\mockito\mockito-core\4.11.0\mockito-core-4.11.0.jar;C:\Users\emiio\.m2\repository\net\bytebuddy\byte-buddy\1.12.19\byte-buddy-1.12.19.jar;C:\Users\emiio\.m2\repository\net\bytebuddy\byte-buddy-agent\1.12.19\byte-buddy-agent-1.12.19.jar;C:\Users\emiio\.m2\repository\org\objenesis\objenesis\3.3\objenesis-3.3.jar;C:\Users\emiio\.m2\repository\javax\servlet\jstl\1.2\jstl-1.2.jar" com.intellij.rt.junit.JUnitStarter -ideVersion5 -junit5 integration.gestione_catena.AddFilmServletIntegrationTest
 Process finished with exit code 0
 
                     <li class="level test" xmlns="">
                         <span><em class="time">
-                                <div class="time">36 ms</div>
-                            </em><em class="status">passed</em>Creazione di un film</span>
+                                <div class="time">777 ms</div>
+                            </em><em class="status">passed</em>testDoGet()</span>
                     </li>
                     <li class="level test">
                         <span><em class="time">
-                                <div class="time">9 ms</div>
-                            </em><em class="status">passed</em>Recupero di tutti i film</span>
+                                <div class="time">23 ms</div>
+                            </em><em class="status">passed</em>testDoPostFallimentoDatiMancanti()</span>
+                        <ul>
+                            <li class="text">
+                                <span class="stdout">Dati film: Titolo='', Durata='120', Descrizione='Descrizione Test', Genere='Azione', Classificazione='T' (Locandina non inviata)<br/>Forward verso pagina di errore<br/></span>
+                            </li>
+                        </ul>
                     </li>
                     <li class="level test">
                         <span><em class="time">
-                                <div class="time">8 ms</div>
-                            </em><em class="status">passed</em>Recupero di un film tramite ID</span>
+                                <div class="time">26 ms</div>
+                            </em><em class="status">passed</em>testDoPostSuccess()</span>
+                        <ul>
+                            <li class="text">
+                                <span class="stdout">Dati film: Titolo='Film Test', Durata='120', Descrizione='Descrizione Test',Locandina: locandina.jpg ,Genere='Azione', Classificazione='T'<br/>Redirected al catalogo<br/></span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="level test">
+                        <span><em class="time">
+                                <div class="time">15 ms</div>
+                            </em><em class="status">passed</em>testDoPostFallimentoDatiNonValidi()</span>
+                        <ul>
+                            <li class="text">
+                                <span class="stdout">Film Data: Titolo='Test film<>', Durata='-10', Descrizione='!!', Genere='Non valido', Classificazione=''<br/>Forward verso pagina di errore<br/></span>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="level test">
+                        <span><em class="time">
+                                <div class="time">5 ms</div>
+                            </em><em class="status">passed</em>testDoPostFailureDurataNonValida()</span>
+                        <ul>
+                            <li class="text">
+                                <span class="stdout">Film Data: Titolo='Film Test', Durata='invalid', Descrizione='Descrizione Test',Locandina=locandina.jpg ,Genere='Azione', Classificazione='T'<br/>Forward verso pagina di errore<br/></span>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>
         </div>
         <div id="footer">
-            <p>Generated by IntelliJ IDEA on 06/01/25, 15:02</p>
+            <p>Generated by IntelliJ IDEA on 08/01/25, 09:00</p>
         </div>
     </body>
 </html>
