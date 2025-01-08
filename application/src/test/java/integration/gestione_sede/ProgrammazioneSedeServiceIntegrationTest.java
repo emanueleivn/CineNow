@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ProgrammazioneSedeServiceIntegrationTest {
+public class ProgrammazioneSedeServiceIntegrationTest {
     private static ProgrammazioneSedeService service;
 
     @BeforeAll
@@ -46,7 +46,6 @@ class ProgrammazioneSedeServiceIntegrationTest {
                        (2, '2025-01-11', 2, 1, 2);
             """;
             statement.execute(dataInsertScript);
-            System.out.println("Database popolato con i dati iniziali.");
         } catch (Exception e) {
             throw new RuntimeException("Errore durante il popolamento del database di test", e);
         }
