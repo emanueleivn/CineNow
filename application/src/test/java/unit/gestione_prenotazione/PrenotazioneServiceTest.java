@@ -91,14 +91,14 @@ class PrenotazioneServiceTest {
         assertThrows(RuntimeException.class, () ->
                 prenotazioneService.aggiungiOrdine(cliente, posti, proiezione)
         );
-        System.out.println("Tentativo di creare prenotazione fallito: Cliente=" + cliente.getEmail() + ", Proiezione ID=" + proiezione.getId());
+        System.out.println("Tentativo di creare prenotazione fallito: Cliente=" + cliente.getEmail() + ", Proiezione=" + null);
         verify(prenotazioneDAOMock).create(any(Prenotazione.class));
         verifyNoInteractions(postoProiezioneDAOMock);
     }
 
     @Test
     void testAggiungiOrdineFailure() {
-        System.out.println("Test fallimento causa posti");
+        System.out.println("Test fallimento causa posti non selezionati");
         Cliente cliente = new Cliente("test@example.com", "password", "Mario", "Rossi");
         Proiezione proiezione = new Proiezione();
         proiezione.setId(1);
@@ -116,10 +116,11 @@ class PrenotazioneServiceTest {
         assertThrows(RuntimeException.class, () ->
                 prenotazioneService.aggiungiOrdine(cliente, posti, proiezione)
         );
-        System.out.println("Tentativo di occupare posto fallito: Sala ID=" + posto.getSala().getId() + ", Fila=" + posto.getFila() + ", Numero=" + posto.getNumero());
+        System.out.println("Tentativo di occupare posto fallito: Sala ID=" + posto.getSala().getId() + ", Fila=" + null + ", Numero=" + null);
         verify(prenotazioneDAOMock).create(any(Prenotazione.class));
         verify(postoProiezioneDAOMock).occupaPosto(any(PostoProiezione.class), eq(100));
     }
+
     @Test
     void testAggiungiOrdineFailurePostiOccupati() {
         Cliente cliente = new Cliente("test@example.com", "password", "Mario", "Rossi");
@@ -127,7 +128,7 @@ class PrenotazioneServiceTest {
         proiezione.setId(1);
         Sala sala = new Sala();
         sala.setId(1);
-        System.out.println("posti occupati per il testing: A1,A2");
+        System.out.println("Posti occupati per il testing: T1,T2");
         Posto posto1 = new Posto(sala, 'A', 1);
         Posto posto2 = new Posto(sala, 'A', 2);
         PostoProiezione postoProiezione1 = new PostoProiezione(posto1, proiezione);

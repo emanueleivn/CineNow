@@ -46,12 +46,12 @@ class ProgrammazioneServiceTest {
             stmt.execute("DELETE FROM sala;");
             stmt.execute("DELETE FROM sede;");
             stmt.execute("DELETE FROM film;");
-            stmt.execute("INSERT INTO sede (id, nome, via, città, cap) VALUES (1, 'Moviplex', 'Via Roma', 'Napoli', '80100');");
+            stmt.execute("INSERT INTO sede (id, nome, via, città, cap) VALUES (1, 'Movieplex', 'Via Roma', 'Napoli', '80100');");
             stmt.execute("INSERT INTO film (id, titolo, durata, genere, classificazione, descrizione, is_proiettato) " +
-                    "VALUES (1, 'Film Test', 120, 'Azione', 'T', 'Descrizione di test', true);");
+                    "VALUES (1, 'Sonic 3', 120, 'Azione', 'T', 'Descrizione di test', true);");
             stmt.execute("INSERT INTO sala (id, numero, capienza, id_sede) VALUES (1, 1, 100, 1);");
-            stmt.execute("INSERT INTO slot (id, ora_inizio) VALUES (1, '10:00:00');");
-            stmt.execute("INSERT INTO slot (id, ora_inizio) VALUES (2, '12:00:00');");
+            stmt.execute("INSERT INTO slot (id, ora_inizio) VALUES (1, '18:00:00');");
+            stmt.execute("INSERT INTO slot (id, ora_inizio) VALUES (2, '18:30:00');");
 
         } catch (SQLException e) {
             throw new RuntimeException("Errore durante la configurazione del database per i test", e);
@@ -63,7 +63,7 @@ class ProgrammazioneServiceTest {
         int salaId = 1;
         List<Integer> slotIds = List.of(1, 2);
         LocalDate data = LocalDate.of(2025, 1, 10);
-        System.out.println("Test Film Non Selezionato - Input: salaId=" + salaId + ", slotIds=" + slotIds + ", data=" + data);
+        System.out.println("Test Film Non Selezionato - Input:Film=null, salaId=" + salaId + ", slotIds=" + slotIds + ", data=" + data);
         doReturn(null).when(filmDAOSpy).retrieveById(anyInt());
         boolean result = programmazioneService.aggiungiProiezione(0, salaId, slotIds, data);
         assertFalse(result, "Il test dovrebbe fallire perché il film non è stato selezionato.");
@@ -74,7 +74,7 @@ class ProgrammazioneServiceTest {
         int filmId = 1;
         int salaId = 1;
         List<Integer> slotIds = List.of(1, 2);
-        System.out.println("Test Data Non Inserita - Input: filmId=" + filmId + ", salaId=" + salaId + ", slotIds=" + slotIds);
+        System.out.println("Test Data Non Inserita - Input:data=null, film=Sonic 3, salaId=" + salaId + ", slotIds=" + slotIds);
         Film film = new Film();
         film.setId(filmId);
         Sala sala = new Sala();
@@ -91,7 +91,7 @@ class ProgrammazioneServiceTest {
         int salaId = 1;
         List<Integer> slotIds = List.of(1, 2);
         LocalDate dataPassata = LocalDate.of(2023, 1, 1);
-        System.out.println("Test Data Passata - Input: filmId=" + filmId + ", salaId=" + salaId + ", slotIds=" + slotIds + ", data=" + dataPassata);
+        System.out.println("Test Data Passata - Input: filmId= Sonic 3, salaId=" + salaId + ", slotIds=" + slotIds + ", data=" + dataPassata);
         Film film = new Film();
         film.setId(filmId);
         Sala sala = new Sala();
@@ -108,7 +108,7 @@ class ProgrammazioneServiceTest {
         int salaId = 1;
         List<Integer> slotIds = List.of(10, 20);
         LocalDate data = LocalDate.of(2025, 1, 10);
-        System.out.println("Test Slot Non Disponibili - Input: filmId=" + filmId + ", salaId=" + salaId + ", slotIds=" + slotIds + ", data=" + data);
+        System.out.println("Test Slot Non Disponibili - Input: film= Sonic 3" + ", salaId=" + salaId + ", slotIds=" + slotIds + ", data=" + data);
         Film film = new Film();
         film.setId(filmId);
         Sala sala = new Sala();
@@ -126,7 +126,7 @@ class ProgrammazioneServiceTest {
         int salaId = 1;
         List<Integer> slotIds = List.of(1, 2);
         LocalDate data = LocalDate.of(2025, 1, 10);
-        System.out.println("Test Proiezione Aggiunta Con Successo - Input: filmId=" + filmId + ", salaId=" + salaId + ", slotIds=" + slotIds + ", data=" + data);
+        System.out.println("Test Proiezione Aggiunta Con Successo - Input: film=Sonic 3, salaId=" + salaId + ", slotIds=" + slotIds + ", data=" + data);
         Film film = new Film();
         film.setId(filmId);
         film.setTitolo("Test Film");
@@ -137,10 +137,10 @@ class ProgrammazioneServiceTest {
         sala.setCapienza(100);
         Slot slot1 = new Slot();
         slot1.setId(1);
-        slot1.setOraInizio(java.sql.Time.valueOf("10:00:00"));
+        slot1.setOraInizio(java.sql.Time.valueOf("19:00:00"));
         Slot slot2 = new Slot();
         slot2.setId(2);
-        slot2.setOraInizio(java.sql.Time.valueOf("12:00:00"));
+        slot2.setOraInizio(java.sql.Time.valueOf("19:30:00"));
         doReturn(film).when(filmDAOSpy).retrieveById(filmId);
         doReturn(sala).when(salaDAOSpy).retrieveById(salaId);
         doReturn(List.of(slot1, slot2)).when(slotDAOSpy).retrieveAllSlots();
@@ -149,4 +149,18 @@ class ProgrammazioneServiceTest {
         assertTrue(result, "Il test dovrebbe passare perché tutti i parametri sono validi.");
     }
 
+    @Test
+    void testSalaNull() {
+        int filmId = 1;
+        int salaId = 2;
+        List<Integer> slotIds = List.of(1, 2);
+        LocalDate data = LocalDate.of(2025, 1, 10);
+        System.out.println("Test Sala Null - Input: filmId=" + filmId + ", sala=null, slots= [19:00,19:30]" + ", data=" + data);
+        Film film = new Film();
+        film.setId(filmId);
+        doReturn(film).when(filmDAOSpy).retrieveById(filmId);
+        doReturn(null).when(salaDAOSpy).retrieveById(salaId);
+        boolean result = programmazioneService.aggiungiProiezione(filmId, salaId, slotIds, data);
+        assertFalse(result, "Il test dovrebbe fallire perché la sala è null.");
+    }
 }

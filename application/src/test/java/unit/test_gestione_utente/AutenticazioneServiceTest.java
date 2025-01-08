@@ -42,7 +42,7 @@ public class AutenticazioneServiceTest {
     @Test
     void testLoginWrongPassword() {
         String email = "test@test.com";
-        String wrongPassword = "12<345678>";
+        String wrongPassword = "12345678";
         String hashedPassword = PasswordHash.hash("Testing1!");
         Utente mockUtente = new Utente(email, hashedPassword, "cliente");
         Mockito.when(utenteDAOMock.retrieveByEmail(email)).thenReturn(mockUtente);
@@ -54,7 +54,7 @@ public class AutenticazioneServiceTest {
     @Test
     void testLoginUserNotFound() {
         String email = "pippo@pluto.com";
-        String password = "Testing1!";
+        String password = "12345678";
         Mockito.when(utenteDAOMock.retrieveByEmail(email)).thenReturn(null);
         Utente utente = autenticazioneService.login(email, password);
         assertNull(utente, "Il login dovrebbe fallire per utente non trovato");
