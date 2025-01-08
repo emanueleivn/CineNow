@@ -31,21 +31,11 @@ public class ProiezioniFilmServlet extends HttpServlet {
             Film film = filmDAO.retrieveById(filmId);
             Sede sede = sedeDAO.retrieveById(sedeId);
 
-            if (film == null || sede == null) {
-                req.setAttribute("errorMessage", "Film o sede non trovati.");
-                req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
-                return;
-            }
+            req.setAttribute("programmazioneFilm", programmazioneFilm);
+            req.setAttribute("filmNome", film.getTitolo());
+            req.setAttribute("sedeNome", sede.getNome());
+            req.getRequestDispatcher("/WEB-INF/jsp/proiezioniFilm.jsp").forward(req, resp);
 
-            if (programmazioneFilm.isEmpty()) {
-                req.setAttribute("errorMessage", "Proiezioni non trovate per il film selezionato.");
-                req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
-            } else {
-                req.setAttribute("programmazioneFilm", programmazioneFilm);
-                req.setAttribute("filmNome", film.getTitolo());
-                req.setAttribute("sedeNome", sede.getNome());
-                req.getRequestDispatcher("/WEB-INF/jsp/proiezioniFilm.jsp").forward(req, resp);
-            }
         } catch (NumberFormatException e) {
             req.setAttribute("errorMessage", "Parametri non validi.");
             req.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(req, resp);
