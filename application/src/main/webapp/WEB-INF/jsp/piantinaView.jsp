@@ -57,6 +57,16 @@
         .checkout-section button {
             width: 100%;
         }
+
+        .schermo {
+            width: 80%;
+            background-color: #343a40;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
     </style>
 </head>
 <body>
@@ -73,6 +83,12 @@
                 <span> - </span>
                 <span class="posto posto-selezionato">Selezionato</span>
             </div>
+            <div class="d-flex justify-content-center mb-4">
+                <div class="schermo p-2 text-center">
+                    Schermo
+                </div>
+            </div>
+
             <div class="d-flex flex-wrap justify-content-center">
                 <%
                     List<PostoProiezione> posti = (List<PostoProiezione>) request.getAttribute("postiProiezione");

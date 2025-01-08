@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-
 import static org.mockito.Mockito.*;
 
 class VisualizzaCatalogoServletTest {
@@ -45,7 +44,6 @@ class VisualizzaCatalogoServletTest {
         } catch (Exception e) {
             throw new RuntimeException("Errore durante l'iniezione del CatalogoService", e);
         }
-
         try (Connection conn = DataSourceSingleton.getInstance().getConnection()) {
             conn.createStatement().execute("DELETE FROM film;");
             conn.createStatement().executeUpdate(
@@ -62,9 +60,11 @@ class VisualizzaCatalogoServletTest {
     @Test
     void testDoGetWithFilms() throws ServletException, IOException {
         when(requestMock.getRequestDispatcher("/WEB-INF/jsp/catalogo.jsp")).thenReturn(dispatcherMock);
+        System.out.println("Database inizializzato con 2 film.");
         visualizzaCatalogoServlet.doGet(requestMock, responseMock);
         verify(requestMock).setAttribute(eq("catalogo"), anyList());
         verify(dispatcherMock).forward(requestMock, responseMock);
+        System.out.println("Forward corretto verso il catalogo, con due film ottenuti.");
     }
 
     @Test
@@ -74,11 +74,11 @@ class VisualizzaCatalogoServletTest {
         } catch (SQLException e) {
             throw new RuntimeException("Errore durante la pulizia dei dati nel database", e);
         }
-
         when(requestMock.getRequestDispatcher("/WEB-INF/jsp/error.jsp")).thenReturn(dispatcherMock);
+        System.out.println("Database vuoto");
         visualizzaCatalogoServlet.doGet(requestMock, responseMock);
         verify(requestMock).setAttribute(eq("errorMessage"), eq("Nessun film trovato."));
         verify(dispatcherMock).forward(requestMock, responseMock);
+        System.out.println("Forward corretto, verso la pagina di errore");
     }
 }
-

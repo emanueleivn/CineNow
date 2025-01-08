@@ -71,56 +71,60 @@ class AddFilmServletIntegrationTest {
         when(requestMock.getParameter("durata")).thenReturn("120");
         when(requestMock.getParameter("descrizione")).thenReturn("Descrizione Test");
         when(requestMock.getParameter("genere")).thenReturn("Azione");
-        when(requestMock.getParameter("classificazione")).thenReturn("PG-13");
-
+        when(requestMock.getParameter("classificazione")).thenReturn("T");
         when(requestMock.getPart("locandina")).thenReturn(filePartMock);
         byte[] fileContent = "file content".getBytes();
         when(filePartMock.getSize()).thenReturn((long) fileContent.length);
         when(filePartMock.getInputStream()).thenReturn(new ByteArrayInputStream(fileContent));
+        System.out.println("Dati film: Titolo='Film Test', Durata='120', Descrizione='Descrizione Test',Locandina: locandina.jpg ,Genere='Azione', Classificazione='T'");
         addFilmServlet.doPost(requestMock, responseMock);
         verify(responseMock).sendRedirect(requestMock.getContextPath() + "/catalogo");
+        System.out.println("Redirected al catalogo");
     }
 
     @Test
-    void testDoPostFailureMissingFile() throws ServletException, IOException {
+    void testDoPostFallimentoDatiMancanti() throws ServletException, IOException {
         when(requestMock.getParameter("titolo")).thenReturn("");
         when(requestMock.getParameter("durata")).thenReturn("120");
         when(requestMock.getParameter("descrizione")).thenReturn("Descrizione Test");
         when(requestMock.getParameter("genere")).thenReturn("Azione");
-        when(requestMock.getParameter("classificazione")).thenReturn("PG-13");
+        when(requestMock.getParameter("classificazione")).thenReturn("T");
         when(requestMock.getPart("locandina")).thenReturn(null);
         when(requestMock.getRequestDispatcher("/WEB-INF/jsp/error.jsp")).thenReturn(dispatcherMock);
+        System.out.println("Dati film: Titolo='', Durata='120', Descrizione='Descrizione Test', Genere='Azione', Classificazione='T' (Locandina non inviata)");
         addFilmServlet.doPost(requestMock, responseMock);
         verify(requestMock).setAttribute(eq("errorMessage"), anyString());
         verify(dispatcherMock).forward(requestMock, responseMock);
+        System.out.println("Forward verso pagina di errore");
     }
 
     @Test
-    void testDoPostFailureInvalidData() throws ServletException, IOException {
+    void testDoPostFallimentoDatiNonValidi() throws ServletException, IOException {
         when(requestMock.getParameter("titolo")).thenReturn("");
         when(requestMock.getParameter("durata")).thenReturn("-10");
         when(requestMock.getParameter("descrizione")).thenReturn("");
         when(requestMock.getParameter("genere")).thenReturn("Non valido");
         when(requestMock.getParameter("classificazione")).thenReturn("");
         when(requestMock.getRequestDispatcher("/WEB-INF/jsp/error.jsp")).thenReturn(dispatcherMock);
+        System.out.println("Film Data: Titolo='Test film<>', Durata='-10', Descrizione='!!', Genere='Non valido', Classificazione=''");
         addFilmServlet.doPost(requestMock, responseMock);
         verify(requestMock).setAttribute(eq("errorMessage"), anyString());
         verify(dispatcherMock).forward(requestMock, responseMock);
+        System.out.println("Forward verso pagina di errore");
     }
 
     @Test
-    void testDoPostFailureInvalidDuration() throws ServletException, IOException {
+    void testDoPostFailureDurataNonValida() throws ServletException, IOException {
         when(requestMock.getParameter("titolo")).thenReturn("Film Test");
         when(requestMock.getParameter("durata")).thenReturn("invalid");
         when(requestMock.getParameter("descrizione")).thenReturn("Descrizione Test");
         when(requestMock.getParameter("genere")).thenReturn("Azione");
-        when(requestMock.getParameter("classificazione")).thenReturn("PG-13");
-
+        when(requestMock.getParameter("classificazione")).thenReturn("T");
         when(requestMock.getRequestDispatcher("/WEB-INF/jsp/error.jsp")).thenReturn(dispatcherMock);
-
+        System.out.println("Film Data: Titolo='Film Test', Durata='invalid', Descrizione='Descrizione Test',Locandina=locandina.jpg ,Genere='Azione', Classificazione='T'");
         addFilmServlet.doPost(requestMock, responseMock);
-
         verify(requestMock).setAttribute(eq("errorMessage"), anyString());
         verify(dispatcherMock).forward(requestMock, responseMock);
+        System.out.println("Forward verso pagina di errore");
     }
 }
