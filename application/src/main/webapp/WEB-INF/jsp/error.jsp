@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="it.unisa.application.model.entity.Utente"%>
 <html>
 <head>
   <title>Errore</title>
@@ -15,7 +16,23 @@
       <p class="card-text">
         <%= request.getAttribute("errorMessage") != null ? request.getAttribute("errorMessage") : "Errore sconosciuto." %>
       </p>
-      <a href="<%= request.getContextPath() %>/Home" class="btn btn-primary mt-3">Torna alla Home</a>
+      <%
+        HttpSession sessione = request.getSession(false);
+        Utente utente = (sessione != null) ? (Utente) sessione.getAttribute("gestoreSede") : null;
+
+        if(utente != null){
+      %>
+        <a href="<%= request.getContextPath() %>/areaGestoreSede.jsp" class="btn btn-primary mt-3">Torna alla Home</a>
+      <%
+        }
+        else if(((sessione != null) ? (Utente) sessione.getAttribute("gestoreCatena") : null) != null){
+      %>
+        <a href="<%= request.getContextPath() %>/areaGestoreCatena.jsp" class="btn btn-primary mt-3">Torna alla Home</a>
+      <%
+        }else{
+      %>
+        <a href="<%= request.getContextPath() %>/Home" class="btn btn-primary mt-3">Torna alla Home</a>
+      <%}%>
     </div>
   </div>
 </div>
