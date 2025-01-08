@@ -46,13 +46,13 @@ public class AddFilmServlet extends HttpServlet {
                 throw new IllegalArgumentException("La locandina è obbligatoria.");
             }
 
-            // Converti la locandina in byte array
+
             byte[] locandinaBytes;
             try (InputStream fileContent = filePart.getInputStream()) {
                 locandinaBytes = fileContent.readAllBytes();
             }
 
-            // Salva i dati nel database
+
             catalogoService.addFilmCatalogo(titolo, durata, descrizione, locandinaBytes, genere, classificazione);
 
             response.sendRedirect(request.getContextPath() + "/catalogo");

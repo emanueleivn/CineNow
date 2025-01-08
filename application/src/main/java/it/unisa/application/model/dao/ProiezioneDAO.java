@@ -30,7 +30,7 @@ public class ProiezioneDAO {
         try (Connection connection = ds.getConnection()) {
             connection.setAutoCommit(false);
 
-            // Retrieve slot disponibili
+
             List<Slot> availableSlots = new ArrayList<>();
             try (PreparedStatement psGetSlots = connection.prepareStatement("SELECT id, ora_inizio FROM slot ORDER BY ora_inizio")) {
                 try (ResultSet rs = psGetSlots.executeQuery()) {
@@ -166,12 +166,12 @@ public class ProiezioneDAO {
                 slot.setOraInizio(rs.getTime("orario"));
                 proiezione.setOrarioProiezione(slot);
 
-                // Chiave unica basata su titolo, sala e giorno della proiezione
+
                 String uniqueKey = proiezione.getFilmProiezione().getTitolo() + "|" +
                         proiezione.getSalaProiezione().getId() + "|" +
                         proiezione.getDataProiezione().toString();
 
-                // Recupera la lista di proiezioni uniche per questa chiave
+
                 List<Proiezione> proiezioniPerChiave = uniqueProiezioni.getOrDefault(uniqueKey, new ArrayList<>());
 
                 boolean aggiungiProiezione = true;
@@ -180,7 +180,7 @@ public class ProiezioneDAO {
                             + existingProiezione.getFilmProiezione().getDurata();
                     int currentStartMinute = proiezione.getOrarioProiezione().getOraInizio().toLocalTime().toSecondOfDay() / 60;
 
-                    // Controlla se la nuova proiezione è distinta rispetto a quelle già aggiunte
+
                     if (currentStartMinute < existingEndMinute) {
                         aggiungiProiezione = false;
                         break;
@@ -216,7 +216,7 @@ public class ProiezioneDAO {
             ps.setInt(1, sedeId);
             ResultSet rs = ps.executeQuery();
 
-            // Mappa per tracciare le proiezioni uniche per chiave
+
             Map<String, List<Proiezione>> uniqueProiezioni = new HashMap<>();
 
             while (rs.next()) {
