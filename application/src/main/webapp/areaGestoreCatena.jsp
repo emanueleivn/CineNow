@@ -20,7 +20,11 @@
 </style>
 
 <h1>Benvenuto, Gestore della Catena</h1>
-
+<div class="container my-5">
+  <div class="text-center my-5">
+    <img src="static/images/logo.png" alt="CineNow Logo" style="height: 300px;">
+  </div>
+</div>
 <footer>
   <jsp:include page="/WEB-INF/jsp/footer.jsp"/>
 </footer>
