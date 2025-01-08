@@ -56,7 +56,7 @@
     } else {
     %>
     <div class="alert alert-warning text-center" role="alert">
-      Nessuna proiezione disponibile.
+      Nessuna proiezione disponibile per questa settimana, torna presto...
     </div>
     <%
       }
